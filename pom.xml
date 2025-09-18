@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2024 Copyright 2022 Aiven Oy and
+    bigquery-connector-for-apache-kafka project contributors
+
+    This software contains code derived from the Confluent BigQuery
+    Kafka Connector, Copyright Confluent, Inc, which in turn
+    contains code derived from the WePay BigQuery Kafka Connector,
+    Copyright WePay, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.aiven.commons</groupId>
+    <artifactId>aiven-commons</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <modules>
+        <module>kafka-config-utils</module>
+        <module>version-utils</module>
+        <module>velocity-utils</module>
+        <module>collection-utils</module>
+    </modules>
+
+    <properties>
+        <latestRelease>0.0.1-SNAPSHOT</latestRelease>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+
+        <java.version>17</java.version>
+        <com.google.guava.version>32.0.1-jre</com.google.guava.version>
+        <com.google.re2j.version>1.7</com.google.re2j.version>
+        <com.google.auto.value.version>1.10.2</com.google.auto.value.version>
+        <kafka.version>3.9.1</kafka.version>
+        <kafka.scala.version>2.12</kafka.scala.version>
+
+        <commons.collection.version>4.4</commons.collection.version>
+        <junit.version>5.10.2</junit.version>
+
+        <assembly.plugin.version>3.7.1</assembly.plugin.version>
+        <checkstyle.plugin.version>3.3.1</checkstyle.plugin.version>
+        <compiler.plugin.version>3.8.1</compiler.plugin.version>
+        <exec.plugin.version>3.2.0</exec.plugin.version>
+        <surefire.plugin.version>3.5.3</surefire.plugin.version>
+
+        <site.plugin.version>3.21.0</site.plugin.version>
+        <velocity.core.version>2.4.1</velocity.core.version>
+        <velocity.tools.version>3.1</velocity.tools.version>
+    </properties>
+
+    <name>Kafka Connect Utils</name>
+
+    <description>This is a collection of utility jars that no external dependencies that are not either used in test or
+    provided by the environment.  For example the kafka connector is expected to be present and so classes an depend upon it.
+    </description>
+
+    <url>https://github.com/Aiven-Open/kafka-connector-utils</url>
+
+    <inceptionYear>2025</inceptionYear>
+
+    <organization>
+        <name>Aiven</name>
+        <url>https://www.aiven.io</url>
+    </organization>
+
+    <licenses>
+        <license>
+            <name>Apache License 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:git://github.com/Aiven-Open/kafka-connector-utils.git</connection>
+        <developerConnection>scm:git:git@github.com:Aiven-Open/kafka-connector-utils.git</developerConnection>
+        <url>https://github.com/Aiven-Open/kafka-connector-utils</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <developers>
+        <developer>
+            <id>claudenw</id>
+            <name>Claude Warren</name>
+            <email>claude.warren@aiven.io</email>
+            <timezone>Europe/Dublin</timezone>
+            <organization>Aiven, OY</organization>
+            <organizationUrl>https://aiven.io</organizationUrl>
+        </developer>
+    </developers>
+
+    <dependencyManagement>
+        <dependencies>
+
+            <!-- Child projects -->
+            <dependency>
+                <groupId>io.aiven</groupId>
+                <artifactId>config-utils</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- provided packages -->
+            <dependency>
+                <groupId>org.apache.kafka</groupId>
+                <artifactId>connect-api</artifactId>
+                <version>${kafka.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.kafka</groupId>
+                <artifactId>kafka-clients</artifactId>
+                <version>${kafka.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>${commons.collection.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- testing packages -->
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${mockito.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.kafka</groupId>
+                <artifactId>kafka_${kafka.scala.version}</artifactId>
+                <version>${kafka.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.kafka</groupId>
+                <artifactId>kafka_${kafka.scala.version}</artifactId>
+                <version>${kafka.version}</version>
+                <classifier>test</classifier>
+                <type>test-jar</type>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.kafka</groupId>
+                <artifactId>kafka-clients</artifactId>
+                <version>${kafka.version}</version>
+                <classifier>test</classifier>
+                <type>test-jar</type>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.kafka</groupId>
+                <artifactId>connect-runtime</artifactId>
+                <version>${kafka.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.kafka</groupId>
+                <artifactId>connect-runtime</artifactId>
+                <version>${kafka.version}</version>
+                <classifier>test</classifier>
+                <type>test-jar</type>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- plugin dependencies -->
+            <dependency>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
+                <type>maven-plugin</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>3.9.0</version>
+                <configuration>
+                    <siteDirectory>docs/src/site</siteDirectory>
+                    <outputFormat>xhtml</outputFormat>
+                    <customBundle>${project.basedir}/docs/src/site/custom/project-info-reports.properties</customBundle>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>dependencies</goal>
+                            <goal>dependency-convergence</goal>
+                            <goal>distribution-management</goal>
+                            <goal>issue-management</goal>
+                            <goal>plugin-management</goal>
+                            <goal>plugins</goal>
+                            <goal>team</goal>
+                            <goal>scm</goal>
+                        </goals>
+                        <phase>prepare-package</phase>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.4.2</version>
+                    <configuration>
+                        <archive>
+                            <manifest>
+                                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            </manifest>
+                            <manifestEntries>
+                                <Specification-Vendor>Apache Kafka</Specification-Vendor>
+                                <Specification-Version>${kafka.version}</Specification-Version>
+                            </manifestEntries>
+                        </archive>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${compiler.plugin.version}</version>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>${assembly.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${surefire.plugin.version}</version>
+                    <configuration>
+                        <excludedGroups>integration</excludedGroups>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>${surefire.plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>embedded-integration-test</id>
+                            <goals>
+                                <goal>integration-test</goal>
+                                <goal>verify</goal>
+                            </goals>
+                            <configuration>
+                                <groups>integration</groups>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>${checkstyle.plugin.version}</version>
+                    <configuration>
+                        <configLocation>google_checks.xml</configLocation>
+                        <suppressionsLocation>config/checkstyle/suppressions.xml</suppressionsLocation>
+                        <violationSeverity>warning</violationSeverity>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>validate</id>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>check</goal>
+                                <goal>checkstyle</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>${exec.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>${site.plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>ci</id>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-failsafe-plugin</artifactId>
+                            <configuration>
+                                <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                                <parallel>classes</parallel>
+                                <useUnlimitedThreads>true</useUnlimitedThreads>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+    </profiles>
+</project>
