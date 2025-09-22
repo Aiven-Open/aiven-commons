@@ -1,4 +1,3 @@
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one   *
  * or more contributor license agreements.  See the NOTICE file *
@@ -22,178 +21,183 @@ package io.aiven.commons.kafka.config;
 
 import java.util.function.Supplier;
 
-/**
- * Contains the information about a deprecated ConfigKey
- */
+/** Contains the information about a deprecated ConfigKey */
 public class DeprecatedInfo {
-    /**
-     * The Builder for {@link DeprecatedInfo}.
-     */
-    public static class Builder implements Supplier<DeprecatedInfo> {
+	/** The Builder for {@link DeprecatedInfo}. */
+	public static class Builder implements Supplier<DeprecatedInfo> {
 
-        /**
-         * The description.
-         */
-        private String description;
+		/** The description. */
+		private String description;
 
-        /**
-         * Whether this option is subject to removal in a future version.
-         *
-         * @see <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Deprecated.html#forRemoval()">Deprecated.forRemoval</a>
-         */
-        private boolean forRemoval;
+		/**
+		 * Whether this option is subject to removal in a future version.
+		 *
+		 * @see <a href=
+		 *      "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Deprecated.html#forRemoval()">Deprecated.forRemoval</a>
+		 */
+		private boolean forRemoval;
 
-        /**
-         * The version in which the option became deprecated.
-         *
-         * @see <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Deprecated.html#forRemoval()">Deprecated.since</a>
-         */
-        private String since;
+		/**
+		 * The version in which the option became deprecated.
+		 *
+		 * @see <a href=
+		 *      "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Deprecated.html#forRemoval()">Deprecated.since</a>
+		 */
+		private String since;
 
-        /**
-         * Private constructor.
-         */
-        private Builder() {}
+		/** Private constructor. */
+		private Builder() {
+		}
 
-        @Override
-        public DeprecatedInfo get() {
-            return new DeprecatedInfo(description, since, forRemoval);
-        }
+		@Override
+		public DeprecatedInfo get() {
+			return new DeprecatedInfo(description, since, forRemoval);
+		}
 
-        /**
-         * Sets the description.
-         *
-         * @param description the description.
-         * @return {@code this} instance.
-         */
-        public Builder setDescription(final String description) {
-            this.description = description;
-            return this;
-        }
+		/**
+		 * Sets the description.
+		 *
+		 * @param description
+		 *            the description.
+		 * @return {@code this} instance.
+		 */
+		public Builder setDescription(final String description) {
+			this.description = description;
+			return this;
+		}
 
-        /**
-         * Sets whether this option is subject to removal in a future version.
-         *
-         * @param forRemoval whether this is subject to removal in a future version.
-         * @return {@code this} instance.
-         * @see <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Deprecated.html#forRemoval()">Deprecated.forRemoval</a>
-         */
-        public Builder setForRemoval(final boolean forRemoval) {
-            this.forRemoval = forRemoval;
-            return this;
-        }
+		/**
+		 * Sets whether this option is subject to removal in a future version.
+		 *
+		 * @param forRemoval
+		 *            whether this is subject to removal in a future version.
+		 * @return {@code this} instance.
+		 * @see <a href=
+		 *      "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Deprecated.html#forRemoval()">Deprecated.forRemoval</a>
+		 */
+		public Builder setForRemoval(final boolean forRemoval) {
+			this.forRemoval = forRemoval;
+			return this;
+		}
 
-        /**
-         * Sets the version in which the option became deprecated.
-         *
-         * @param since the version in which the option became deprecated.
-         * @return {@code this} instance.
-         */
-        public Builder setSince(final String since) {
-            this.since = since;
-            return this;
-        }
-    }
+		/**
+		 * Sets the version in which the option became deprecated.
+		 *
+		 * @param since
+		 *            the version in which the option became deprecated.
+		 * @return {@code this} instance.
+		 */
+		public Builder setSince(final String since) {
+			this.since = since;
+			return this;
+		}
+	}
 
-    /**
-     * Creates a new builder.
-     *
-     * @return a new builder.
-     */
-    public static Builder builder() {
-        return new Builder();
-    }
+	/**
+	 * Creates a new builder.
+	 *
+	 * @return a new builder.
+	 */
+	public static Builder builder() {
+		return new Builder();
+	}
 
-    /**
-     * The description.
-     */
-    private final String description;
+	/** The description. */
+	private final String description;
 
-    /**
-     * Whether this option will be removed.
-     */
-    private final boolean forRemoval;
+	/** Whether this option will be removed. */
+	private final boolean forRemoval;
 
-    /**
-     * The version label for removal.
-     */
-    private final String since;
+	/** The version label for removal. */
+	private final String since;
 
-    /**
-     * Constructs a new instance.
-     *
-     * @param description The description.
-     * @param since       The version label for removal.
-     * @param forRemoval  Whether this option will be removed.
-     */
-    private DeprecatedInfo(final String description, final String since, final boolean forRemoval) {
-        this.description = toEmpty(description);
-        this.since = toEmpty(since);
-        this.forRemoval = forRemoval;
-    }
+	/**
+	 * Constructs a new instance.
+	 *
+	 * @param description
+	 *            The description.
+	 * @param since
+	 *            The version label for removal.
+	 * @param forRemoval
+	 *            Whether this option will be removed.
+	 */
+	private DeprecatedInfo(final String description, final String since, final boolean forRemoval) {
+		this.description = toEmpty(description);
+		this.since = toEmpty(since);
+		this.forRemoval = forRemoval;
+	}
 
-    /**
-     * Gets the descriptions.
-     *
-     * @return the descriptions.
-     */
-    public String getDescription() {
-        return description;
-    }
+	/**
+	 * Gets the descriptions.
+	 *
+	 * @return the descriptions.
+	 */
+	public String getDescription() {
+		return description;
+	}
 
-    /**
-     * Gets version in which the option became deprecated.
-     *
-     * @return the version in which the option became deprecated.
-     */
-    public String getSince() {
-        return since;
-    }
+	/**
+	 * Gets version in which the option became deprecated.
+	 *
+	 * @return the version in which the option became deprecated.
+	 */
+	public String getSince() {
+		return since;
+	}
 
-    /**
-     * Tests whether this option is subject to removal in a future version.
-     *
-     * @return whether this option is subject to removal in a future version.
-     */
-    public boolean isForRemoval() {
-        return forRemoval;
-    }
+	/**
+	 * Tests whether this option is subject to removal in a future version.
+	 *
+	 * @return whether this option is subject to removal in a future version.
+	 */
+	public boolean isForRemoval() {
+		return forRemoval;
+	}
 
-    private String toEmpty(final String since) {
-        return since != null ? since : "";
-    }
+	private String toEmpty(final String since) {
+		return since != null ? since : "";
+	}
 
-    @Override
-    public String toString() {
-        return formatted(null);
-    }
+	@Override
+	public String toString() {
+		return formatted(null);
+	}
 
-    /**
-     * Gets a string that contains the deprecated information.  The output will read:
-     * "{@code name} deprecated for removal since {@link #since}: {@link #description}".  Where
-     * <ul>
-     * <li>{@code name} is the name argument.  If {@code name} is empty, the start of the result will be "Deprecated"</li>
-     * <li>"for removal" will not be present if {@link #forRemoval} is {@code false}.</li>
-     * <li>"since {@link #since}" will contain the {@link #since} text, or be omitted if {@link #since} is not set.</li>
-     * <li>": {@link #description}" will contain the {@link #description} text, or be omitted if  {@link #description} is empty.</li>
-     * </ul>
-     *
-     * @param name The name to use for the formatted display.
-     * @return the formatted information.
-     */
-    public String formatted(String name) {
-        final StringBuilder builder = name == null || name.isEmpty() ? new StringBuilder("Deprecated") : new StringBuilder(name).append(" is deprecated");
-        if (forRemoval) {
-            builder.append(" for removal");
-        }
-        if (!since.isEmpty()) {
-            builder.append(" since ");
-            builder.append(since);
-        }
-        if (!description.isEmpty()) {
-            builder.append(": ");
-            builder.append(description);
-        }
-        return builder.toString();
-    }
+	/**
+	 * Gets a string that contains the deprecated information. The output will read:
+	 * "{@code name} deprecated for removal since {@link #since}:
+	 * {@link #description}". Where
+	 *
+	 * <ul>
+	 * <li>{@code name} is the name argument. If {@code name} is empty, the start of
+	 * the result will be "Deprecated"
+	 * <li>"for removal" will not be present if {@link #forRemoval} is
+	 * {@code false}.
+	 * <li>"since {@link #since}" will contain the {@link #since} text, or be
+	 * omitted if {@link #since} is not set.
+	 * <li>": {@link #description}" will contain the {@link #description} text, or
+	 * be omitted if {@link #description} is empty.
+	 * </ul>
+	 *
+	 * @param name
+	 *            The name to use for the formatted display.
+	 * @return the formatted information.
+	 */
+	public String formatted(String name) {
+		final StringBuilder builder = name == null || name.isEmpty()
+				? new StringBuilder("Deprecated")
+				: new StringBuilder(name).append(" is deprecated");
+		if (forRemoval) {
+			builder.append(" for removal");
+		}
+		if (!since.isEmpty()) {
+			builder.append(" since ");
+			builder.append(since);
+		}
+		if (!description.isEmpty()) {
+			builder.append(": ");
+			builder.append(description);
+		}
+		return builder.toString();
+	}
 }
