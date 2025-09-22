@@ -28,7 +28,7 @@
 
     <groupId>io.aiven.commons</groupId>
     <artifactId>aiven-commons</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1</version>
     <packaging>pom</packaging>
     <modules>
         <module>kafka-config-utils</module>
@@ -38,7 +38,6 @@
     </modules>
 
     <properties>
-        <latestRelease>0.0.1-SNAPSHOT</latestRelease>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.source>17</maven.compiler.source>
@@ -65,13 +64,13 @@
         <velocity.tools.version>3.1</velocity.tools.version>
     </properties>
 
-    <name>Kafka Connect Utils</name>
+    <name>Kafka Common Utilities</name>
 
-    <description>This is a collection of utility jars that no external dependencies that are not either used in test or
-    provided by the environment.  For example the kafka connector is expected to be present and so classes an depend upon it.
+    <description>This is a collection of utility jars with minimal external dependencies.  All external dependencies are
+        provided by the environment or are for testing only.  For example the kafka-config-utils module expects Kafka to be present.
     </description>
 
-    <url>https://github.com/Aiven-Open/kafka-connector-utils</url>
+    <url>https://github.com/Aiven-Open/aiven-commons</url>
 
     <inceptionYear>2025</inceptionYear>
 
@@ -89,11 +88,21 @@
     </licenses>
 
     <scm>
-        <connection>scm:git:git://github.com/Aiven-Open/kafka-connector-utils.git</connection>
-        <developerConnection>scm:git:git@github.com:Aiven-Open/kafka-connector-utils.git</developerConnection>
-        <url>https://github.com/Aiven-Open/kafka-connector-utils</url>
+        <connection>scm:git:git://github.com/Aiven-Open/aiven-commons.git</connection>
+        <developerConnection>scm:git:git@github.com:Aiven-Open/aiven-commons.git</developerConnection>
+        <url>https://github.com/Aiven-Open/aiven-commons</url>
         <tag>HEAD</tag>
     </scm>
+
+    <distributionManagement>
+        <site>
+            <id>staging</id>
+            <!--  For the URL to resolve to the default URL as described in the Apache Site Plugin documentation this URL
+            must be invalid. A ticket is open to resolve this issue. See https://github.com/apache/maven-site-plugin/issues/1140
+            -->
+            <url>invalid:url</url>
+        </site>
+    </distributionManagement>
 
     <developers>
         <developer>
@@ -110,11 +119,6 @@
         <dependencies>
 
             <!-- Child projects -->
-            <dependency>
-                <groupId>io.aiven</groupId>
-                <artifactId>config-utils</artifactId>
-                <version>${project.version}</version>
-            </dependency>
 
             <!-- provided packages -->
             <dependency>
@@ -186,14 +190,6 @@
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
-
-            <!-- plugin dependencies -->
-            <dependency>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.3.1</version>
-                <type>maven-plugin</type>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -209,12 +205,40 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.9.0</version>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>Generate Javadoc</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>javadoc</goal>
+                        </goals>
+                        <configuration>
+                            <failOnWarnings>true</failOnWarnings>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>Aggregate Javadoc</id>
+                        <phase>pre-site</phase>
+                        <goals>
+                            <goal>aggregate</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
-                    <siteDirectory>docs/src/site</siteDirectory>
-                    <outputFormat>xhtml</outputFormat>
-                    <customBundle>${project.basedir}/docs/src/site/custom/project-info-reports.properties</customBundle>
+
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <configuration>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <configuration>
                 </configuration>
                 <executions>
                     <execution>
@@ -227,14 +251,36 @@
                             <goal>plugins</goal>
                             <goal>team</goal>
                             <goal>scm</goal>
+                            <goal>summary</goal>
                         </goals>
                         <phase>prepare-package</phase>
                     </execution>
                 </executions>
             </plugin>
+
         </plugins>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>3.12.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.3.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.21.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-project-info-reports-plugin</artifactId>
+                    <version>3.9.0</version>
+                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
@@ -323,6 +369,30 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <reportSets>
+                    <reportSet>
+                        <id>aggregate</id>
+                        <inherited>false</inherited>
+                        <reports>
+                            <report>aggregate</report>
+                        </reports>
+                    </reportSet>
+                    <reportSet>
+                        <id>default</id>
+                        <reports>
+                            <report>javadoc</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            </plugins>
+    </reporting>
 
     <profiles>
         <profile>

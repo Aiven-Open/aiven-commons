@@ -6,10 +6,12 @@
     <parent>
         <groupId>io.aiven.commons</groupId>
         <artifactId>aiven-commons</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1</version>
     </parent>
 
     <artifactId>collection-utils</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <description>Aiven enhancements to the Apache Commons collections library</description>
 
     <properties>
     </properties>
@@ -21,4 +23,23 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <Specification-Vendor>Apache Commons Collection</Specification-Vendor>
+                            <Specification-Version>${commons.collection.version}</Specification-Version>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

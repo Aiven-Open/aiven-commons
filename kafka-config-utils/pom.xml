@@ -6,14 +6,15 @@
     <parent>
         <groupId>io.aiven.commons</groupId>
         <artifactId>aiven-commons</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1</version>
     </parent>
 
     <artifactId>kafka-config-utils</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
     <description>Utilities to help manage Kafka ConfigDef and ConfigKey definitions</description>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
@@ -22,7 +23,25 @@
             <artifactId>connect-api</artifactId>
             <scope>provided</scope>
         </dependency>
-
-
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <Specification-Vendor>Apache Kafka</Specification-Vendor>
+                            <Specification-Version>${kafka.version}</Specification-Version>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

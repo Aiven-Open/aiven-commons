@@ -23,8 +23,8 @@
 
 package io.aiven.commons.velocity;
 
-import io.aiven.common.kafka.config.DeprecatedInfo;
-import io.aiven.common.kafka.config.ExtendedConfigKey;
+import io.aiven.commons.kafka.config.DeprecatedInfo;
+import io.aiven.commons.kafka.config.ExtendedConfigKey;
 import org.apache.kafka.common.config.ConfigDef;
 
 
@@ -48,23 +48,43 @@ public class ExtendedConfigKeyBean extends ConfigKeyBean {
     this.extendedFlag = (key instanceof ExtendedConfigKey);
   }
 
+  /**
+   * Gets ths extendedFlag value.
+   * @return the extendedFlag value
+   */
   public final boolean isExtendedFlag() {
     return extendedFlag;
   }
 
+  /**
+   * Gets the {@link EndendedConfigKey} if the extendedFlag is set, otherwise returns null.
+   * @return EndendedConfigKey if the extendedFlag is set, otherwise returns null.
+   */
   private ExtendedConfigKey asExtended() {
     return extendedFlag ? (ExtendedConfigKey) key : null;
   }
 
+  /**
+   * Gets the since value.
+   * @return the since value or {@code null} if not an extended key.
+   */
   public final String since() {
     return extendedFlag ? asExtended().since : null;
   }
 
+  /**
+   * Gets the deprecated flag.
+   * @return the deprecated flag.
+   */
   @SuppressWarnings("unused")
   public final boolean isDeprecated() {
     return extendedFlag && asExtended().isDeprecated();
   }
 
+  /**
+   * Gets the DeprecatedInfo or {@code null} if not an extended key.
+   * @return the DeprecatedInfo or {@code null} if not an extended key.
+   */
   public final DeprecatedInfo deprecated() {
     return extendedFlag ? asExtended().deprecated : null;
   }

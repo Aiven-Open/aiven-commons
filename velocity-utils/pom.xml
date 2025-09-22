@@ -6,14 +6,15 @@
     <parent>
         <groupId>io.aiven.commons</groupId>
         <artifactId>aiven-commons</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1</version>
     </parent>
 
     <artifactId>velocity-utils</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
     <description>Utilities to provide data to the Apache Velocity engine used in site generation</description>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
@@ -23,10 +24,31 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>io.aiven</groupId>
-            <artifactId>config-utils</artifactId>
-            <version>${project.version}</version>
+            <groupId>io.aiven.commons</groupId>
+            <artifactId>kafka-config-utils</artifactId>
+            <scope>provided</scope>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <Specification-Vendor>Apache Velocity</Specification-Vendor>
+                            <Specification-Version>${velocity.tools.version}</Specification-Version>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

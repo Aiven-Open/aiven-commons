@@ -27,7 +27,7 @@ import java.util.function.Supplier;
  */
 public class DeprecatedInfo {
     /**
-     * Builds {@link DeprecatedInfo}.
+     * The Builder for {@link DeprecatedInfo}.
      */
     public static class Builder implements Supplier<DeprecatedInfo> {
 
@@ -50,6 +50,10 @@ public class DeprecatedInfo {
          */
         private String since;
 
+        /**
+         * Private constructor.
+         */
+        private Builder() {}
 
         @Override
         public DeprecatedInfo get() {

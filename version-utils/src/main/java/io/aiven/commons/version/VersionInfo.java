@@ -122,9 +122,25 @@ public final class VersionInfo {
     return orDefault(pkg.getSpecificationTitle(), "SPEC-TITLE");
   }
 
-  public static void main(String[] args) {
-    VersionInfo versionInfo = new VersionInfo();
-    System.out.println(versionInfo);
-    System.out.format("Spec: %s %s %s%n", versionInfo.getSpecTitle(), versionInfo.getSpecVersion(), versionInfo.getSpecVendor());
+  /**
+   * Main class to print version information.
+   * <p>If specified the arguments are assumed to be class names and the Version info for each class printed.  If not specified
+   * the version info for this class is printed.</p>
+   * @param args the optional class names.
+   * @throws ClassNotFoundException if a clas name can not be resolved.
+   */
+  public static void main(String[] args) throws ClassNotFoundException {
+    VersionInfo versionInfo;
+    if (args.length < 1) {
+      versionInfo = new VersionInfo();
+      System.out.println(versionInfo);
+      System.out.format("Spec: %s %s %s%n", versionInfo.getSpecTitle(), versionInfo.getSpecVersion(), versionInfo.getSpecVendor());
+    } else {
+      for (String className : args) {
+          versionInfo = new VersionInfo(Class.forName(className));
+        System.out.println(versionInfo);
+        System.out.format("Spec: %s %s %s%n", versionInfo.getSpecTitle(), versionInfo.getSpecVersion(), versionInfo.getSpecVendor());
+      }
+    }
   }
 }

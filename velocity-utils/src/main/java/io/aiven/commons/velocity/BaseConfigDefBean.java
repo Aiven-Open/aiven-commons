@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
  * DEVHINT: Be careful when removing methods as this may invalidate contents and functionality of the velocity templates.
  * </p>
  *
- * <p>Example of use <pre>{@code
+ * <p>Example of use</p> <pre>{@code
  * @DefaultKey("configDef")
  * @ValidScope({"application"})
  * public class ConfigDefBean extends BaseConfigDefBean<ConfigKeyBean> {
@@ -50,7 +50,6 @@ import java.util.stream.Collectors;
  *   }
  * }
  * }</pre>
- * </p>
  *
  * @param <T> The {@link ConfigKeyBean} type that this ConfigDefBean returns.
  */
@@ -92,12 +91,19 @@ public class BaseConfigDefBean<T extends ConfigKeyBean> {
 
   /**
    * Constructor.
+   * @param configDef the Kafka configuration definition to process.
+   * @param constructor A function to convert a Kafka {@code ConfigKey} to a {@code T}.
    */
   public BaseConfigDefBean(ConfigDef configDef, Function<? super ConfigDef.ConfigKey, T> constructor) {
     this.configDef = configDef;
     this.constructor = constructor;
   }
 
+  /**
+   * Filters the {@code ConfigKey}s in the {@configDef} provided in the constructor.
+   * @param filter A predicate to select keys from the ConfigDef.
+   * @return a list of {@code T}s built from the accepted config keys.
+   */
   private List<T> generatedFilteredList(Predicate<ConfigDef.ConfigKey> filter) {
     return configDef.configKeys().values().stream()
             .filter(filter)

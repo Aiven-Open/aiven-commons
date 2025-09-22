@@ -31,7 +31,7 @@ import java.util.Objects;
  */
 public final class RingBuffer<K> {
     /**
-     * HOw to handle the duplicates in the buffer.
+     * How to handle the duplicates in the buffer.
      */
     public enum DuplicateHandling {
         /**
@@ -80,6 +80,7 @@ public final class RingBuffer<K> {
      *
      * @param size
      *            The maximum size of the ring buffer
+     * @param duplicateHandling defines how to handle duplicate values in the buffer.
      */
     public RingBuffer(final int size, final DuplicateHandling duplicateHandling) {
         wrappedQueue = new CircularFifoQueue<>(size > 0 ? size : 1);
@@ -110,10 +111,19 @@ public final class RingBuffer<K> {
         return null;
     }
 
+    /**
+     * Removes a single instance of the item from the buffer.
+     * @param item the item to remove.
+     */
     public void remove(final K item) {
         queue.remove(item);
     }
 
+    /**
+     * Determines if the item is in the buffer.
+     * @param item the item to look for.
+     * @return {@code true} if the item is in the buffer, {@code false} othersie.
+     */
     public boolean contains(final K item) {
         return queue.contains(item);
     }
