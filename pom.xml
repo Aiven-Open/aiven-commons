@@ -68,6 +68,7 @@
     <module>version-utils</module>
     <module>velocity-utils</module>
     <module>collection-utils</module>
+    <module>string-utils</module>
   </modules>
 
   <scm>
@@ -102,6 +103,7 @@
 
     <commons.collection.version>4.4</commons.collection.version>
     <junit.version>5.10.2</junit.version>
+    <assertj.version>3.26.0</assertj.version>
 
     <assembly.plugin.version>3.7.1</assembly.plugin.version>
     <checkstyle.plugin.version>3.3.1</checkstyle.plugin.version>
@@ -138,6 +140,12 @@
         <version>${commons.collection.version}</version>
         <scope>provided</scope>
       </dependency>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-text</artifactId>
+        <version>1.14.0</version>
+        <scope>provided</scope>
+      </dependency>
 
       <!-- testing packages -->
       <dependency>
@@ -146,6 +154,12 @@
         <version>${junit.version}</version>
         <type>pom</type>
         <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.assertj</groupId>
+        <artifactId>assertj-core</artifactId>
+        <version>${assertj.version}</version>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.mockito</groupId>
@@ -341,7 +355,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <configuration></configuration>
         <executions>
           <execution>
             <id>Generate Javadoc</id>
@@ -365,12 +378,10 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
-        <configuration></configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
-        <configuration></configuration>
         <executions>
           <execution>
             <goals>
@@ -387,10 +398,6 @@
             <phase>prepare-package</phase>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <groupId>com.diffplug.spotless</groupId>
-        <artifactId>spotless-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </build>

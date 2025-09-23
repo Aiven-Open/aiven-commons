@@ -78,6 +78,11 @@ public final class RingBuffer<K> {
 		this.duplicateHandling = duplicateHandling;
 	}
 
+	@Override
+	public String toString() {
+		return String.format("RingBuffer[%s, load %s/%s]", duplicateHandling, queue.size(), wrappedQueue.maxSize());
+	}
+
 	/**
 	 * Adds a new item if it is not already present.
 	 *
@@ -120,6 +125,25 @@ public final class RingBuffer<K> {
 	 */
 	public boolean contains(final K item) {
 		return queue.contains(item);
+	}
+
+	/**
+	 * Returns but does not remove the head of the buffer.
+	 * 
+	 * @return the item at the head of the buffer. May be {@code null}.
+	 */
+	public K head() {
+		return queue.peek();
+	}
+
+	/**
+	 * Returns but does not remove the teal of the buffer.
+	 * 
+	 * @return the item at the tail of the buffer. May be {@code null}.
+	 */
+	public K tail() {
+		int size = wrappedQueue.size();
+		return size == 0 ? null : wrappedQueue.get(size - 1);
 	}
 
 	private boolean checkDuplicates(final K item) {

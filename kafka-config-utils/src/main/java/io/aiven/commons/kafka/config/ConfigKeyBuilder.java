@@ -295,7 +295,7 @@ public class ConfigKeyBuilder<T extends ConfigKeyBuilder<?>> {
 	 * Sets the {@link #recommender}.
 	 *
 	 * @param recommender
-	 *            the recommender.
+	 *            der.
 	 * @return this.
 	 */
 	public final T recommender(final ConfigDef.Recommender recommender) {
