@@ -12,12 +12,10 @@
         </logo>
     </poweredBy>
     <body>
-        <menu ref="modules" inherit="top"/>
         <menu ref="reports"/>
 
-
         <links>
-            <item name="Apache" href="http://www.apache.org"/>
+            <item name="Apache Commons Text" href="https://commons.apache.org/proper/commons-text/"/>
         </links>
 
         <footer>Copyright &amp;copy Aiven Oy. Licensed under the Apache License, Version 2.0.
@@ -36,7 +34,7 @@
             <sideBarEnabled>true</sideBarEnabled>
             <skipGenerationDate>true</skipGenerationDate>
             <gitHub>
-                <projectId>aiven-open/bigquery-connector-for-apache-kafka</projectId>
+                <projectId>aiven-open/aiven-commons</projectId>
                 <ribbonOrientation>right</ribbonOrientation>
                 <ribbonColor>orange</ribbonColor>
             </gitHub>
