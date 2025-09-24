@@ -1,6 +1,8 @@
 Aiven Commons
 ======================
-Is a collection of utilities for Aiven development
+Is a collection of java utilities used in Aiven development
+
+[Documentation](https://aiven-open.github.io/aiven-commons/) is available.
 
 Overview
 ========
