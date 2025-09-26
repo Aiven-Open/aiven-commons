@@ -64,11 +64,12 @@
     </developer>
   </developers>
   <modules>
-    <module>kafka-config-utils</module>
-    <module>version-utils</module>
-    <module>velocity-utils</module>
-    <module>collection-utils</module>
-    <module>string-utils</module>
+    <module>kafka-config</module>
+    <module>version</module>
+    <module>velocity</module>
+    <module>collections</module>
+    <module>strings</module>
+    <module>kafka-testkit</module>
   </modules>
 
   <scm>
@@ -93,34 +94,38 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
-
     <java.version>17</java.version>
     <com.google.guava.version>32.0.1-jre</com.google.guava.version>
     <com.google.re2j.version>1.7</com.google.re2j.version>
     <com.google.auto.value.version>1.10.2</com.google.auto.value.version>
     <kafka.version>3.9.1</kafka.version>
     <kafka.scala.version>2.12</kafka.scala.version>
+    <slf4j.version>2.0.11</slf4j.version>
 
+    <!-- standard package versions -->
     <commons.collection.version>4.4</commons.collection.version>
+
+    <!-- testing versions -->
     <junit.version>5.10.2</junit.version>
     <assertj.version>3.26.0</assertj.version>
+    <awaitility.version>4.2.1</awaitility.version>
+    <testcontainers.version>1.20.6</testcontainers.version>
 
+    <!-- plugin versions -->
     <assembly.plugin.version>3.7.1</assembly.plugin.version>
     <checkstyle.plugin.version>3.3.1</checkstyle.plugin.version>
     <compiler.plugin.version>3.8.1</compiler.plugin.version>
     <exec.plugin.version>3.2.0</exec.plugin.version>
     <surefire.plugin.version>3.5.3</surefire.plugin.version>
-
     <site.plugin.version>3.21.0</site.plugin.version>
+
+    <!-- site versions -->
     <velocity.core.version>2.4.1</velocity.core.version>
     <velocity.tools.version>3.1</velocity.tools.version>
   </properties>
 
   <dependencyManagement>
     <dependencies>
-
-      <!-- Child projects -->
-
       <!-- provided packages -->
       <dependency>
         <groupId>org.apache.kafka</groupId>
@@ -146,7 +151,19 @@
         <version>1.14.0</version>
         <scope>provided</scope>
       </dependency>
-
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>testcontainers-bom</artifactId>
+        <version>${testcontainers.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
       <!-- testing packages -->
       <dependency>
         <groupId>org.junit</groupId>
@@ -203,6 +220,18 @@
         <type>test-jar</type>
         <scope>test</scope>
       </dependency>
+      <dependency>
+        <groupId>org.assertj</groupId>
+        <artifactId>assertj-core</artifactId>
+        <version>${assertj.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.awaitility</groupId>
+        <artifactId>awaitility</artifactId>
+        <version>${awaitility.version}</version>
+        <scope>test</scope>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -217,6 +246,21 @@
   <build>
     <pluginManagement>
       <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-pmd-plugin</artifactId>
+          <version>3.27.0</version>
+          <configuration>
+            <minimumTokens>100</minimumTokens>
+            <targetJdk>${java.version}</targetJdk>
+            <analysisCache>true</analysisCache>
+            <excludeRoots>
+              <excludeRoot>target/generated-sources/stubs</excludeRoot>
+            </excludeRoots>
+            <verbose>true</verbose>
+            <linkXRef>false</linkXRef>
+          </configuration>
+        </plugin>
         <plugin>
           <groupId>com.diffplug.spotless</groupId>
           <artifactId>spotless-maven-plugin</artifactId>
@@ -340,6 +384,20 @@
     </pluginManagement>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>PMD check</id>
+            <goals>
+              <goal>check</goal>
+              <goal>cpd-check</goal>
+            </goals>
+            <phase>test</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>com.diffplug.spotless</groupId>
         <artifactId>spotless-maven-plugin</artifactId>
         <executions>
@@ -420,6 +478,30 @@
             <reports>
               <report>javadoc</report>
             </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <reportSets>
+          <reportSet>
+            <!-- by default, id = "default" -->
+            <reports>
+              <!-- select non-aggregate reports -->
+              <report>pmd</report>
+              <report>cpd</report>
+            </reports>
+          </reportSet>
+          <reportSet>
+            <!-- aggregate reportSet, to define in poms having modules -->
+            <id>aggregate</id>
+            <!-- don't run aggregate in child modules -->
+            <reports>
+              <report>aggregate-pmd</report>
+              <report>aggregate-cpd</report>
+            </reports>
+            <inherited>false</inherited>
           </reportSet>
         </reportSets>
       </plugin>
