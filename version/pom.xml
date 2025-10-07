@@ -7,7 +7,7 @@
     <version>1</version>
   </parent>
 
-  <artifactId>version-utils</artifactId>
+  <artifactId>version</artifactId>
   <version>0.0.1-SNAPSHOT</version>
 
   <description>Utilities to retrieve and manage version information</description>
