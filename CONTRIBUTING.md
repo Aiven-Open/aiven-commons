@@ -1,6 +1,6 @@
 # Welcome!
 
-Contributions are very welcome on Kafka Connector Utils. When contributing please keep this in mind:
+Contributions are very welcome on Aiven Commons. When contributing please keep this in mind:
 
 - Open an issue to discuss new bigger features.
 - Write code consistent with the project style and make sure the tests are passing.
