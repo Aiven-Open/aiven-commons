@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-
-    Copyright 2024 Copyright 2022 Aiven Oy and
-    bigquery-connector-for-apache-kafka project contributors
-
-    This software contains code derived from the Confluent BigQuery
-    Kafka Connector, Copyright Confluent, Inc, which in turn
-    contains code derived from the WePay BigQuery Kafka Connector,
-    Copyright WePay, Inc.
+    Copyright 2025 Aiven Oy and project contributors
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -22,6 +15,7 @@
     specific language governing permissions and limitations
     under the License.
 
+    SPDX-License-Identifier: Apache-2
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
@@ -63,14 +57,6 @@
       <timezone>Europe/Dublin</timezone>
     </developer>
   </developers>
-  <modules>
-    <module>kafka-config</module>
-    <module>version</module>
-    <module>velocity</module>
-    <module>collections</module>
-    <module>strings</module>
-    <module>kafka-testkit</module>
-  </modules>
 
   <scm>
     <connection>scm:git:git://github.com/Aiven-Open/aiven-commons.git</connection>
@@ -80,12 +66,6 @@
   </scm>
 
   <distributionManagement>
-    <repository>
-      <id>central</id>
-    </repository>
-    <snapshotRepository>
-      <id>central-snapshot</id>
-    </snapshotRepository>
     <site>
       <id>staging</id>
       <!--  For the URL to resolve to the default URL as described in the Apache Site Plugin documentation this URL
@@ -118,6 +98,7 @@
     <testcontainers.version>1.20.6</testcontainers.version>
 
     <!-- plugin versions -->
+    <rat.version>0.17</rat.version>
     <assembly.plugin.version>3.7.1</assembly.plugin.version>
     <checkstyle.plugin.version>3.3.1</checkstyle.plugin.version>
     <compiler.plugin.version>3.8.1</compiler.plugin.version>
@@ -254,7 +235,7 @@
         <checksumPolicy>fail</checksumPolicy>
       </snapshots>
       <id>central-snapshot</id>
-      <url>https://central.sonatype.com</url>
+      <url>https://central.sonatype.com/repository/maven-snapshots/</url>
       <layout>default</layout>
     </repository>
 
@@ -445,6 +426,27 @@
     </pluginManagement>
     <plugins>
       <plugin>
+        <groupId>org.apache.rat</groupId>
+        <artifactId>apache-rat-plugin</artifactId>
+        <version>${rat.version}</version>
+        <executions>
+          <execution>
+            <id>Release Audit Check</id>
+            <goals>
+              <goal>check</goal>
+            </goals>
+            <phase>test</phase>
+            <configuration>
+              <inputExcludes>
+                <expression>/CODE_OF_CONDUCT.md</expression>
+                <expression>/CONTRIBUTING.md</expression>
+                <expression>/SECURITY.md</expression>
+              </inputExcludes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-pmd-plugin</artifactId>
         <executions>
@@ -559,7 +561,7 @@
         <version>0.9.0</version>
         <extensions>true</extensions>
         <configuration>
-          <publishingServerId>central</publishingServerId>
+          <publishingServerId>central-snapshot</publishingServerId>
         </configuration>
       </plugin>
     </plugins>
