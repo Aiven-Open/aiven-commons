@@ -27,6 +27,8 @@
 
   <artifactId>kafka-testkit</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <name>Aiven commons Kafka testkit</name>
+  <description>Aiven Kafka testing utiltiies</description>
 
   <properties>
     <maven.compiler.source>23</maven.compiler.source>
@@ -39,14 +41,17 @@
       <groupId>io.aiven.commons</groupId>
       <artifactId>strings</artifactId>
       <version>0.0.1-SNAPSHOT</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.kafka</groupId>
       <artifactId>connect-api</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.kafka</groupId>
       <artifactId>connect-runtime</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.kafka</groupId>

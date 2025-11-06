@@ -27,8 +27,8 @@
 
   <artifactId>kafka-config</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-
-  <description>Utilities to help manage Kafka ConfigDef and ConfigKey definitions</description>
+  <name>Aiven commons Kafka config</name>
+  <description>Utilities to help manage Kafka configuration and configuration definitions</description>
 
   <properties></properties>
 

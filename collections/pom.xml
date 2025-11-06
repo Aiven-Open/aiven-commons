@@ -27,7 +27,8 @@
 
   <artifactId>collections</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <description>Aiven enhancements to the Apache Commons collections library</description>
+  <name>Aiven commons collections</name>
+  <description>Aiven enhancements and implementations for the Apache Commons collections and genral Java collections libraries.</description>
 
   <properties></properties>
 

@@ -25,10 +25,10 @@
   <version>1</version>
   <packaging>pom</packaging>
 
-  <name>Kafka Common Utilities</name>
+  <name>Aiven Common Utilities</name>
 
   <description>This is a collection of utility jars with minimal external dependencies.  All external dependencies are
-        provided by the environment or are for testing only.  For example the kafka-config-utils module expects Kafka to be present.</description>
+        provided by the environment or are for testing only.  For example the kafka-config module expects Kafka to be present.</description>
 
   <url>https://github.com/Aiven-Open/aiven-commons</url>
 
@@ -104,7 +104,6 @@
     <compiler.plugin.version>3.8.1</compiler.plugin.version>
     <exec.plugin.version>3.2.0</exec.plugin.version>
     <surefire.plugin.version>3.5.3</surefire.plugin.version>
-    <site.plugin.version>3.21.0</site.plugin.version>
 
     <!-- site versions -->
     <velocity.core.version>2.4.1</velocity.core.version>
@@ -395,11 +394,6 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-site-plugin</artifactId>
-          <version>${site.plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-source-plugin</artifactId>
           <version>3.3.1</version>
           <executions>
@@ -416,11 +410,6 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-gpg-plugin</artifactId>
           <version>3.2.8</version>
-        </plugin>
-        <plugin>
-          <groupId>org.sonatype.central</groupId>
-          <artifactId>central-publishing-maven-plugin</artifactId>
-          <version>0.9.0</version>
         </plugin>
       </plugins>
     </pluginManagement>

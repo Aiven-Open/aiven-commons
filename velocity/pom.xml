@@ -27,7 +27,7 @@
 
   <artifactId>velocity</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-
+  <name>Aiven commons velocity</name>
   <description>Utilities to provide data to the Apache Velocity engine used in site generation</description>
 
   <properties></properties>

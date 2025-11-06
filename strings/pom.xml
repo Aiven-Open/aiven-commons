@@ -27,7 +27,7 @@
 
   <artifactId>strings</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-
+  <name>Aiven commons strings</name>
   <description>Utilities to manipulate strings</description>
   <properties></properties>
 

@@ -27,8 +27,8 @@
 
   <artifactId>version</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-
-  <description>Utilities to retrieve and manage version information</description>
+  <name>Aiven commons version</name>
+  <description>Utilities to retrieve and manage version information from jars</description>
 
   <properties></properties>
 
