@@ -41,8 +41,8 @@ public class ExtendedConfigKey extends ConfigDef.ConfigKey {
 	 */
 	private ExtendedConfigKey(Builder<?> builder) {
 		super(builder.name, builder.type, builder.defaultValue, builder.validator, builder.importance,
-				builder.documentation, builder.group, builder.orderInGroup, builder.width, builder.displayName,
-				builder.getDependents(), builder.recommender, builder.internalConfig);
+				builder.generateDocumentation(), builder.group, builder.orderInGroup, builder.width,
+				builder.displayName, builder.getDependents(), builder.recommender, builder.internalConfig);
 		this.deprecated = builder.deprecated;
 		this.since = builder.since == null ? "" : builder.since;
 	}
@@ -115,6 +115,19 @@ public class ExtendedConfigKey extends ConfigDef.ConfigKey {
 		@Override
 		public ExtendedConfigKey build() {
 			return new ExtendedConfigKey(this);
+		}
+
+		@Override
+		protected String generateDocumentation() {
+			StringBuilder result = new StringBuilder();
+			if (deprecated != null) {
+				result.append(deprecated.formatted(displayName)).append(". ");
+			}
+			if (since != null) {
+				result.append(displayName).append(" has been available since ").append(since).append(". ");
+			}
+			result.append(documentation);
+			return result.toString();
 		}
 
 		/**

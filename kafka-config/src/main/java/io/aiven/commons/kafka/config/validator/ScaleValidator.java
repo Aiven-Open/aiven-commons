@@ -1,4 +1,4 @@
-package io.aiven.kafka.connect.common.config.validators;
+package io.aiven.commons.kafka.config.validator;
 /*
          Copyright 2025 Aiven Oy and project contributors
 
@@ -68,6 +68,7 @@ public class ScaleValidator implements ConfigDef.Validator {
 	 *            The minimum acceptable number of bytes
 	 * @param possibleScales
 	 *            The list of potential scale values.
+	 * @return A scale validator that requires at least the {@code min} number.
 	 */
 	public static ScaleValidator atLeast(final Number min, final List<Scale> possibleScales) {
 		return new ScaleValidator(min, null, possibleScales);
@@ -82,6 +83,8 @@ public class ScaleValidator implements ConfigDef.Validator {
 	 *            the maximum acceptable number of bytes.
 	 * @param possibleScales
 	 *            The list of potential scale values.
+	 * @return A scale validator that requires a value between the {@code min} and
+	 *         {@code max} numbers inclusive.
 	 */
 	public static ScaleValidator between(final Number min, final Number max, final List<Scale> possibleScales) {
 		return new ScaleValidator(min, max, possibleScales);
@@ -93,9 +96,11 @@ public class ScaleValidator implements ConfigDef.Validator {
 			throw new ConfigException(name, null, "Value must be non-null");
 		final Number number = (Number) value;
 		if (minBytes != null && number.longValue() < minBytes.longValue())
-			throw new ConfigException(name, value, "Value must be at least " + minScale.format(minBytes.longValue()));
+			throw new ConfigException(name, value,
+					"Value must be at least " + minScale.displayValue(minBytes.longValue()));
 		if (maxBytes != null && number.doubleValue() > maxBytes.doubleValue())
-			throw new ConfigException(name, value, "Value must be no more than " + maxScale.format(maxBytes.longValue()));
+			throw new ConfigException(name, value,
+					"Value must be no more than " + maxScale.displayValue(maxBytes.longValue()));
 	}
 
 	@Override

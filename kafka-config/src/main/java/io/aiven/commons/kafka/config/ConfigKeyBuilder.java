@@ -104,8 +104,19 @@ public class ConfigKeyBuilder<T extends ConfigKeyBuilder<?>> {
 	 * @return a ConfigKey from the specified values.
 	 */
 	public ConfigDef.ConfigKey build() {
-		return new ConfigDef.ConfigKey(name, type, defaultValue, validator, importance, documentation, group,
+		return new ConfigDef.ConfigKey(name, type, defaultValue, validator, importance, generateDocumentation(), group,
 				orderInGroup, width, displayName, getDependents(), recommender, internalConfig);
+	}
+
+	/**
+	 * Generates the documentation. This is an extension point for ConfigKey
+	 * builders to modify the documentation. For example adding deprecation
+	 * information, or interactions with other keys in the configuration.
+	 * 
+	 * @return the documentation for the component.
+	 */
+	protected String generateDocumentation() {
+		return documentation;
 	}
 
 	/**
