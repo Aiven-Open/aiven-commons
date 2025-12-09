@@ -30,7 +30,12 @@ public enum Scale {
 	/**
 	 * A byte.
 	 */
-	B(1),
+	B(1) {
+		@Override
+		public String format(final long byteCount) {
+			return String.format("%s %s", byteCount, this.name());
+		}
+	},
 	/**
 	 * SI scale Kilobytes bytes
 	 */
@@ -72,23 +77,23 @@ public enum Scale {
 	 */
 	PiB(TiB.bytes * KiB.bytes);
 
-    /**
-     * The International Electrotechnical Commission (IEC) standardized binary
-     * prefixes. Developed by the IEC to avoid ambiguity through their similarity to
-     * the standard metric terms. These are based on powers of 2.
-     *
-     * @see <a href='https://www.iec.ch/prefixes-binary-multiples'>IEC prefixes for
-     *      binary multiples</a>.
-     */
-    public static final List<Scale> IEC = Arrays.asList(KiB, MiB, GiB, TiB, PiB);
+	/**
+	 * The International Electrotechnical Commission (IEC) standardized binary
+	 * prefixes. Developed by the IEC to avoid ambiguity through their similarity to
+	 * the standard metric terms. These are based on powers of 2.
+	 *
+	 * @see <a href='https://www.iec.ch/prefixes-binary-multiples'>IEC prefixes for
+	 *      binary multiples</a>.
+	 */
+	public static final List<Scale> IEC = Arrays.asList(KiB, MiB, GiB, TiB, PiB);
 
-    /**
-     * The SI standardized prefix scales. These are the metric units, as such they
-     * are all powers of 10.
-     */
-    public static final List<Scale> SI = Arrays.asList(KB, MB, GB, TB, PB);
+	/**
+	 * The SI standardized prefix scales. These are the metric units, as such they
+	 * are all powers of 10.
+	 */
+	public static final List<Scale> SI = Arrays.asList(KB, MB, GB, TB, PB);
 
-    /**
+	/**
 	 * The format used to output the values.
 	 */
 	final DecimalFormat dec = new DecimalFormat("0.0 ");
@@ -160,7 +165,7 @@ public enum Scale {
 		ordered.sort((a, b) -> Long.compare(b.bytes, a.bytes));
 
 		for (Scale scale : ordered) {
-			if (scale.bytes < byteCount) {
+			if (scale.bytes <= byteCount) {
 				return scale;
 			}
 		}
@@ -181,5 +186,18 @@ public enum Scale {
 	 */
 	public static String size(final int byteCount, final List<Scale> possibleScales) {
 		return scaleOf(byteCount, possibleScales).format(byteCount);
+	}
+
+	/**
+	 * Creates a String using the scale. if the scale is not {@link #B} then it is
+	 * followed by the number of bytes within a set of parenthesis.
+	 * 
+	 * @param value
+	 *            the number of bytes.
+	 * @return a String using the scale. if the scale is not {@link #B} then it is
+	 *         followed by the number of bytes
+	 */
+	public String displayValue(final long value) {
+		return format(value) + (this == B ? "" : " (" + B.format(value) + ")");
 	}
 }
