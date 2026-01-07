@@ -637,6 +637,15 @@
   <profiles>
     <profile>
       <id>ci</id>
+      <modules>
+        <module>collections</module>
+        <module>google-utils</module>
+        <module>kafka-config</module>
+        <module>kafka-testkit</module>
+        <module>strings</module>
+        <module>system</module>
+        <module>velocity</module>
+      </modules>
       <build>
         <pluginManagement>
           <plugins>
@@ -652,6 +661,18 @@
           </plugins>
         </pluginManagement>
       </build>
+    </profile>
+    <profile>
+      <id>build-all</id>
+      <modules>
+        <module>collections</module>
+        <module>google-utils</module>
+        <module>kafka-config</module>
+        <module>kafka-testkit</module>
+        <module>strings</module>
+        <module>system</module>
+        <module>velocity</module>
+      </modules>
     </profile>
   </profiles>
 </project>

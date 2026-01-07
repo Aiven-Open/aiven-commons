@@ -27,14 +27,8 @@
 
   <artifactId>google-utils</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>Aiven commons Google utilities</name>
-  <description>Aiven comon utilities for Google environments</description>
-
-  <properties>
-    <maven.compiler.source>23</maven.compiler.source>
-    <maven.compiler.target>23</maven.compiler.target>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+  <name>Aiven commons Google cloud utilities</name>
+  <description>Aiven comon utilities for Google cloud environments</description>
 
   <dependencies>
     <dependency>
@@ -87,9 +81,10 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
+          <detail>true</detail>
           <!-- necessary to test environment var changes in code -->
-          <argLine>--add-opens java.base/java.util=ALL-UNNAMED
-                        --add-opens java.base/java.lang=ALL-UNNAMED</argLine>
+          <argLine>--add-opens java.base/java.util=io.aiven.commons.system
+                --add-opens java.base/java.lang=io.aiven.commons.system</argLine>
         </configuration>
       </plugin>
     </plugins>

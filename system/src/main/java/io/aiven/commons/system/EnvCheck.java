@@ -138,7 +138,7 @@ public final class EnvCheck {
 	 * with the values being reset in the finally block.
 	 * </p>
 	 * <p>
-	 * To remove an envrionment variable use the {@link Map#remove(Object)} method.
+	 * To remove an environment variable use the {@link Map#remove(Object)} method.
 	 * Setting the map value to {@code null} will throw an exception.
 	 * </p>
 	 * 

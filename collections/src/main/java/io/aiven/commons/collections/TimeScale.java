@@ -28,20 +28,21 @@ import java.util.Locale;
  */
 @SuppressWarnings("PMD.FieldNamingConventions")
 public enum TimeScale {
+	/** milliseconds */
 	MILLISECONDS(1) {
 		@Override
 		public String format(final long milliseconds) {
 			return String.format("%s %s", milliseconds, unitName());
 		}
 	},
-    /** seconds */
+	/** seconds */
 	SECONDS(MILLISECONDS.milliseconds * 1000),
-   /** minutes */
-    MINUTES(SECONDS.milliseconds * 60),
-    /** hours */
-    HOURS(MINUTES.milliseconds * 60),
-    /** days */
-    DAYS(HOURS.milliseconds * 24);
+	/** minutes */
+	MINUTES(SECONDS.milliseconds * 60),
+	/** hours */
+	HOURS(MINUTES.milliseconds * 60),
+	/** days */
+	DAYS(HOURS.milliseconds * 24);
 
 	/**
 	 * The Decimal format for the TimeUnit displays.

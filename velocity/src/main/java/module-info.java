@@ -16,8 +16,12 @@
  * SPDX-License-Identifier: Apache-2
  */
 /**
- * System utilities module def
+ * Kafka configuration utilities module def
  */
-module io.aiven.commons.system {
-	exports io.aiven.commons.system;
+module io.aiven.commons.velocity {
+	exports io.aiven.commons.velocity;
+
+	requires org.slf4j;
+	requires io.aiven.commons.kafka.config;
+	requires kafka.clients;
 }
