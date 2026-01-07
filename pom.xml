@@ -84,6 +84,7 @@
     <com.google.guava.version>32.0.1-jre</com.google.guava.version>
     <com.google.re2j.version>1.7</com.google.re2j.version>
     <com.google.auto.value.version>1.10.2</com.google.auto.value.version>
+    <google.cloud.bom.version>26.33.0</google.cloud.bom.version>
     <kafka.version>3.9.1</kafka.version>
     <kafka.scala.version>2.12</kafka.scala.version>
     <slf4j.version>2.0.11</slf4j.version>
@@ -114,6 +115,20 @@
 
   <dependencyManagement>
     <dependencies>
+      <!-- imported poms -->
+      <dependency>
+        <groupId>com.google.cloud</groupId>
+        <artifactId>libraries-bom</artifactId>
+        <version>${google.cloud.bom.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+        <exclusions>
+          <exclusion>
+            <groupId>com.google.auto.value</groupId>
+            <artifactId>auto-value</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
       <!-- provided packages -->
       <dependency>
         <groupId>org.apache.kafka</groupId>
@@ -340,10 +355,6 @@
               <manifest>
                 <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
               </manifest>
-              <manifestEntries>
-                <Specification-Vendor>Apache Kafka</Specification-Vendor>
-                <Specification-Version>${kafka.version}</Specification-Version>
-              </manifestEntries>
             </archive>
           </configuration>
         </plugin>

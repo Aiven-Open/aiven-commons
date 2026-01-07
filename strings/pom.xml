@@ -59,10 +59,6 @@
             <manifest>
               <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
             </manifest>
-            <manifestEntries>
-              <Specification-Vendor>Apache Kafka</Specification-Vendor>
-              <Specification-Version>${kafka.version}</Specification-Version>
-            </manifestEntries>
           </archive>
         </configuration>
       </plugin>

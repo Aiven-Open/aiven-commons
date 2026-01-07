@@ -22,26 +22,16 @@
   <parent>
     <groupId>io.aiven.commons</groupId>
     <artifactId>aiven-commons</artifactId>
-    <version>1</version>
+    <version>2-SNAPSHOT</version>
   </parent>
 
-  <artifactId>collections</artifactId>
+  <artifactId>system</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>Aiven commons collections</name>
-  <description>Aiven enhancements and implementations for the Apache Commons collections and genral Java collections libraries.</description>
+  <name>Aiven commons system utils</name>
+  <description>Utilities to retrieve and manage information from the java system</description>
 
   <properties></properties>
-
   <dependencies>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-collections4</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-params</artifactId>
-      <scope>test</scope>
-    </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
@@ -53,10 +43,31 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <!-- necessary to test environment var changes in code -->
+          <argLine>--add-opens java.base/java.util=ALL-UNNAMED
+                            --add-opens java.base/java.lang=ALL-UNNAMED</argLine>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>**/target/classes/**</exclude>
+          </excludes>
+          <useManifestOnlyJar>false</useManifestOnlyJar>
+          <classesDirectory>${project.build.directory}/${project.build.finalName}.jar</classesDirectory>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <configuration>
           <archive>
             <manifest>
+              <mainClass>io.aiven.commons.system.VersionInfo</mainClass>
               <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
             </manifest>
           </archive>
