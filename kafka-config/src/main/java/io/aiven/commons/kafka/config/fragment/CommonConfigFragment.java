@@ -50,7 +50,7 @@ public class CommonConfigFragment extends ConfigFragment {
 	 */
 	public static ConfigDef update(final ConfigDef configDef) {
 		int orderInGroup = 0;
-		final String commonGroup = "commons";
+		final String commonGroup = "common";
 
 		return configDef.define(ConnectorConfig.TASKS_MAX_CONFIG, ConfigDef.Type.INT, 1, atLeast(1),
 				ConfigDef.Importance.HIGH, "Maximum number of tasks to use for this connector.", commonGroup,
