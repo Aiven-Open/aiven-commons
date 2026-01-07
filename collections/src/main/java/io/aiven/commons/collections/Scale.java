@@ -30,7 +30,12 @@ public enum Scale {
 	/**
 	 * A byte.
 	 */
-	B(1),
+	B(1) {
+		@Override
+		public String format(final long byteCount) {
+			return String.format("%s %s", byteCount, this.name());
+		}
+	},
 	/**
 	 * SI scale Kilobytes bytes
 	 */
@@ -73,6 +78,22 @@ public enum Scale {
 	PiB(TiB.bytes * KiB.bytes);
 
 	/**
+	 * The International Electrotechnical Commission (IEC) standardized binary
+	 * prefixes. Developed by the IEC to avoid ambiguity through their similarity to
+	 * the standard metric terms. These are based on powers of 2.
+	 *
+	 * @see <a href='https://www.iec.ch/prefixes-binary-multiples'>IEC prefixes for
+	 *      binary multiples</a>.
+	 */
+	public static final List<Scale> IEC = Arrays.asList(KiB, MiB, GiB, TiB, PiB);
+
+	/**
+	 * The SI standardized prefix scales. These are the metric units, as such they
+	 * are all powers of 10.
+	 */
+	public static final List<Scale> SI = Arrays.asList(KB, MB, GB, TB, PB);
+
+	/**
 	 * The format used to output the values.
 	 */
 	final DecimalFormat dec = new DecimalFormat("0.0 ");
@@ -88,7 +109,7 @@ public enum Scale {
 	 * @param bytes
 	 *            the number of bytes in a single unit of the scale.
 	 */
-	Scale(long bytes) {
+	Scale(final long bytes) {
 		this.bytes = bytes;
 	}
 
@@ -100,7 +121,7 @@ public enum Scale {
 	 * @return A string representing the number of units that comprise the
 	 *         {@code byteCount}.
 	 */
-	public String format(long byteCount) {
+	public String format(final long byteCount) {
 		return dec.format(byteCount * 1.0 / bytes).concat(this.name());
 	}
 
@@ -111,7 +132,7 @@ public enum Scale {
 	 *            the number of units at this scale.
 	 * @return A string representing the number of units at this scale.
 	 */
-	public String units(int unitCount) {
+	public String units(final int unitCount) {
 		return dec.format(unitCount).concat(this.name());
 	}
 
@@ -122,7 +143,7 @@ public enum Scale {
 	 *            the number of units.
 	 * @return the number of bytes in {@code unitCount} units of this scale.
 	 */
-	public long asBytes(double unitCount) {
+	public long asBytes(final double unitCount) {
 		return (long) unitCount * bytes;
 	}
 
@@ -138,13 +159,13 @@ public enum Scale {
 	 *            the list of possible scales.
 	 * @return the first matching scale.
 	 */
-	public static Scale scaleOf(long byteCount, List<Scale> possibleScales) {
+	public static Scale scaleOf(final long byteCount, final List<Scale> possibleScales) {
 		final List<Scale> ordered = new ArrayList<>(possibleScales);
 		// sort descending size.
 		ordered.sort((a, b) -> Long.compare(b.bytes, a.bytes));
 
 		for (Scale scale : ordered) {
-			if (scale.bytes < byteCount) {
+			if (scale.bytes <= byteCount) {
 				return scale;
 			}
 		}
@@ -163,24 +184,20 @@ public enum Scale {
 	 *         best Scale representation.
 	 * @see #scaleOf(long, List)
 	 */
-	public static String size(int byteCount, List<Scale> possibleScales) {
+	public static String size(final int byteCount, final List<Scale> possibleScales) {
 		return scaleOf(byteCount, possibleScales).format(byteCount);
 	}
 
 	/**
-	 * The International Electrotechnical Commission (IEC) standardized binary
-	 * prefixes. Developed by the IEC to avoid ambiguity through their similarity to
-	 * the standard metric terms. These are based on powers of 2.
+	 * Creates a String using the scale. if the scale is not {@link #B} then it is
+	 * followed by the number of bytes within a set of parenthesis.
 	 * 
-	 * @see <a href='https://www.iec.ch/prefixes-binary-multiples'>IEC prefixes for
-	 *      binary multiples</a>.
+	 * @param value
+	 *            the number of bytes.
+	 * @return a String using the scale. if the scale is not {@link #B} then it is
+	 *         followed by the number of bytes
 	 */
-	public static final List<Scale> IEC = Arrays.asList(KiB, MiB, GiB, TiB, PiB);
-
-	/**
-	 * The SI standardized prefix scales. These are the metric units, as such they
-	 * are all powers of 10.
-	 */
-	public static final List<Scale> SI = Arrays.asList(KB, MB, GB, TB, PB);
-
+	public String displayValue(final long value) {
+		return format(value) + (this == B ? "" : " (" + B.format(value) + ")");
+	}
 }

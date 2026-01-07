@@ -54,11 +54,11 @@ public class ScaleValidator implements ConfigDef.Validator {
 	 * @param possibleScales
 	 *            the potential scales for display.
 	 */
-	ScaleValidator(final Number minBytes, final Number maxBytes, List<Scale> possibleScales) {
+	ScaleValidator(final Number minBytes, final Number maxBytes, final List<Scale> possibleScales) {
 		this.minBytes = minBytes;
-		this.minScale = Scale.scaleOf(minBytes.longValue(), possibleScales);
+		this.minScale = minBytes == null ? Scale.B : Scale.scaleOf(minBytes.longValue(), possibleScales);
 		this.maxBytes = maxBytes;
-		this.maxScale = Scale.scaleOf(maxBytes.longValue(), possibleScales);
+		this.maxScale = maxBytes == null ? Scale.B : Scale.scaleOf(maxBytes.longValue(), possibleScales);
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class ScaleValidator implements ConfigDef.Validator {
 	 * @param possibleScales
 	 *            The list of potential scale values.
 	 */
-	public static ScaleValidator atLeast(Number min, List<Scale> possibleScales) {
+	public static ScaleValidator atLeast(final Number min, final List<Scale> possibleScales) {
 		return new ScaleValidator(min, null, possibleScales);
 	}
 
@@ -83,19 +83,19 @@ public class ScaleValidator implements ConfigDef.Validator {
 	 * @param possibleScales
 	 *            The list of potential scale values.
 	 */
-	public static ScaleValidator between(Number min, Number max, List<Scale> possibleScales) {
+	public static ScaleValidator between(final Number min, final Number max, final List<Scale> possibleScales) {
 		return new ScaleValidator(min, max, possibleScales);
 	}
 
 	@Override
-	public void ensureValid(String name, Object o) {
-		if (o == null)
+	public void ensureValid(final String name, final Object value) {
+		if (value == null)
 			throw new ConfigException(name, null, "Value must be non-null");
-		Number n = (Number) o;
-		if (minBytes != null && n.longValue() < minBytes.longValue())
-			throw new ConfigException(name, o, "Value must be at least " + minScale.format(minBytes.longValue()));
-		if (maxBytes != null && n.doubleValue() > maxBytes.doubleValue())
-			throw new ConfigException(name, o, "Value must be no more than " + maxScale.format(maxBytes.longValue()));
+		final Number number = (Number) value;
+		if (minBytes != null && number.longValue() < minBytes.longValue())
+			throw new ConfigException(name, value, "Value must be at least " + minScale.format(minBytes.longValue()));
+		if (maxBytes != null && number.doubleValue() > maxBytes.doubleValue())
+			throw new ConfigException(name, value, "Value must be no more than " + maxScale.format(maxBytes.longValue()));
 	}
 
 	@Override
