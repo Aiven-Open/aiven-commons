@@ -75,7 +75,7 @@ public class CommonConfig extends AbstractConfig {
 		for (final Map.Entry<String, Object> entry : originals().entrySet()) {
 			if (entry.getValue() != null && !(entry.getValue() instanceof String)) {
 				throw new ClassCastException("Non-string value found in original settings for key " + entry.getKey()
-						+ ": " + entry.getValue().getClass().getName());
+						+ " : " + entry.getValue().getClass().getName());
 			}
 			if (entry.getKey() == null) {
 				throw new ClassCastException("Null key found in original settings.");
