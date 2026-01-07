@@ -60,7 +60,7 @@ public class ConfigFragment implements FragmentDataAccess {
 	 * Create a validation message.
 	 *
 	 * @param name
-	 *            the Name of the configuration property.
+	 *            the name of the configuration property.
 	 * @param value
 	 *            the value associated with that property.
 	 * @param message
@@ -75,7 +75,7 @@ public class ConfigFragment implements FragmentDataAccess {
 	 * Registers an issue in the Config map.
 	 *
 	 * @param configMap
-	 *            The map of name ot ConfigValue.
+	 *            The map of name to ConfigValue.
 	 * @param name
 	 *            the name of the item with the error.
 	 * @param value
