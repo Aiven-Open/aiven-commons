@@ -26,7 +26,6 @@ public class ExtendedConfigKeyBuilderTest {
 
 	private void assertStandardValues(ConfigDef.ConfigKey key, String name) {
 		assertThat(key.displayName).isEqualTo(name);
-		assertThat(key.documentation).isEmpty();
 		assertThat(key.group).isNull();
 		assertThat(key.alternativeString).isNull();
 		assertThat(key.dependents).isEmpty();
@@ -45,6 +44,7 @@ public class ExtendedConfigKeyBuilderTest {
 		ExtendedConfigKey key = ExtendedConfigKey.builder("defaults").build();
 		assertThat(key.isDeprecated()).isFalse();
 		assertThat(key.getSince()).isEmpty();
+		assertThat(key.documentation).isEmpty();
 		assertStandardValues(key, "defaults");
 	}
 
@@ -54,6 +54,7 @@ public class ExtendedConfigKeyBuilderTest {
 				.build();
 		assertThat(key.isDeprecated()).isTrue();
 		assertThat(key.getSince()).isEmpty();
+		assertThat(key.documentation).isEqualTo("deprecation is deprecated. ");
 		assertStandardValues(key, "deprecation");
 	}
 
@@ -62,6 +63,7 @@ public class ExtendedConfigKeyBuilderTest {
 		ExtendedConfigKey key = ExtendedConfigKey.builder("since").since("whenever").build();
 		assertThat(key.isDeprecated()).isFalse();
 		assertThat(key.getSince()).isEqualTo("whenever");
+		assertThat(key.documentation).isEqualTo("since has been available since whenever. ");
 		assertStandardValues(key, "since");
 	}
 }
