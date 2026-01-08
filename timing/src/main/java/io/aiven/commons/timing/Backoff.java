@@ -187,8 +187,8 @@ public class Backoff {
 	public void cleanDelay() {
 		try {
 			delay();
-		} catch (InterruptedException exception) {
-			// do nothing return results below
+		} catch (InterruptedException expected) {
+			// do nothing.  We swallow the interruption so that we do not return an error.
 		}
 	}
 
