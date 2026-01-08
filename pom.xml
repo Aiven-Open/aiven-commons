@@ -22,12 +22,12 @@
 
   <groupId>io.aiven.commons</groupId>
   <artifactId>aiven-commons</artifactId>
-  <version>2-SNAPSHOT</version>
+  <version>2</version>
   <packaging>pom</packaging>
 
-  <name>Aiven Common Utilities</name>
+  <name>Aiven Commons Parent</name>
 
-  <description>This is a collection of utility jars with minimal external dependencies.  All external dependencies are
+  <description>This is the parent POM for a collection of utility jars with minimal external dependencies.  All external dependencies are
         provided by the environment or are for testing only.  For example the kafka-config module expects Kafka to be present.</description>
 
   <url>https://github.com/Aiven-Open/aiven-commons</url>
@@ -225,12 +225,6 @@
         <version>${kafka.version}</version>
         <classifier>test</classifier>
         <type>test-jar</type>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.kafka</groupId>
-        <artifactId>connect-runtime</artifactId>
-        <version>${kafka.version}</version>
         <scope>test</scope>
       </dependency>
       <dependency>
