@@ -1,4 +1,4 @@
-package io.aiven.commons.version;
+package io.aiven.commons.system;
 /*
          Copyright 2025 Aiven Oy and project contributors
 
@@ -131,19 +131,12 @@ public final class VersionInfo {
 	 *             if a clas name can not be resolved.
 	 */
 	public static void main(String[] args) throws ClassNotFoundException {
-		VersionInfo versionInfo;
-		if (args.length < 1) {
-			versionInfo = new VersionInfo();
-			System.out.println(versionInfo);
+		VersionInfo versionInfo = args.length < 1 ? new VersionInfo() : new VersionInfo(Class.forName(args[0]));
+		System.out.println(versionInfo);
+		if (versionInfo.pkg.getSpecificationTitle() != null || versionInfo.pkg.getSpecificationVersion() != null
+				|| versionInfo.pkg.getSpecificationTitle() != null) {
 			System.out.format("Spec: %s %s %s%n", versionInfo.getSpecTitle(), versionInfo.getSpecVersion(),
 					versionInfo.getSpecVendor());
-		} else {
-			for (String className : args) {
-				versionInfo = new VersionInfo(Class.forName(className));
-				System.out.println(versionInfo);
-				System.out.format("Spec: %s %s %s%n", versionInfo.getSpecTitle(), versionInfo.getSpecVersion(),
-						versionInfo.getSpecVendor());
-			}
 		}
 	}
 }

@@ -48,23 +48,18 @@ public final class SchemaRegistryContainer extends GenericContainer<SchemaRegist
 	 * @param bootstrapServer
 	 *            the url of the kafka bootstrap server.
 	 */
+	@SuppressWarnings("PMD.AvoidUsingHardCodedIP")
 	public SchemaRegistryContainer(final String karapaceVersion, final String bootstrapServer) {
 		super("ghcr.io/aiven-open/karapace:" + karapaceVersion);
-		withAccessToHost(true);
-		withEnv("KARAPACE_ADVERTISED_HOSTNAME", "karapace-registry");
-		withEnv("KARAPACE_BOOTSTRAP_URI", bootstrapServer);
-		withEnv("KARAPACE_PORT", String.valueOf(SCHEMA_REGISTRY_PORT));
-		withEnv("KARAPACE_HOST", "0.0.0.0");
-		withEnv("KARAPACE_CLIENT_ID", "karapace");
-		withEnv("KARAPACE_GROUP_ID", "karapace-registry");
-		withEnv("KARAPACE_MASTER_ELIGIBILITY", "true");
-		withEnv("KARAPACE_TOPIC_NAME", "_schemas");
-		withEnv("KARAPACE_LOG_LEVEL", "WARNING");// This can be set to DEBUG for more verbose logging
-		withEnv("KARAPACE_COMPATIBILITY", "FULL");
-		withEnv("KARAPACE_KAFKA_SCHEMA_READER_STRICT_MODE", "false");
-		withEnv("KARAPACE_KAFKA_RETRIABLE_ERRORS_SILENCED", "true");
-		withExposedPorts(SCHEMA_REGISTRY_PORT);
-		withCommand("/bin/bash", "/opt/karapace/start.sh", "registry");
+		withAccessToHost(true).withEnv("KARAPACE_ADVERTISED_HOSTNAME", "karapace-registry")
+				.withEnv("KARAPACE_BOOTSTRAP_URI", bootstrapServer)
+				.withEnv("KARAPACE_PORT", String.valueOf(SCHEMA_REGISTRY_PORT)).withEnv("KARAPACE_HOST", "0.0.0.0")
+				.withEnv("KARAPACE_CLIENT_ID", "karapace").withEnv("KARAPACE_GROUP_ID", "karapace-registry")
+				.withEnv("KARAPACE_MASTER_ELIGIBILITY", "true").withEnv("KARAPACE_TOPIC_NAME", "_schemas")
+				.withEnv("KARAPACE_LOG_LEVEL", "WARNING") // This can be set to DEBUG for more verbose logging
+				.withEnv("KARAPACE_COMPATIBILITY", "FULL").withEnv("KARAPACE_KAFKA_SCHEMA_READER_STRICT_MODE", "false")
+				.withEnv("KARAPACE_KAFKA_RETRIABLE_ERRORS_SILENCED", "true").withExposedPorts(SCHEMA_REGISTRY_PORT)
+				.withCommand("/bin/bash", "/opt/karapace/start.sh", "registry");
 
 		// When started, check any API to see if the service is ready, which also
 		// indicates that it is connected to the

@@ -56,9 +56,13 @@ public class KafkaIntegrationTestBase {
 	private static final ThreadLocal<KafkaManager> KAFKA_MANAGER_THREAD_LOCAL = new ThreadLocal<>();
 
 	/** The thread local instance of the connector name */
-	private static final ThreadLocal<String> CONNECTOR_NAME_THREAD_LOCAL = new ThreadLocal<>() {
-	};
+	private static final ThreadLocal<String> CONNECTOR_NAME_THREAD_LOCAL = new ThreadLocal<>();
 
+	/**
+	 * The base test class for kafka integration tests.
+	 */
+	public KafkaIntegrationTestBase() {
+	}
 	/**
 	 * Returns value as bytes or {@code null} .
 	 *
@@ -81,7 +85,7 @@ public class KafkaIntegrationTestBase {
 	 *            the key for the recrod.
 	 * @param value
 	 *            the value for the record.
-	 * @return a {@code }ProducerRecord<byte[], byte[]>}
+	 * @return a {@code ProducerRecord<byte[], byte[]>}
 	 */
 	protected static ProducerRecord<byte[], byte[]> recordOf(final String topic, final int partition, final String key,
 			final String value) {
