@@ -37,11 +37,6 @@
       <version>0.0.1-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
-    <!--      <dependency>-->
-    <!--          <groupId>org.apache.kafka</groupId>-->
-    <!--          <artifactId>kafka-group-coordinator-api</artifactId>-->
-    <!--          <scope>compile</scope>-->
-    <!--      </dependency>-->
     <dependency>
       <groupId>org.apache.kafka</groupId>
       <artifactId>connect-api</artifactId>
