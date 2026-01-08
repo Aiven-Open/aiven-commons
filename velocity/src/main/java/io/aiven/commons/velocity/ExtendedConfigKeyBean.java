@@ -53,7 +53,7 @@ public class ExtendedConfigKeyBean extends ConfigKeyBean {
 	}
 
 	/**
-	 * Gets the {@link EndendedConfigKey} if the extendedFlag is set, otherwise
+	 * Gets the {@link ExtendedConfigKey} if the extendedFlag is set, otherwise
 	 * returns null.
 	 *
 	 * @return EndendedConfigKey if the extendedFlag is set, otherwise returns null.

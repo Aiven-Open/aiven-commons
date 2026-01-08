@@ -30,8 +30,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 
 /**
  * Manages a containerized Kafka and some associated components.
@@ -129,7 +127,7 @@ public final class KafkaManager {
 	/**
 	 * Gets a list of all the current workers.
 	 *
-	 * @return a list of all the c urrent workers.
+	 * @return a set of all the current workers.
 	 */
 	public Set<WorkerHandle> listWorkers() {
 		return connectRunner.listWorkers();
@@ -141,12 +139,8 @@ public final class KafkaManager {
 	 *
 	 * @param topic
 	 *            one or more topic names to create.
-	 * @throws ExecutionException
-	 *             on topic creation error.
-	 * @throws InterruptedException
-	 *             if operation is interrupted.
 	 */
-	public void createTopic(final String... topic) throws ExecutionException, InterruptedException {
+	public void createTopic(final String... topic) {
 		createTopics(List.of(topic), 4, (short) 1);
 	}
 
@@ -172,8 +166,8 @@ public final class KafkaManager {
 	 *            the replication factor to use.
 	 */
 	public void createTopics(final List<String> topics, final int partitions, final short replicationFactor) {
-		final NewTopic[] newTopics = topics.stream().map(t -> new NewTopic(t, partitions, replicationFactor))
-				.collect(Collectors.toList()).toArray(new NewTopic[topics.size()]);
+		final NewTopic[] newTopics = topics.stream().map(t -> new NewTopic(t, partitions, replicationFactor)).toList()
+				.toArray(new NewTopic[topics.size()]);
 		topicAdmin.createTopics(newTopics);
 	}
 

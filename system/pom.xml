@@ -46,8 +46,8 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <!-- necessary to test environment var changes in code -->
-          <argLine>--add-opens java.base/java.util=ALL-UNNAMED
-                            --add-opens java.base/java.lang=ALL-UNNAMED</argLine>
+          <argLine>--add-opens java.base/java.util=io.aiven.commons.system
+              --add-opens java.base/java.lang=io.aiven.commons.system</argLine>
         </configuration>
       </plugin>
       <plugin>

@@ -25,7 +25,6 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
@@ -35,14 +34,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class GCPValidatorTest {
 
 	private final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
-
-	private Map<String, String> getEnvVars() throws NoSuchFieldException, IllegalAccessException {
-		Class<?> classOfMap = System.getenv().getClass();
-		// The field m inside the UnmodifiableMap wrapper object is a mutable Map
-		Field field = classOfMap.getDeclaredField("m");
-		field.setAccessible(true);
-		return (Map<String, String>) field.get(System.getenv());
-	}
 
 	private GenericJson newKeyFile() {
 		final GenericJson keyFile = new GenericJson();
@@ -101,7 +92,7 @@ public class GCPValidatorTest {
 
 		credentialSource.put("url", "https://example.com/badURL");
 
-		Map<String, String> envVar = getEnvVars();
+		Map<String, String> envVar = EnvCheck.getEnvVars();
 		String oldValue = envVar.get(EnvCheck.Type.URI.envVar());
 		try {
 			envVar.remove(EnvCheck.Type.URI.envVar());
@@ -134,7 +125,7 @@ public class GCPValidatorTest {
 
 		credentialSource.put("file", "/tmp/example/badFile");
 
-		Map<String, String> envVar = getEnvVars();
+		Map<String, String> envVar = EnvCheck.getEnvVars();
 		String oldValue = envVar.get(EnvCheck.Type.FILE.envVar());
 		try {
 			envVar.remove(EnvCheck.Type.FILE.envVar());
@@ -170,7 +161,7 @@ public class GCPValidatorTest {
 		credentialSource.put("executable", executable);
 		executable.put("command", "/my/badCommand");
 
-		Map<String, String> envVar = getEnvVars();
+		Map<String, String> envVar = EnvCheck.getEnvVars();
 		String oldValue = envVar.get(EnvCheck.Type.CMD.envVar());
 		try {
 			envVar.remove(EnvCheck.Type.CMD.envVar());
