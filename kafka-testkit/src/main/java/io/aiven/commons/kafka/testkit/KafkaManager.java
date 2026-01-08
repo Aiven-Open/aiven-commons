@@ -1,4 +1,4 @@
-package testkit;
+package io.aiven.commons.kafka.testkit;
 /*
          Copyright 2025 Aiven Oy and project contributors
 
