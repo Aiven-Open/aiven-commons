@@ -129,8 +129,8 @@ public final class EnvCheck {
 	 * will be reflected in the system environment variables.
 	 * <p>
 	 * This method will only work if the command line options
-	 * {@code --add-opens java.base/java.util=ALL-UNNAMED} and
-	 * {@code --add-opens java.base/java.lang=ALL-UNNAMED} are used.
+	 * {@code --add-opens java.base/java.util=io.aiven.commons.system} and
+	 * {@code --add-opens java.base/java.lang=io.aiven.commons.system} are used.
 	 * </p>
 	 * <p>
 	 * Changes made to the returned map change the environment variables. This is

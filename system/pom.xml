@@ -22,12 +22,12 @@
   <parent>
     <groupId>io.aiven.commons</groupId>
     <artifactId>aiven-commons</artifactId>
-    <version>2-SNAPSHOT</version>
+    <version>2</version>
   </parent>
 
   <artifactId>system</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <name>Aiven commons system utils</name>
+  <version>1.0.0</version>
+  <name>Aiven Commons System Utils</name>
   <description>Utilities to retrieve and manage information from the java system</description>
 
   <properties></properties>
