@@ -30,12 +30,6 @@
   <name>Aiven commons Kafka testkit</name>
   <description>Aiven Kafka testing utilities.  This project is intended to be used in testing and in the test scope.</description>
 
-  <properties>
-    <maven.compiler.source>23</maven.compiler.source>
-    <maven.compiler.target>23</maven.compiler.target>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>io.aiven.commons</groupId>
@@ -75,4 +69,38 @@
     </dependency>
   </dependencies>
 
+  <repositories>
+    <!-- TODO remove when commons version 2 -->
+    <repository>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>maven-repo</id>
+      <url>https://repo1.maven.org/maven2/</url>
+      <layout>default</layout>
+    </repository>
+  </repositories>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+            </manifest>
+            <manifestEntries>
+              <Specification-Vendor>Apache Kafka</Specification-Vendor>
+              <Specification-Version>${kafka.version}</Specification-Version>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>

@@ -284,17 +284,6 @@
       <layout>default</layout>
     </repository>
 
-    <repository>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <id>maven-repo</id>
-      <url>https://repo1.maven.org/maven2/</url>
-      <layout>default</layout>
-    </repository>
   </repositories>
 
   <build>
@@ -304,10 +293,7 @@
           <groupId>org.sonatype.central</groupId>
           <artifactId>central-publishing-maven-plugin</artifactId>
           <version>0.9.0</version>
-          <extensions>true</extensions>
-          <configuration>
-            <publishingServerId>central</publishingServerId>
-          </configuration>
+          <!--          <extensions>true</extensions>-->
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
