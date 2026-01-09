@@ -30,6 +30,43 @@
   <name>Aiven commons Google cloud utilities</name>
   <description>Aiven comon utilities for Google cloud environments</description>
 
+  <url>https://github.com/Aiven-Open/aiven-commons</url>
+
+  <licenses>
+    <license>
+      <name>Apache License 2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <!-- please order developers by surname then given name -->
+  <developers>
+    <developer>
+      <id>aindriu-aiven</id>
+      <name>Aindriú Lavelle</name>
+      <email>aindriu.lavelle@aiven.io</email>
+      <organization>Aiven, OY</organization>
+      <organizationUrl>https://aiven.io</organizationUrl>
+      <timezone>Europe/Dublin</timezone>
+    </developer>
+    <developer>
+      <id>claudenw</id>
+      <name>Claude Warren</name>
+      <email>claude.warren@aiven.io</email>
+      <organization>Aiven, OY</organization>
+      <organizationUrl>https://aiven.io</organizationUrl>
+      <timezone>Europe/Dublin</timezone>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:git:git://github.com/Aiven-Open/aiven-commons.git</connection>
+    <developerConnection>scm:git:git@github.com:Aiven-Open/aiven-commons.git</developerConnection>
+    <tag>HEAD</tag>
+    <url>https://github.com/Aiven-Open/aiven-commons</url>
+  </scm>
+
   <dependencies>
     <dependency>
       <groupId>io.aiven.commons</groupId>
@@ -56,11 +93,13 @@
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
+      <version>${assertj.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.awaitility</groupId>
       <artifactId>awaitility</artifactId>
+      <version>${awaitility.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

@@ -47,7 +47,16 @@
     </license>
   </licenses>
 
+  <!-- please order developers by surname then given name -->
   <developers>
+    <developer>
+      <id>aindriu-aiven</id>
+      <name>Aindriú Lavelle</name>
+      <email>aindriu.lavelle@aiven.io</email>
+      <organization>Aiven, OY</organization>
+      <organizationUrl>https://aiven.io</organizationUrl>
+      <timezone>Europe/Dublin</timezone>
+    </developer>
     <developer>
       <id>claudenw</id>
       <name>Claude Warren</name>
@@ -278,6 +287,7 @@
       <url>https://central.sonatype.com/repository/maven-snapshots/</url>
       <layout>default</layout>
     </repository>
+
     <repository>
       <releases>
         <enabled>true</enabled>
@@ -583,7 +593,8 @@
         <version>0.9.0</version>
         <extensions>true</extensions>
         <configuration>
-          <publishingServerId>central-snapshot</publishingServerId>
+          <publishingServerId>central</publishingServerId>
+          <deploymentName>${groupId} ${artifactId} v${version}</deploymentName>
         </configuration>
       </plugin>
     </plugins>
@@ -676,6 +687,22 @@
         <module>system</module>
         <module>velocity</module>
       </modules>
+    </profile>
+    <profile>
+      <id>release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.sonatype.central</groupId>
+            <artifactId>central-publishing-maven-plugin</artifactId>
+            <version>0.9.0</version>
+            <extensions>true</extensions>
+            <configuration>
+              <publishingServerId>central</publishingServerId>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
   </profiles>
 </project>
