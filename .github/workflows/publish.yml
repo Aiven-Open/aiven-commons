@@ -51,8 +51,8 @@ jobs:
           servers: |
             [{
               "id": "central",
-              "username": "${{ secrets.CLAUDE_ID }}",
-              "password": "${{ secrets.CLAUDE_PASSWORD }}"
+              "username": "${{ secrets.SONOTYPE_NAME }}",
+              "password": "${{ secrets.SONOTYPE_PASSWORD }}"
             }]
       - name: Build (Maven)
         run: mvn -P ci -P sign --batch-mode -Dgpg.signer=bc clean deploy

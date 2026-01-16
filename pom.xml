@@ -75,6 +75,10 @@
   </scm>
 
   <distributionManagement>
+    <snapshotRepository>
+      <id>central-snapshot</id>
+      <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+    </snapshotRepository>
     <site>
       <id>staging</id>
       <!--  For the URL to resolve to the default URL as described in the Apache Site Plugin documentation this URL
