@@ -50,7 +50,7 @@ jobs:
         with:
           servers: |
             [{
-              "id": "central-snapshot",
+              "id": "central",
               "username": "${{ secrets.CLAUDE_ID }}",
               "password": "${{ secrets.CLAUDE_PASSWORD }}"
             }]
