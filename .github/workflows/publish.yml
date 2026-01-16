@@ -1,5 +1,5 @@
 #
-#   Copyright 2025 Aiven Oy and project contributors
+#   Copyright 2026 Aiven Oy and project contributors
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -16,14 +16,14 @@
 #
 #  SPDX-License-Identifier: Apache-2
 
+
 # Workflow to check pull requests and new commits to main branches
 # This checks the source in the state as if after the merge.
 name: Pull request checks
 on:
-  pull_request:
-    branches: [ main ]
-  push:
-    branches: [ main ]
+  workflow_dispatch:
+  #push:
+  #  branches: [ main ]
 
 # Disallow concurrent runs for the same PR by cancelling in-progress runs
 # when new commits are pushed
@@ -44,13 +44,22 @@ jobs:
           distribution: 'adopt'
           java-version: 17
           cache: maven
+      - name: setup maven
+        uses: s4u/maven-settings-action@v4.0.0
+        with:
+          servers: |
+            [{
+              "id": "maven",
+              "username": "${{ secrets.SONOTYPE_NAME }}",
+              "password": "${{ secrets.SONOTYPE_PASSWORD }}"
+            }]
       - name: Build (Maven)
-        run: mvn -ntp -P ci --batch-mode clean install
+        run: mvn -P ci -P sign --batch-mode -Dgpg.signer=bc clean deploy
       - name: "Upload build failure reports"
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: unit-test-results
+          name: test-results
           path: |
             **/target/*-reports/**
           retention-days: 1
