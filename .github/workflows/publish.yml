@@ -50,7 +50,7 @@ jobs:
         with:
           servers: |
             [{
-              "id": "maven",
+              "id": "central-snapshot",
               "username": "${{ secrets.SONOTYPE_NAME }}",
               "password": "${{ secrets.SONOTYPE_PASSWORD }}"
             }]
