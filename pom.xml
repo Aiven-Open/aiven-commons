@@ -698,7 +698,7 @@
             <version>0.9.0</version>
             <extensions>true</extensions>
             <configuration>
-              <publishingServerId>central</publishingServerId>
+              <publishingServerId>central-snapshot</publishingServerId>
             </configuration>
           </plugin>
         </plugins>
