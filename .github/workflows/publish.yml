@@ -48,9 +48,14 @@ jobs:
       - name: setup maven
         uses: s4u/maven-settings-action@v4.0.0
         with:
+          sonatypeSnapshots: true
           servers: |
             [{
               "id": "central",
+              "username": "${{ secrets.SONOTYPE_NAME }}",
+              "password": "${{ secrets.SONOTYPE_PASSWORD }}"
+            }, {
+              "id": "central-snapshot",
               "username": "${{ secrets.SONOTYPE_NAME }}",
               "password": "${{ secrets.SONOTYPE_PASSWORD }}"
             }]
