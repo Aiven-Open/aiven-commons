@@ -33,7 +33,7 @@ on:
 # Disallow concurrent runs for the same PR by cancelling in-progress runs
 # when new commits are pushed
 concurrency:
-  group: ${{ inputs.module-name }}-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: ${{ inputs.module-name }}-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
