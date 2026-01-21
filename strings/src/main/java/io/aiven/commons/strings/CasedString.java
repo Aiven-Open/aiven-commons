@@ -17,6 +17,7 @@ package io.aiven.commons.strings;
 
         SPDX-License-Identifier: Apache-2
  */
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,39 +30,42 @@ import org.apache.commons.text.WordUtils;
 /**
  * Handles converting from one string case to another (e.g. camel case to snake
  * case).
- *
+ * 
  * @since 0.17
  */
 public class CasedString {
 	/** the string of the cased format. */
-	private final String string;
+	private final String[] parts;
 	/** the case of the string. */
 	private final StringCase stringCase;
 
 	/**
-	 * A method to join camel string fragments together.
+	 * A method to join pascal string fragments together.
 	 */
-	private static final Function<String[], String> CAMEL_JOINER = a -> {
-		final StringBuilder builder = new StringBuilder(a[0].toLowerCase(Locale.ROOT));
-
-		for (int i = 1; i < a.length; i++) {
-			builder.append(WordUtils.capitalize(a[i].toLowerCase(Locale.ROOT)));
-		}
-		return builder.toString();
+	private static final Function<String[], String> PASCAL_JOINER = strings -> {
+		StringBuilder sb = new StringBuilder();
+		Arrays.stream(strings).forEach(token -> sb.append(WordUtils.capitalize(token.toLowerCase(Locale.ROOT))));
+		return sb.toString();
 	};
 
 	/**
 	 * An enumeration of supported string cases. These cases tag strings as having a
 	 * specific format.
 	 */
-	public enum StringCase {
+	public static class StringCase {
 		/**
 		 * Camel case tags strings like 'CamelCase' or 'camelCase'. This conversion
-		 * forces the first character to lower case. If specific capitalization rules
-		 * are required use {@link WordUtils#capitalize(String)} to set the first
-		 * character of the string.
+		 * forces the first character to lower case. If the first character is desired
+		 * to be upper case use PASCAL case instead.
 		 */
-		CAMEL(Character::isUpperCase, true, CAMEL_JOINER),
+		public static final StringCase CAMEL = new StringCase(Character::isUpperCase, true,
+				PASCAL_JOINER.andThen(WordUtils::uncapitalize));
+		/**
+		 * Camel case tags strings like 'PascalCase' or 'pascalCase'. This conversion
+		 * forces the first character to upper case. If the first character is desired
+		 * to be lower case use CAMEL case instead.
+		 */
+		public static final StringCase PASCAL = new StringCase(Character::isUpperCase, true, PASCAL_JOINER);
 		/**
 		 * Snake case tags strings like 'Snake_Case'. This conversion does not change
 		 * the capitalization of any characters in the string. If specific
@@ -70,7 +74,7 @@ public class CasedString {
 		 * {@link WordUtils#capitalize(String)}, or
 		 * {@link WordUtils#uncapitalize(String)} as required.
 		 */
-		SNAKE(c -> c == '_', false, a -> String.join("_", a)),
+		public static final StringCase SNAKE = new StringCase(c -> c == '_', false, a -> String.join("_", a));
 		/**
 		 * Kebab case tags strings like 'kebab-case'. This conversion does not change
 		 * the capitalization of any characters in the string. If specific
@@ -79,7 +83,7 @@ public class CasedString {
 		 * {@link WordUtils#capitalize(String)}, or
 		 * {@link WordUtils#uncapitalize(String)} as required.
 		 */
-		KEBAB(c -> c == '-', false, a -> String.join("-", a)),
+		public static final StringCase KEBAB = new StringCase(c -> c == '-', false, a -> String.join("-", a));
 
 		/**
 		 * Phrase case tags phrases of words like 'phrase case'. This conversion does
@@ -89,7 +93,8 @@ public class CasedString {
 		 * {@link WordUtils#capitalize(String)}, or
 		 * {@link WordUtils#uncapitalize(String)} as required.
 		 */
-		PHRASE(Character::isWhitespace, false, a -> String.join(" ", a)),
+		public static final StringCase PHRASE = new StringCase(Character::isWhitespace, false,
+				a -> String.join(" ", a));
 
 		/**
 		 * Dot case tags phrases of words like 'phrase.case'. This conversion does not
@@ -99,7 +104,17 @@ public class CasedString {
 		 * {@link WordUtils#capitalize(String)}, or
 		 * {@link WordUtils#uncapitalize(String)} as required.
 		 */
-		DOT(c -> c == '.', false, a -> String.join(".", a));
+		public static final StringCase DOT = new StringCase(c -> c == '.', false, a -> String.join(".", a));
+
+		/**
+		 * Slash case tags phrases of words like 'phrase.case'. This conversion does not
+		 * change the capitalization of any characters in the string. If specific
+		 * capitalization is required use {@link String#toUpperCase()},
+		 * {@link String#toLowerCase()}, * or the commons-text methods
+		 * {@link WordUtils#capitalize(String)}, or
+		 * {@link WordUtils#uncapitalize(String)} as required.
+		 */
+		public static final StringCase SLASH = new StringCase(c -> c == '/', false, a -> String.join("/", a));
 
 		/** The segment value for a null string */
 		private static final String[] NULL_SEGMENT = new String[0];
@@ -118,7 +133,7 @@ public class CasedString {
 
 		/**
 		 * Defines a String Case.
-		 *
+		 * 
 		 * @param splitter
 		 *            The predicate that determines when a new word in the cased string
 		 *            begins.
@@ -128,7 +143,7 @@ public class CasedString {
 		 * @param joiner
 		 *            The function to merge a list of strings into the cased String.
 		 */
-		StringCase(final Predicate<Character> splitter, final boolean preserveSplit,
+		public StringCase(final Predicate<Character> splitter, final boolean preserveSplit,
 				final Function<String[], String> joiner) {
 			this.splitter = splitter;
 			this.preserveSplit = preserveSplit;
@@ -137,7 +152,7 @@ public class CasedString {
 
 		/**
 		 * Creates a cased string from a collection of segments.
-		 *
+		 * 
 		 * @param segments
 		 *            the segments to create the CasedString from.
 		 * @return a CasedString
@@ -150,9 +165,7 @@ public class CasedString {
 		 * Returns an array of each of the segments in this CasedString. Segments are
 		 * defined as the strings between the separators in the CasedString. For the
 		 * CAMEL case the segments are determined by the presence of a capital letter.
-		 *
-		 * @param string
-		 *            The string to split into segments.
+		 * 
 		 * @return the array of Strings that are segments of the cased string.
 		 */
 		public String[] getSegments(final String string) {
@@ -160,25 +173,25 @@ public class CasedString {
 				return NULL_SEGMENT;
 			}
 			if (string.isEmpty()) {
-				return Arrays.copyOf(EMPTY_SEGMENT, 1);
+				return EMPTY_SEGMENT;
 			}
-			final List<String> lst = new ArrayList<>();
-			final StringBuilder builder = new StringBuilder();
-			for (final char c : string.toCharArray()) {
+			List<String> lst = new ArrayList<>();
+			StringBuilder sb = new StringBuilder();
+			for (char c : string.toCharArray()) {
 				if (splitter.test(c)) {
-					if (!preserveSplit || !builder.isEmpty()) {
-						lst.add(builder.toString());
+					if (!sb.isEmpty()) {
+						lst.add(sb.toString());
+						sb.setLength(0);
 					}
-					builder.setLength(0);
 					if (preserveSplit) {
-						builder.append(c);
+						sb.append(c);
 					}
 				} else {
-					builder.append(c);
+					sb.append(c);
 				}
 			}
-			if (!builder.isEmpty()) {
-				lst.add(builder.toString());
+			if (!sb.isEmpty()) {
+				lst.add(sb.toString());
 			}
 			return lst.toArray(new String[0]);
 		}
@@ -186,50 +199,67 @@ public class CasedString {
 
 	/**
 	 * A representation of a cased string and the identified case of that string.
-	 *
+	 * 
 	 * @param stringCase
 	 *            The {@code StringCase} that the {@code string} argument is in.
 	 * @param string
 	 *            The string.
 	 */
 	public CasedString(final StringCase stringCase, final String string) {
-		this.string = string == null ? null : stringCase.assemble(stringCase.getSegments(string.trim()));
+		this.parts = string == null ? StringCase.NULL_SEGMENT : stringCase.getSegments(string.trim());
 		this.stringCase = stringCase;
+	}
+
+	/**
+	 * A representation of a cased string and the identified case of that string.
+	 * 
+	 * @param stringCase
+	 *            The {@code StringCase} that the {@code string} argument is in.
+	 * @param parts
+	 *            The string parts.
+	 */
+	public CasedString(final StringCase stringCase, final String[] parts) {
+		this.parts = parts;
+		this.stringCase = stringCase;
+	}
+
+	public CasedString as(final StringCase stringCase) {
+		if (stringCase == this.stringCase) {
+			return this;
+		}
+		return new CasedString(stringCase, Arrays.copyOf(this.parts, this.parts.length));
 	}
 
 	/**
 	 * Returns an array of each of the segments in this CasedString. Segments are
 	 * defined as the strings between the separators in the CasedString. For the
 	 * CAMEL case the segments are determined by the presence of a capital letter.
-	 *
+	 * 
 	 * @return the array of Strings that are segments of the cased string.
 	 */
 	public String[] getSegments() {
-		return stringCase.getSegments(string);
+		return parts;
 	}
 
 	/**
 	 * Converts this cased string into a {@code String} of another format. The
 	 * upper/lower case of the characters within the string are not modified.
-	 *
+	 * 
 	 * @param stringCase
 	 *            The format to convert to.
 	 * @return the String current string represented in the new format.
 	 */
 	public String toCase(final StringCase stringCase) {
-		if (stringCase == this.stringCase) {
-			return string;
-		}
-		return string == null ? null : stringCase.joiner.apply(getSegments());
+		return parts == StringCase.NULL_SEGMENT ? null : stringCase.joiner.apply(getSegments());
 	}
 
 	/**
 	 * Returns the string representation provided in the constructor.
-	 *
+	 * 
 	 * @return the string representation.
 	 */
 	@Override
 	public String toString() {
-		return string;
+		return toCase(stringCase);
 	}
 }
