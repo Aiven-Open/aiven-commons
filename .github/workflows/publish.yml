@@ -71,12 +71,12 @@ jobs:
           servers: |
             [{
               "id": "central",
-              "username": "${{ secrets.SONATYPE_NAME }}",
-              "password": "${{ secrets.SONATYPE_PASSWORD }}"
+              "username": "${{ secrets.CLAUDE_ID }}",
+              "password": "${{ secrets.CLAUDE_PASSWORD }}"
             }, {
               "id": "central-snapshot",
-              "username": "${{ secrets.SONATYPE_NAME }}",
-              "password": "${{ secrets.SONATYPE_PASSWORD }}"
+              "username": "${{ secrets.CLAUDE_ID }}",
+              "password": "${{ secrets.CLAUDE_PASSWORD }}"
             }]
 
       - name: Build and deploy (Maven deploy)
