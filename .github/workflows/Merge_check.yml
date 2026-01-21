@@ -85,7 +85,7 @@ jobs:
         with:
           files: ${{ matrix.module }}/**
 
-      - name: Extract Maven project version for ${{ matrix.module }} - Any changes: ${{ steps.changed-files-specific.outputs.any_changed }}
+      - name: Extract Maven project version for ${{ matrix.module }}  with changes: ${{ steps.changed-files-specific.outputs.any_changed }}
         if: steps.changed-files-specific.outputs.any_changed == 'true'
         run: echo "version=$(mvn -f ${{ matrix.module }} -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_OUTPUT
         id: project
