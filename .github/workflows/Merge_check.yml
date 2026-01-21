@@ -85,7 +85,7 @@ jobs:
         with:
           files: ${{ matrix.module }}/**
 
-      - name: Extract Maven project version for ${{ matrix.module }}
+      - name: Extract Maven project version for ${{ matrix.module }} - Any changes: ${{ steps.changed-files-specific.outputs.any_changed }}
         if: steps.changed-files-specific.outputs.any_changed == 'true'
         run: echo "version=$(mvn -f ${{ matrix.module }} -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_OUTPUT
         id: project
@@ -107,7 +107,7 @@ jobs:
 
       - name: Deploy (Maven ${{ inputs.module-name }} ${{ steps.project.outputs.version }})
         if: steps.changed-files-specific.outputs.any_changed == 'true' && contains(steps.project.outputs.version , '-SNAPSHOT')
-        run: mvn -f ${{ inputs.module-name }} -P sign --batch-mode -Dgpg.signer=bc deploy
+        run: mvn -f ${{ matrix.module }} -P sign --batch-mode -Dgpg.signer=bc deploy
         env:
           MAVEN_GPG_KEY: ${{ secrets.GPG_KEY }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSWORD }}
