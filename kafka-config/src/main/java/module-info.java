@@ -25,4 +25,7 @@ module io.aiven.commons.kafka.config {
 	requires org.slf4j;
 	requires kafka.clients;
 	requires connect.runtime;
+    requires org.apache.commons.lang3;
+	requires maven.artifact;
+	requires java.validation;
 }

@@ -60,10 +60,14 @@ public class ExtendedConfigKeyBuilderTest {
 
 	@Test
 	void testSince() {
-		ExtendedConfigKey key = ExtendedConfigKey.builder("since").since("whenever").build();
+		SinceInfo sinceInfo = SinceInfo.builder().artifactId("artifactId").groupId("groupId").version("version").build();
+		ExtendedConfigKey key = ExtendedConfigKey.builder("since").since(sinceInfo).build();
 		assertThat(key.isDeprecated()).isFalse();
-		assertThat(key.getSince()).isEqualTo("whenever");
-		assertThat(key.documentation).isEqualTo("since has been available since whenever. ");
+		assertThat(key.getSince()).isEqualTo("groupId:artifactId:version");
 		assertStandardValues(key, "since");
+
+		SinceInfo.Builder adjustedInfo = SinceInfo.builder().version("whatever");
+		key.setSince(adjustedInfo);
+		assertThat(key.getSince()).isEqualTo("whatever");
 	}
 }

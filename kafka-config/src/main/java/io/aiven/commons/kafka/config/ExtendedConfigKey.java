@@ -31,7 +31,7 @@ public class ExtendedConfigKey extends ConfigDef.ConfigKey {
 	public final DeprecatedInfo deprecated;
 
 	/** The version in which this attribute was added. May be {@code null}. */
-	public final String since;
+	public final SinceInfo since;
 
 	/**
 	 * The constructor called by the builder.
@@ -44,7 +44,7 @@ public class ExtendedConfigKey extends ConfigDef.ConfigKey {
 				builder.generateDocumentation(), builder.group, builder.orderInGroup, builder.width,
 				builder.displayName, builder.getDependents(), builder.recommender, builder.internalConfig);
 		this.deprecated = builder.deprecated;
-		this.since = builder.since == null ? "" : builder.since;
+		this.since = builder.since == null ? SinceInfo.builder().version("").build() : builder.since;
 	}
 
 	/**
@@ -64,7 +64,16 @@ public class ExtendedConfigKey extends ConfigDef.ConfigKey {
 	 * @return the value of since if it was set, an empty string otherwise.
 	 */
 	public final String getSince() {
-		return since;
+		return since.toString();
+	}
+
+	/**
+	 * Sets since override.  The builder must define {@code version} at a minimum.
+	 * Any undefined values will be blank.
+	 * @param builder the SinceInfo.Builder to define the override.
+	 */
+	public final void setSince(SinceInfo.Builder builder) {
+		since.setOverride(builder);
 	}
 
 	/**
@@ -100,7 +109,7 @@ public class ExtendedConfigKey extends ConfigDef.ConfigKey {
 		private DeprecatedInfo deprecated;
 
 		/** The since value. */
-		private String since;
+		private SinceInfo since;
 
 		/**
 		 * The builder.
@@ -122,9 +131,6 @@ public class ExtendedConfigKey extends ConfigDef.ConfigKey {
 			StringBuilder result = new StringBuilder();
 			if (deprecated != null) {
 				result.append(deprecated.formatted(displayName)).append(". ");
-			}
-			if (since != null) {
-				result.append(displayName).append(" has been available since ").append(since).append(". ");
 			}
 			result.append(documentation);
 			return result.toString();
@@ -160,7 +166,7 @@ public class ExtendedConfigKey extends ConfigDef.ConfigKey {
 		 *            the since value.
 		 * @return this.
 		 */
-		public final T since(final String since) {
+		public final T since(final SinceInfo since) {
 			this.since = since;
 			return self();
 		}
