@@ -60,10 +60,56 @@ public class ExtendedConfigKeyBuilderTest {
 
 	@Test
 	void testSince() {
-		ExtendedConfigKey key = ExtendedConfigKey.builder("since").since("whenever").build();
+		SinceInfo sinceInfo = SinceInfo.builder().artifactId("artifactId").groupId("groupId").version("version")
+				.build();
+		ExtendedConfigKey key = ExtendedConfigKey.builder("since").since(sinceInfo).build();
 		assertThat(key.isDeprecated()).isFalse();
-		assertThat(key.getSince()).isEqualTo("whenever");
-		assertThat(key.documentation).isEqualTo("since has been available since whenever. ");
+		assertThat(key.getSince()).isEqualTo("groupId:artifactId:version");
 		assertStandardValues(key, "since");
+	}
+
+	@Test
+	void testOverrideSince() {
+		SinceInfo.Builder sinceBuilder = SinceInfo.builder().artifactId("artifactId").groupId("groupId").version("1.0");
+		SinceInfo.Builder deprecatedSinceBuilder = SinceInfo.builder().artifactId("artifactId").groupId("groupId")
+				.version("1.5");
+		SinceInfo.Builder overrideBuilder = SinceInfo.builder().version("myVersion");
+		// since only
+		ExtendedConfigKey key = ExtendedConfigKey.builder("overrideSince").since(sinceBuilder.build()).build();
+		assertThat(key.getSince()).isEqualTo("groupId:artifactId:1.0");
+		assertThat(key.getDeprecationMessage()).isEqualTo("");
+
+		key.overrideSince(overrideBuilder);
+		assertThat(key.getSince()).isEqualTo("myVersion");
+		assertThat(key.getDeprecationMessage()).isEqualTo("");
+
+		// since and deprecation
+		key = ExtendedConfigKey.builder("overrideSince").since(sinceBuilder.build())
+				.deprecatedInfo(DeprecatedInfo.builder().setSince(deprecatedSinceBuilder)).build();
+		assertThat(key.getSince()).isEqualTo("groupId:artifactId:1.0");
+		assertThat(key.getDeprecationMessage()).isEqualTo("Deprecated since groupId:artifactId:1.5");
+
+		key.overrideSince(overrideBuilder);
+		assertThat(key.getSince()).isEqualTo("myVersion");
+		assertThat(key.getDeprecationMessage()).isEqualTo("Deprecated since myVersion");
+
+		// deprecation only
+		key = ExtendedConfigKey.builder("overrideSince")
+				.deprecatedInfo(DeprecatedInfo.builder().setSince(deprecatedSinceBuilder.build())).build();
+		assertThat(key.getSince()).isEqualTo("");
+		assertThat(key.getDeprecationMessage()).isEqualTo("Deprecated since groupId:artifactId:1.5");
+
+		key.overrideSince(overrideBuilder);
+		assertThat(key.getSince()).isEqualTo("");
+		assertThat(key.getDeprecationMessage()).isEqualTo("Deprecated since myVersion");
+
+		// neither since nor deprecation
+		key = ExtendedConfigKey.builder("overrideSince").build();
+		assertThat(key.getSince()).isEqualTo("");
+		assertThat(key.getDeprecationMessage()).isEqualTo("");
+
+		key.overrideSince(overrideBuilder);
+		assertThat(key.getSince()).isEqualTo("");
+		assertThat(key.getDeprecationMessage()).isEqualTo("");
 	}
 }

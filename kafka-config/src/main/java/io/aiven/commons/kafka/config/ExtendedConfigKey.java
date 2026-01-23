@@ -21,6 +21,8 @@ package io.aiven.commons.kafka.config;
 
 import org.apache.kafka.common.config.ConfigDef;
 
+import java.util.Map;
+
 /**
  * An extended {@link ConfigDef.ConfigKey} that added deprecation information,
  * and since data.
@@ -31,7 +33,22 @@ public class ExtendedConfigKey extends ConfigDef.ConfigKey {
 	public final DeprecatedInfo deprecated;
 
 	/** The version in which this attribute was added. May be {@code null}. */
-	public final String since;
+	public final SinceInfo since;
+
+	/**
+	 * Creates an extended config key from a ConfigKey. If the key is already an
+	 * ExtendedConfigKey it is simply returned.
+	 * 
+	 * @param key
+	 *            The key to construct the ExtendedConfigKey from.
+	 * @return An Extended config key.
+	 */
+	public static ExtendedConfigKey create(final ConfigDef.ConfigKey key) {
+		if (key instanceof ExtendedConfigKey) {
+			return (ExtendedConfigKey) key;
+		}
+		return Builder.unbuild(key).build();
+	}
 
 	/**
 	 * The constructor called by the builder.
@@ -39,12 +56,12 @@ public class ExtendedConfigKey extends ConfigDef.ConfigKey {
 	 * @param builder
 	 *            the builder.
 	 */
-	private ExtendedConfigKey(Builder<?> builder) {
+	private ExtendedConfigKey(final Builder<?> builder) {
 		super(builder.name, builder.type, builder.defaultValue, builder.validator, builder.importance,
 				builder.generateDocumentation(), builder.group, builder.orderInGroup, builder.width,
 				builder.displayName, builder.getDependents(), builder.recommender, builder.internalConfig);
 		this.deprecated = builder.deprecated;
-		this.since = builder.since == null ? "" : builder.since;
+		this.since = builder.since;
 	}
 
 	/**
@@ -55,7 +72,7 @@ public class ExtendedConfigKey extends ConfigDef.ConfigKey {
 	 *         string.
 	 */
 	public final String getDeprecationMessage() {
-		return isDeprecated() ? deprecated.getDescription() : "";
+		return isDeprecated() ? deprecated.toString() : "";
 	}
 
 	/**
@@ -64,7 +81,40 @@ public class ExtendedConfigKey extends ConfigDef.ConfigKey {
 	 * @return the value of since if it was set, an empty string otherwise.
 	 */
 	public final String getSince() {
-		return since;
+		return since == null ? "" : since.toString();
+	}
+
+	/**
+	 * Sets since override. The builder must define {@code version} at a minimum.
+	 * Any undefined values will be blank.
+	 * 
+	 * @param builder
+	 *            the SinceInfo.Builder to define the override.
+	 */
+	public final void overrideSince(final SinceInfo.Builder builder) {
+		if (since != null) {
+			since.setOverride(builder);
+		}
+		if (deprecated != null) {
+			deprecated.overrideSince(builder);
+		}
+	}
+
+	/**
+	 * Sets the override from the Builder associated with the matching OverrideRange
+	 * in the overrideMap. If multiple ranges match the last one in the map will be
+	 * applied.
+	 *
+	 * @param overrideMap
+	 *            the map of OverrideRanges and builders to apply.
+	 */
+	public void overrideSince(final Map<SinceInfo.OverrideRange, SinceInfo.Data> overrideMap) {
+		if (since != null) {
+			since.setOverride(overrideMap);
+		}
+		if (deprecated != null) {
+			deprecated.overrideSince(overrideMap);
+		}
 	}
 
 	/**
@@ -85,7 +135,7 @@ public class ExtendedConfigKey extends ConfigDef.ConfigKey {
 	 * @param <T>
 	 *            the type of the returned builder.
 	 */
-	public static <T extends Builder<?>> Builder<T> builder(String name) {
+	public static <T extends Builder<?>> Builder<T> builder(final String name) {
 		return new Builder<>(name);
 	}
 
@@ -100,7 +150,7 @@ public class ExtendedConfigKey extends ConfigDef.ConfigKey {
 		private DeprecatedInfo deprecated;
 
 		/** The since value. */
-		private String since;
+		private SinceInfo since;
 
 		/**
 		 * The builder.
@@ -108,8 +158,30 @@ public class ExtendedConfigKey extends ConfigDef.ConfigKey {
 		 * @param name
 		 *            the name of the final ConfigKey
 		 */
-		protected Builder(String name) {
+		protected Builder(final String name) {
 			super(name);
+		}
+
+		/**
+		 * unbuilds a key. Creates an ExtendedConfigKey.Builder from the key.
+		 * 
+		 * @param key
+		 *            the key to unbuild.
+		 * @return An extended key builder
+		 * @param <T>
+		 *            the type of the builder.
+		 */
+		public static <T extends Builder<?>> Builder<T> unbuild(final ConfigDef.ConfigKey key) {
+			Builder<T> result = new Builder<T>(key.name);
+			result.type(key.type).defaultValue(key.defaultValue).validator(key.validator).importance(key.importance)
+					.documentation(key.documentation).group(key.group).orderInGroup(key.orderInGroup).width(key.width)
+					.displayName(key.displayName).recommender(key.recommender).internalConfig(key.internalConfig)
+					.dependents(key.dependents);
+			if (key instanceof ExtendedConfigKey) {
+				ExtendedConfigKey extendedKey = (ExtendedConfigKey) key;
+				result.deprecatedInfo(extendedKey.deprecated).since(extendedKey.since);
+			}
+			return result;
 		}
 
 		@Override
@@ -122,9 +194,6 @@ public class ExtendedConfigKey extends ConfigDef.ConfigKey {
 			StringBuilder result = new StringBuilder();
 			if (deprecated != null) {
 				result.append(deprecated.formatted(displayName)).append(". ");
-			}
-			if (since != null) {
-				result.append(displayName).append(" has been available since ").append(since).append(". ");
 			}
 			result.append(documentation);
 			return result.toString();
@@ -160,7 +229,7 @@ public class ExtendedConfigKey extends ConfigDef.ConfigKey {
 		 *            the since value.
 		 * @return this.
 		 */
-		public final T since(final String since) {
+		public final T since(final SinceInfo since) {
 			this.since = since;
 			return self();
 		}

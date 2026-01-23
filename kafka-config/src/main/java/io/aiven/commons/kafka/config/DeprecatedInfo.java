@@ -19,6 +19,7 @@
 
 package io.aiven.commons.kafka.config;
 
+import java.util.Map;
 import java.util.function.Supplier;
 
 /** Contains the information about a deprecated ConfigKey */
@@ -43,7 +44,7 @@ public class DeprecatedInfo {
 		 * @see <a href=
 		 *      "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Deprecated.html#forRemoval()">Deprecated.since</a>
 		 */
-		private String since;
+		private SinceInfo since;
 
 		/** Private constructor. */
 		private Builder() {
@@ -87,8 +88,20 @@ public class DeprecatedInfo {
 		 *            the version in which the option became deprecated.
 		 * @return {@code this} instance.
 		 */
-		public Builder setSince(final String since) {
+		public Builder setSince(final SinceInfo since) {
 			this.since = since;
+			return this;
+		}
+
+		/**
+		 * Sets the version in which the option became deprecated.
+		 *
+		 * @param sinceBuilder
+		 *            the builder for the version in which the option became deprecated.
+		 * @return {@code this} instance.
+		 */
+		public Builder setSince(final SinceInfo.Builder sinceBuilder) {
+			this.since = sinceBuilder.build();
 			return this;
 		}
 	}
@@ -109,7 +122,7 @@ public class DeprecatedInfo {
 	private final boolean forRemoval;
 
 	/** The version label for removal. */
-	private final String since;
+	private final SinceInfo since;
 
 	/**
 	 * Constructs a new instance.
@@ -117,13 +130,13 @@ public class DeprecatedInfo {
 	 * @param description
 	 *            The description.
 	 * @param since
-	 *            The version label for removal.
+	 *            The version label when deprecated.
 	 * @param forRemoval
 	 *            Whether this option will be removed.
 	 */
-	private DeprecatedInfo(final String description, final String since, final boolean forRemoval) {
+	private DeprecatedInfo(final String description, final SinceInfo since, final boolean forRemoval) {
 		this.description = toEmpty(description);
-		this.since = toEmpty(since);
+		this.since = since;
 		this.forRemoval = forRemoval;
 	}
 
@@ -141,8 +154,36 @@ public class DeprecatedInfo {
 	 *
 	 * @return the version in which the option became deprecated.
 	 */
-	public String getSince() {
+	public SinceInfo getSince() {
 		return since;
+	}
+
+	/**
+	 * Sets the override for this SinceInfo. The builder must define
+	 * {@code version}. The {@code groupId} and {@code artifactId} are optional and
+	 * will be displayed if present.
+	 *
+	 * @param builder
+	 *            the builder to define the override.
+	 */
+	public void overrideSince(SinceInfo.Builder builder) {
+		if (since != null) {
+			since.setOverride(builder);
+		}
+	}
+
+	/**
+	 * Sets the override from the Builder associated with the matching OverrideRange
+	 * in the overrideMap. If multiple ranges match the last one in the map will be
+	 * applied.
+	 *
+	 * @param overrideMap
+	 *            the map of OverrideRanges and builders to apply.
+	 */
+	public void overrideSince(Map<SinceInfo.OverrideRange, SinceInfo.Data> overrideMap) {
+		if (since != null) {
+			since.setOverride(overrideMap);
+		}
 	}
 
 	/**
@@ -190,7 +231,7 @@ public class DeprecatedInfo {
 		if (forRemoval) {
 			builder.append(" for removal");
 		}
-		if (!since.isEmpty()) {
+		if (since != null) {
 			builder.append(" since ");
 			builder.append(since);
 		}

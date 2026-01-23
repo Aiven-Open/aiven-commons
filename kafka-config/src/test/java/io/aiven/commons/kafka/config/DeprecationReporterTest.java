@@ -33,12 +33,14 @@ public class DeprecationReporterTest {
 
 	private final ConfigDef configDef = new ConfigDef()
 			.define(ExtendedConfigKey.builder("oldgreeting").defaultValue("Howdy")
-					.deprecatedInfo(DeprecatedInfo.builder().setDescription("because we say Hi").setSince("1960")
+					.deprecatedInfo(DeprecatedInfo.builder().setDescription("because we say Hi")
+							.setSince(SinceInfo.builder().groupId("g").artifactId("a").version("1960").build())
 							.setForRemoval(true))
 					.documentation("deprecated with default value").build())
 			.define(ExtendedConfigKey.builder("roads")
 					.deprecatedInfo(DeprecatedInfo.builder().setDescription("Where we're going we don't need roads")
-							.setSince("1985").setForRemoval(false))
+							.setSince(SinceInfo.builder().groupId("g").artifactId("a").version("1985").build())
+							.setForRemoval(false))
 					.documentation("deprecated no-default").build())
 			.define(ExtendedConfigKey.builder("shangrila").documentation("not deprecated no-default").build())
 			.define(ExtendedConfigKey.builder("greeting").defaultValue("Howdy").documentation("not deprecated default")
@@ -66,7 +68,8 @@ public class DeprecationReporterTest {
 	void testChangedDefaultValueReport() {
 		Map<String, String> properties = new HashMap<>();
 		properties.put("oldgreeting", "Hi");
-		List<String> expected = List.of("Option oldgreeting is deprecated for removal since 1960: because we say Hi");
+		List<String> expected = List
+				.of("Option oldgreeting is deprecated for removal since g:a:1960: because we say Hi");
 		List<String> actual = DeprecationReporter.report(makeConfig(properties), configDef);
 		assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
 	}
@@ -75,7 +78,8 @@ public class DeprecationReporterTest {
 	void testSetDeprecatedOptionReport() {
 		Map<String, String> properties = new HashMap<>();
 		properties.put("roads", "Thunder Road");
-		List<String> expected = List.of("Option roads is deprecated since 1985: Where we're going we don't need roads");
+		List<String> expected = List
+				.of("Option roads is deprecated since g:a:1985: Where we're going we don't need roads");
 		List<String> actual = DeprecationReporter.report(makeConfig(properties), configDef);
 		assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
 	}
@@ -97,8 +101,8 @@ public class DeprecationReporterTest {
 		properties.put("shangrila", "The place to be");
 		properties.put("greeting", "Hola");
 		List<String> expected = Arrays.asList(
-				"Option oldgreeting is deprecated for removal since 1960: because we say Hi",
-				"Option roads is deprecated since 1985: Where we're going we don't need roads");
+				"Option oldgreeting is deprecated for removal since g:a:1960: because we say Hi",
+				"Option roads is deprecated since g:a:1985: Where we're going we don't need roads");
 		List<String> actual = DeprecationReporter.report(makeConfig(properties), configDef);
 		assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
 	}
