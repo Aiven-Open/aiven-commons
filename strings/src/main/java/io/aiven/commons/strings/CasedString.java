@@ -158,10 +158,30 @@ public class CasedString {
 			this(name, splitter, preserveSplit, joiner, Function.identity());
 		}
 
+		/**
+		 * Create a simple string case for the delimiter. Items will be split on the
+		 * delimiter. Arrays of strings will be joined by the delimiter, null strings
+		 * will be discarded.
+		 * 
+		 * @param name
+		 *            the name of the case.
+		 * @param delimiter
+		 *            the delimiter
+		 */
 		public StringCase(final String name, char delimiter) {
 			this(name, c -> c == delimiter, false, simpleJoiner(delimiter));
 		}
 
+		/**
+		 * Creates a function to join a String array with a character delimiter. Null
+		 * strings are discarded. Empty strings will be processed and result in leading
+		 * or trailing delimiters (if at the start or end of the array) or extra
+		 * delimiters in other positions.
+		 * 
+		 * @param delimiter
+		 *            the character to join the string array with.
+		 * @return the function to perform the array join.
+		 */
 		public static Function<String[], String> simpleJoiner(char delimiter) {
 			return s -> String.join(String.valueOf(delimiter),
 					Arrays.stream(s).filter(Objects::nonNull).toArray(String[]::new));
@@ -180,6 +200,9 @@ public class CasedString {
 		 *            preserved as the first character of the new word.
 		 * @param joiner
 		 *            The function to merge a list of strings into the cased String.
+		 * @param postProcess
+		 *            A function to perform post split processing on the generated
+		 *            String array.
 		 */
 		public StringCase(final String name, final Predicate<Character> splitter, final boolean preserveSplit,
 				final Function<String[], String> joiner, Function<String, String> postProcess) {
@@ -272,6 +295,7 @@ public class CasedString {
 	 * {@code stringCase} is the same as the current case this object returned.
 	 * 
 	 * @param stringCase
+	 *            the case to convert this CasedString to.
 	 * @return a CasedString with the specified string case.
 	 */
 	public CasedString as(final StringCase stringCase) {
