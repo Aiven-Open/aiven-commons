@@ -165,7 +165,7 @@ public class CasedString {
 		 * Returns an array of each of the segments in this CasedString. Segments are
 		 * defined as the strings between the separators in the CasedString. For the
 		 * CAMEL case the segments are determined by the presence of a capital letter.
-		 * 
+		 * @param string The string to parse into segments.
 		 * @return the array of Strings that are segments of the cased string.
 		 */
 		public String[] getSegments(final String string) {
@@ -223,6 +223,12 @@ public class CasedString {
 		this.stringCase = stringCase;
 	}
 
+	/**
+	 * Creates a new cased string from this one but with the new case.
+	 * If the {@code stringCase} is the same as the current case this object returned.
+	 * @param stringCase
+	 * @return a CasedString with the specified string case.
+	 */
 	public CasedString as(final StringCase stringCase) {
 		if (stringCase == this.stringCase) {
 			return this;
