@@ -36,7 +36,7 @@ public class ExtendedConfigKey extends ConfigDef.ConfigKey {
 	public final SinceInfo since;
 
 	/**
-	 * Creates an extended config key from a ConfigKey. If the key is alreayd an
+	 * Creates an extended config key from a ConfigKey. If the key is already an
 	 * ExtendedConfigKey it is simply returned.
 	 * 
 	 * @param key
