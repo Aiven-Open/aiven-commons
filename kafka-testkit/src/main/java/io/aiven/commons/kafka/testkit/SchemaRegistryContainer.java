@@ -22,6 +22,7 @@ import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 
 import java.time.Duration;
+import java.util.Objects;
 
 /**
  * A container for the schema registry.
@@ -59,16 +60,16 @@ public final class SchemaRegistryContainer extends GenericContainer<SchemaRegist
 				.withEnv("KARAPACE_LOG_LEVEL", "WARNING") // This can be set to DEBUG for more verbose logging
 				.withEnv("KARAPACE_COMPATIBILITY", "FULL").withEnv("KARAPACE_KAFKA_SCHEMA_READER_STRICT_MODE", "false")
 				.withEnv("KARAPACE_KAFKA_RETRIABLE_ERRORS_SILENCED", "true").withExposedPorts(SCHEMA_REGISTRY_PORT)
-				.withCommand("/bin/bash", "/opt/karapace/start.sh", "registry");
+				.withCommand("/bin/bash", "/opt/karapace/start.sh", "registry")
 
-		// When started, check any API to see if the service is ready, which also
-		// indicates that it is connected to the
-		// Kafka bootstrap server.
-		waitingFor(Wait.forHttp("/_health").forPort(8081).withReadTimeout(Duration.ofMinutes(1))
-				.forResponsePredicate(response -> response.contains("\"schema_registry_ready\":true")));
+				// When started, check any API to see if the service is ready, which also
+				// indicates that it is connected to the
+				// Kafka bootstrap server.
+				.waitingFor(Wait.forHttp("/_health").forPort(8081).withReadTimeout(Duration.ofMinutes(1))
+						.forResponsePredicate(response -> response.contains("\"schema_registry_ready\":true")))
 
-		withCreateContainerCmdModifier(
-				cmd -> cmd.getHostConfig().withUlimits(new Ulimit[]{new Ulimit("nofile", 30_000L, 30_000L)}));
+				.withCreateContainerCmdModifier(cmd -> Objects.requireNonNull(cmd.getHostConfig())
+						.withUlimits(new Ulimit[]{new Ulimit("nofile", 30_000L, 30_000L)}));
 	}
 
 	/**
