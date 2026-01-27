@@ -205,7 +205,7 @@ public final class SinceInfo {
 		 * @return this
 		 */
 		public Builder groupId(final String groupId) {
-			this.groupId = groupId;
+			this.groupId = groupId.trim();
 			return this;
 		}
 
@@ -217,7 +217,7 @@ public final class SinceInfo {
 		 * @return this
 		 */
 		public Builder artifactId(final String artifactId) {
-			this.artifactId = artifactId;
+			this.artifactId = artifactId.trim();
 			return this;
 		}
 
@@ -229,7 +229,7 @@ public final class SinceInfo {
 		 * @return this
 		 */
 		public Builder version(final String version) {
-			this.version = version;
+			this.version = version.trim();
 			return this;
 		}
 
@@ -273,6 +273,11 @@ public final class SinceInfo {
 			}
 			data = new Data(builder);
 			versionRange = VersionRange.createFromVersionSpec(builder.version);
+		}
+
+		@Override
+		public String toString() {
+			return data.toString();
 		}
 
 		/**
