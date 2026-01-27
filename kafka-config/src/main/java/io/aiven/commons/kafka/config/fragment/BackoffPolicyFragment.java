@@ -17,6 +17,8 @@
 package io.aiven.commons.kafka.config.fragment;
 
 import io.aiven.commons.collections.TimeScale;
+import io.aiven.commons.kafka.config.ExtendedConfigKey;
+import io.aiven.commons.kafka.config.SinceInfo;
 import io.aiven.commons.kafka.config.validator.PredicateGatedValidator;
 import io.aiven.commons.kafka.config.validator.TimeScaleValidator;
 import org.apache.kafka.common.config.ConfigDef;
@@ -49,15 +51,17 @@ public final class BackoffPolicyFragment extends ConfigFragment {
 	 * @return the number of items in the backoff policy group.
 	 */
 	public static int update(final ConfigDef configDef) {
-		configDef.define(KAFKA_RETRY_BACKOFF_MS_CONFIG, ConfigDef.Type.LONG, null,
-				new PredicateGatedValidator(
-						Objects::nonNull, TimeScaleValidator.between(0, TimeScale.DAYS.asMilliseconds(1))),
-				ConfigDef.Importance.MEDIUM,
-				"The retry backoff in milliseconds. "
+		configDef.define(ExtendedConfigKey.builder(KAFKA_RETRY_BACKOFF_MS_CONFIG).type(ConfigDef.Type.LONG)
+				.validator(new PredicateGatedValidator(Objects::nonNull,
+						TimeScaleValidator.between(0, TimeScale.DAYS.asMilliseconds(1))))
+				.group(GROUP_RETRY_BACKOFF_POLICY).orderInGroup(1).width(ConfigDef.Width.NONE)
+				.documentation("The retry backoff in milliseconds. "
 						+ "This config is used to notify Kafka Connect to retry delivering a message batch or "
 						+ "performing recovery in case of transient exceptions. Maximum value is "
-						+ TimeScale.DAYS.displayValue(TimeScale.DAYS.asMilliseconds(1)),
-				GROUP_RETRY_BACKOFF_POLICY, 1, ConfigDef.Width.NONE, KAFKA_RETRY_BACKOFF_MS_CONFIG);
+						+ TimeScale.DAYS.displayValue(TimeScale.DAYS.asMilliseconds(1)))
+				.since(SinceInfo.builder().groupId("io.aiven.commons").artifactId("kafka-config").version("1.0.0")
+						.build())
+				.build());
 		return 1;
 	}
 

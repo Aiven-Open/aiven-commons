@@ -28,4 +28,5 @@ module io.aiven.commons.kafka.config {
 	requires org.apache.commons.lang3;
 	requires maven.artifact;
 	requires java.validation;
+	requires org.apache.commons.io;
 }

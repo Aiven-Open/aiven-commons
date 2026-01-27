@@ -16,6 +16,8 @@
 
 package io.aiven.commons.kafka.config.fragment;
 
+import io.aiven.commons.kafka.config.ExtendedConfigKey;
+import io.aiven.commons.kafka.config.SinceInfo;
 import org.apache.kafka.common.config.ConfigDef;
 import org.apache.kafka.connect.runtime.ConnectorConfig;
 
@@ -48,16 +50,28 @@ public class CommonConfigFragment extends ConfigFragment {
 	 *            the configuraiton def to update.
 	 * @return the updated configuration def.
 	 */
+	@SuppressWarnings("PMD.AvoidUsingHardCodedIP")
 	public static ConfigDef update(final ConfigDef configDef) {
 		int orderInGroup = 0;
 		final String commonGroup = "common";
+		// We want the kafka version to display for the tasks.max property, these are
+		// not Hardcoded IPs"
+		SinceInfo.Builder overrideBuilder = SinceInfo.builder().version("Kafka 0.9.0.0");
+		SinceInfo tasksMaxSince = SinceInfo.builder().groupId("org.apache.kafka").artifactId("kafka").version("0.9.0.0")
+				.build();
+		tasksMaxSince.setOverride(overrideBuilder);
+		SinceInfo.Builder siBuilder = SinceInfo.builder().groupId("io.aiven.commons").artifactId("kafka-config")
+				.version("1.0.0");
 
-		return configDef.define(ConnectorConfig.TASKS_MAX_CONFIG, ConfigDef.Type.INT, 1, atLeast(1),
-				ConfigDef.Importance.HIGH, "Maximum number of tasks to use for this connector.", commonGroup,
-				++orderInGroup, ConfigDef.Width.SHORT, ConnectorConfig.TASKS_MAX_CONFIG).define(TASK_ID,
-						ConfigDef.Type.INT, 1, atLeast(0), ConfigDef.Importance.HIGH,
-						"The task ID that this connector is working with.", commonGroup, ++orderInGroup,
-						ConfigDef.Width.SHORT, TASK_ID);
+		return configDef.define(ExtendedConfigKey.builder(ConnectorConfig.TASKS_MAX_CONFIG).type(ConfigDef.Type.INT)
+				.defaultValue(1).validator(atLeast(1)).importance(ConfigDef.Importance.HIGH).group(commonGroup)
+				.orderInGroup(++orderInGroup).width(ConfigDef.Width.SHORT)
+				.documentation("Maximum number of tasks to use for this connector.").since(tasksMaxSince).build())
+				.define(ExtendedConfigKey.builder(TASK_ID).type(ConfigDef.Type.INT).defaultValue(1)
+						.validator(atLeast(0)).importance(ConfigDef.Importance.HIGH).group(commonGroup)
+						.orderInGroup(++orderInGroup).width(ConfigDef.Width.SHORT).internalConfig(true)
+						.documentation("The task ID that this connector is working with.")
+						.since(siBuilder.version("1.0.0").build()).build());
 	}
 
 	/**
