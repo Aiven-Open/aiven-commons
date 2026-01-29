@@ -20,7 +20,7 @@ package io.aiven.commons.google.auth;
 import com.google.api.client.json.GenericJson;
 import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.gson.GsonFactory;
-import io.aiven.commons.system.EnvCheck;
+import io.aiven.commons.system.SystemCheck;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -42,7 +42,6 @@ public final class GCPValidator {
 
 	/**
 	 * Validate the JSON credential information.
-	 *
 	 *
 	 * @param credentialsBytes
 	 *            the bytes for the JSON document.
@@ -83,15 +82,15 @@ public final class GCPValidator {
 		if (fileContents.containsKey("credential_source")) {
 			Map<String, Object> credSource = (Map<String, Object>) fileContents.get("credential_source");
 			if (credSource.containsKey("file")) {
-				EnvCheck.throwIfNotAllowed(EnvCheck.Type.FILE, credSource.get("file").toString());
+				SystemCheck.throwIfNotAllowed(SystemCheck.Type.FILE, credSource.get("file").toString());
 			}
 			if (credSource.containsKey("url")) {
-				EnvCheck.throwIfNotAllowed(EnvCheck.Type.URI, credSource.get("url").toString());
+				SystemCheck.throwIfNotAllowed(SystemCheck.Type.URI, credSource.get("url").toString());
 			}
 			if (credSource.containsKey("executable")) {
 				Map<String, Object> executable = (Map<String, Object>) credSource.get("executable");
 				if (executable.containsKey("command")) {
-					EnvCheck.throwIfNotAllowed(EnvCheck.Type.CMD, executable.get("command").toString());
+					SystemCheck.throwIfNotAllowed(SystemCheck.Type.CMD, executable.get("command").toString());
 				}
 			}
 			if (credSource.containsKey("aws")) {

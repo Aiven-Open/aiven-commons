@@ -20,13 +20,12 @@ package io.aiven.commons.google.auth;
 import com.google.api.client.json.GenericJson;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
-import io.aiven.commons.system.EnvCheck;
+import io.aiven.commons.system.SystemCheck;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -84,7 +83,7 @@ public class GCPValidatorTest {
 	}
 
 	@Test
-	void testCredentialSourceUrl() throws IOException, NoSuchFieldException, IllegalAccessException {
+	void testCredentialSourceUrl() throws IOException {
 		final GenericJson keyFile = newKeyFile();
 		final GenericJson credentialSource = new GenericJson();
 		credentialSource.setFactory(jsonFactory);
@@ -92,32 +91,33 @@ public class GCPValidatorTest {
 
 		credentialSource.put("url", "https://example.com/badURL");
 
-		Map<String, String> envVar = EnvCheck.getEnvVars();
-		String oldValue = envVar.get(EnvCheck.Type.URI.envVar());
+		String oldValue = System.getProperties().getProperty(SystemCheck.Type.URI.getSystemProperty());
 		try {
-			envVar.remove(EnvCheck.Type.URI.envVar());
+			System.getProperties().remove(SystemCheck.Type.URI.getSystemProperty());
 			Throwable throwable = assertThrows(IllegalArgumentException.class, () -> GCPValidator
 					.validateCredentialJson(keyFile.toPrettyString().getBytes(StandardCharsets.UTF_8)));
-			assertEquals(EnvCheck.formatError(EnvCheck.Type.URI, "https://example.com/badURL"), throwable.getMessage());
+			assertEquals(SystemCheck.formatError(SystemCheck.Type.URI, "https://example.com/badURL"),
+					throwable.getMessage());
 
-			envVar.put(EnvCheck.Type.URI.envVar(), "https://example.com/badURL/andSome");
+			System.getProperties().put(SystemCheck.Type.URI.getSystemProperty(), "https://example.com/badURL/andSome");
 			throwable = assertThrows(IllegalArgumentException.class, () -> GCPValidator
 					.validateCredentialJson(keyFile.toPrettyString().getBytes(StandardCharsets.UTF_8)));
-			assertEquals(EnvCheck.formatError(EnvCheck.Type.URI, "https://example.com/badURL"), throwable.getMessage());
+			assertEquals(SystemCheck.formatError(SystemCheck.Type.URI, "https://example.com/badURL"),
+					throwable.getMessage());
 
-			envVar.put(EnvCheck.Type.URI.envVar(), "https://example.com/badURL");
+			System.getProperties().put(SystemCheck.Type.URI.getSystemProperty(), "https://example.com/badURL");
 			GCPValidator.validateCredentialJson(keyFile.toPrettyString().getBytes(StandardCharsets.UTF_8));
 		} finally {
 			if (oldValue != null) {
-				envVar.put(EnvCheck.Type.URI.envVar(), oldValue);
+				System.getProperties().put(SystemCheck.Type.URI.getSystemProperty(), oldValue);
 			} else {
-				envVar.remove(EnvCheck.Type.URI.envVar());
+				System.getProperties().remove(SystemCheck.Type.URI.getSystemProperty());
 			}
 		}
 	}
 
 	@Test
-	void testCredentialSourceFile() throws IOException, NoSuchFieldException, IllegalAccessException {
+	void testCredentialSourceFile() throws IOException {
 		final GenericJson keyFile = newKeyFile();
 		final GenericJson credentialSource = new GenericJson();
 		credentialSource.setFactory(jsonFactory);
@@ -125,32 +125,33 @@ public class GCPValidatorTest {
 
 		credentialSource.put("file", "/tmp/example/badFile");
 
-		Map<String, String> envVar = EnvCheck.getEnvVars();
-		String oldValue = envVar.get(EnvCheck.Type.FILE.envVar());
+		String oldValue = System.getProperties().getProperty(SystemCheck.Type.FILE.getSystemProperty());
 		try {
-			envVar.remove(EnvCheck.Type.FILE.envVar());
+			System.getProperties().remove(SystemCheck.Type.FILE.getSystemProperty());
 			Throwable throwable = assertThrows(IllegalArgumentException.class, () -> GCPValidator
 					.validateCredentialJson(keyFile.toPrettyString().getBytes(StandardCharsets.UTF_8)));
-			assertEquals(EnvCheck.formatError(EnvCheck.Type.FILE, "/tmp/example/badFile"), throwable.getMessage());
+			assertEquals(SystemCheck.formatError(SystemCheck.Type.FILE, "/tmp/example/badFile"),
+					throwable.getMessage());
 
-			envVar.put(EnvCheck.Type.FILE.envVar(), "/tmp/example/badFile/andSome");
+			System.getProperties().put(SystemCheck.Type.FILE.getSystemProperty(), "/tmp/example/badFile/andSome");
 			throwable = assertThrows(IllegalArgumentException.class, () -> GCPValidator
 					.validateCredentialJson(keyFile.toPrettyString().getBytes(StandardCharsets.UTF_8)));
-			assertEquals(EnvCheck.formatError(EnvCheck.Type.FILE, "/tmp/example/badFile"), throwable.getMessage());
+			assertEquals(SystemCheck.formatError(SystemCheck.Type.FILE, "/tmp/example/badFile"),
+					throwable.getMessage());
 
-			envVar.put(EnvCheck.Type.FILE.envVar(), "/tmp/example/badFile");
+			System.getProperties().put(SystemCheck.Type.FILE.getSystemProperty(), "/tmp/example/badFile");
 			GCPValidator.validateCredentialJson(keyFile.toPrettyString().getBytes(StandardCharsets.UTF_8));
 		} finally {
 			if (oldValue != null) {
-				envVar.put(EnvCheck.Type.FILE.envVar(), oldValue);
+				System.getProperties().put(SystemCheck.Type.FILE.getSystemProperty(), oldValue);
 			} else {
-				envVar.remove(EnvCheck.Type.FILE.envVar());
+				System.getProperties().remove(SystemCheck.Type.FILE.getSystemProperty());
 			}
 		}
 	}
 
 	@Test
-	void testCredentialSourceCommand() throws IOException, NoSuchFieldException, IllegalAccessException {
+	void testCredentialSourceCommand() throws IOException {
 		final GenericJson keyFile = newKeyFile();
 		final GenericJson credentialSource = new GenericJson();
 		credentialSource.setFactory(jsonFactory);
@@ -161,26 +162,25 @@ public class GCPValidatorTest {
 		credentialSource.put("executable", executable);
 		executable.put("command", "/my/badCommand");
 
-		Map<String, String> envVar = EnvCheck.getEnvVars();
-		String oldValue = envVar.get(EnvCheck.Type.CMD.envVar());
+		String oldValue = System.getProperties().getProperty(SystemCheck.Type.CMD.getSystemProperty());
 		try {
-			envVar.remove(EnvCheck.Type.CMD.envVar());
+			System.getProperties().remove(SystemCheck.Type.CMD.getSystemProperty());
 			Throwable throwable = assertThrows(IllegalArgumentException.class, () -> GCPValidator
 					.validateCredentialJson(keyFile.toPrettyString().getBytes(StandardCharsets.UTF_8)));
-			assertEquals(EnvCheck.formatError(EnvCheck.Type.CMD, "/my/badCommand"), throwable.getMessage());
+			assertEquals(SystemCheck.formatError(SystemCheck.Type.CMD, "/my/badCommand"), throwable.getMessage());
 
-			envVar.put(EnvCheck.Type.CMD.envVar(), "/my/badCommand/andSome");
+			System.getProperties().put(SystemCheck.Type.CMD.getSystemProperty(), "/my/badCommand/andSome");
 			throwable = assertThrows(IllegalArgumentException.class, () -> GCPValidator
 					.validateCredentialJson(keyFile.toPrettyString().getBytes(StandardCharsets.UTF_8)));
-			assertEquals(EnvCheck.formatError(EnvCheck.Type.CMD, "/my/badCommand"), throwable.getMessage());
+			assertEquals(SystemCheck.formatError(SystemCheck.Type.CMD, "/my/badCommand"), throwable.getMessage());
 
-			envVar.put(EnvCheck.Type.CMD.envVar(), "/my/badCommand");
+			System.getProperties().put(SystemCheck.Type.CMD.getSystemProperty(), "/my/badCommand");
 			GCPValidator.validateCredentialJson(keyFile.toPrettyString().getBytes(StandardCharsets.UTF_8));
 		} finally {
 			if (oldValue != null) {
-				envVar.put(EnvCheck.Type.CMD.envVar(), oldValue);
+				System.getProperties().put(SystemCheck.Type.CMD.getSystemProperty(), oldValue);
 			} else {
-				envVar.remove(EnvCheck.Type.CMD.envVar());
+				System.getProperties().remove(SystemCheck.Type.CMD.getSystemProperty());
 			}
 		}
 	}
