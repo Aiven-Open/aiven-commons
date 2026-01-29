@@ -21,7 +21,6 @@ package io.aiven.commons.system;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -32,23 +31,22 @@ public class SystemCheckTest {
 
 		final String testURL = "https://example.com/badURL";
 
-		Map<String, String> envVar = EnvCheck.getEnvVars();
-		String oldValue = envVar.get(EnvCheck.Type.URI.envVar());
+		String oldValue = System.getProperties().getProperty(SystemCheck.Type.URI.getSystemProperty());
 		try {
-			envVar.remove(EnvCheck.Type.URI.envVar());
-			assertThat(EnvCheck.allowed(EnvCheck.Type.URI, testURL)).as("test against null env value").isFalse();
+			System.getProperties().remove(SystemCheck.Type.URI.getSystemProperty());
+			assertThat(SystemCheck.allowed(SystemCheck.Type.URI, testURL)).as("test against null env value").isFalse();
 
-			envVar.put(EnvCheck.Type.URI.envVar(), testURL + "/andSome");
-			assertThat(EnvCheck.allowed(EnvCheck.Type.URI, testURL)).as("test with incorrect value").isFalse();
+			System.getProperties().put(SystemCheck.Type.URI.getSystemProperty(), testURL + "/andSome");
+			assertThat(SystemCheck.allowed(SystemCheck.Type.URI, testURL)).as("test with incorrect value").isFalse();
 
-			envVar.put(EnvCheck.Type.URI.envVar(), testURL);
-			assertThat(EnvCheck.allowed(EnvCheck.Type.URI, testURL)).as("test with correct value").isTrue();
+			System.getProperties().put(SystemCheck.Type.URI.getSystemProperty(), testURL);
+			assertThat(SystemCheck.allowed(SystemCheck.Type.URI, testURL)).as("test with correct value").isTrue();
 
 		} finally {
 			if (oldValue != null) {
-				envVar.put(EnvCheck.Type.URI.envVar(), oldValue);
+				System.getProperties().put(SystemCheck.Type.URI.getSystemProperty(), oldValue);
 			} else {
-				envVar.remove(EnvCheck.Type.URI.envVar());
+				System.getProperties().remove(SystemCheck.Type.URI.getSystemProperty());
 			}
 		}
 	}
@@ -57,23 +55,23 @@ public class SystemCheckTest {
 	void testCredentialSourceFile() throws IOException, NoSuchFieldException, IllegalAccessException {
 		final String testFile = "/tmp/example/badFile";
 
-		Map<String, String> envVar = EnvCheck.getEnvVars();
-		String oldValue = envVar.get(EnvCheck.Type.FILE.envVar());
+		String oldValue = System.getProperties().getProperty(SystemCheck.Type.FILE.getSystemProperty());
 		try {
-			envVar.remove(EnvCheck.Type.FILE.envVar());
-			assertThat(EnvCheck.allowed(EnvCheck.Type.FILE, testFile)).as("test against null env value").isFalse();
+			System.getProperties().remove(SystemCheck.Type.FILE.getSystemProperty());
+			assertThat(SystemCheck.allowed(SystemCheck.Type.FILE, testFile)).as("test against null env value")
+					.isFalse();
 
-			envVar.put(EnvCheck.Type.FILE.envVar(), testFile + "/andSome");
-			assertThat(EnvCheck.allowed(EnvCheck.Type.FILE, testFile)).as("test with incorrect value").isFalse();
+			System.getProperties().put(SystemCheck.Type.FILE.getSystemProperty(), testFile + "/andSome");
+			assertThat(SystemCheck.allowed(SystemCheck.Type.FILE, testFile)).as("test with incorrect value").isFalse();
 
-			envVar.put(EnvCheck.Type.FILE.envVar(), testFile);
-			assertThat(EnvCheck.allowed(EnvCheck.Type.FILE, testFile)).as("test with correct value").isTrue();
+			System.getProperties().put(SystemCheck.Type.FILE.getSystemProperty(), testFile);
+			assertThat(SystemCheck.allowed(SystemCheck.Type.FILE, testFile)).as("test with correct value").isTrue();
 
 		} finally {
 			if (oldValue != null) {
-				envVar.put(EnvCheck.Type.FILE.envVar(), oldValue);
+				System.getProperties().put(SystemCheck.Type.FILE.getSystemProperty(), oldValue);
 			} else {
-				envVar.remove(EnvCheck.Type.FILE.envVar());
+				System.getProperties().remove(SystemCheck.Type.FILE.getSystemProperty());
 			}
 		}
 	}
@@ -82,22 +80,21 @@ public class SystemCheckTest {
 	void testCredentialSourceCommand() throws IOException, NoSuchFieldException, IllegalAccessException {
 		final String testCmd = "/my/badCommand";
 
-		Map<String, String> envVar = EnvCheck.getEnvVars();
-		String oldValue = envVar.get(EnvCheck.Type.CMD.envVar());
+		String oldValue = System.getProperties().getProperty(SystemCheck.Type.CMD.getSystemProperty());
 		try {
-			envVar.remove(EnvCheck.Type.CMD.envVar());
-			assertThat(EnvCheck.allowed(EnvCheck.Type.CMD, testCmd)).as("test against null env value").isFalse();
+			System.getProperties().remove(SystemCheck.Type.CMD.getSystemProperty());
+			assertThat(SystemCheck.allowed(SystemCheck.Type.CMD, testCmd)).as("test against null env value").isFalse();
 
-			envVar.put(EnvCheck.Type.CMD.envVar(), testCmd + "/andSome");
-			assertThat(EnvCheck.allowed(EnvCheck.Type.CMD, testCmd)).as("test with incorrect value").isFalse();
+			System.getProperties().put(SystemCheck.Type.CMD.getSystemProperty(), testCmd + "/andSome");
+			assertThat(SystemCheck.allowed(SystemCheck.Type.CMD, testCmd)).as("test with incorrect value").isFalse();
 
-			envVar.put(EnvCheck.Type.CMD.envVar(), "/my/badCommand");
-			assertThat(EnvCheck.allowed(EnvCheck.Type.CMD, testCmd)).as("test with correct value").isTrue();
+			System.getProperties().put(SystemCheck.Type.CMD.getSystemProperty(), "/my/badCommand");
+			assertThat(SystemCheck.allowed(SystemCheck.Type.CMD, testCmd)).as("test with correct value").isTrue();
 		} finally {
 			if (oldValue != null) {
-				envVar.put(EnvCheck.Type.CMD.envVar(), oldValue);
+				System.getProperties().put(SystemCheck.Type.CMD.getSystemProperty(), oldValue);
 			} else {
-				envVar.remove(EnvCheck.Type.CMD.envVar());
+				System.getProperties().remove(SystemCheck.Type.CMD.getSystemProperty());
 			}
 		}
 	}

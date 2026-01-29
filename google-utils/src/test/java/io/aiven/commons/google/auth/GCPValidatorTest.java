@@ -91,27 +91,27 @@ public class GCPValidatorTest {
 
 		credentialSource.put("url", "https://example.com/badURL");
 
-		String oldValue = System.getProperties().getProperty(SystemCheck.Type.URI.systemVar());
+		String oldValue = System.getProperties().getProperty(SystemCheck.Type.URI.getSystemProperty());
 		try {
-			System.getProperties().remove(SystemCheck.Type.URI.systemVar());
+			System.getProperties().remove(SystemCheck.Type.URI.getSystemProperty());
 			Throwable throwable = assertThrows(IllegalArgumentException.class, () -> GCPValidator
 					.validateCredentialJson(keyFile.toPrettyString().getBytes(StandardCharsets.UTF_8)));
 			assertEquals(SystemCheck.formatError(SystemCheck.Type.URI, "https://example.com/badURL"),
 					throwable.getMessage());
 
-			System.getProperties().put(SystemCheck.Type.URI.systemVar(), "https://example.com/badURL/andSome");
+			System.getProperties().put(SystemCheck.Type.URI.getSystemProperty(), "https://example.com/badURL/andSome");
 			throwable = assertThrows(IllegalArgumentException.class, () -> GCPValidator
 					.validateCredentialJson(keyFile.toPrettyString().getBytes(StandardCharsets.UTF_8)));
 			assertEquals(SystemCheck.formatError(SystemCheck.Type.URI, "https://example.com/badURL"),
 					throwable.getMessage());
 
-			System.getProperties().put(SystemCheck.Type.URI.systemVar(), "https://example.com/badURL");
+			System.getProperties().put(SystemCheck.Type.URI.getSystemProperty(), "https://example.com/badURL");
 			GCPValidator.validateCredentialJson(keyFile.toPrettyString().getBytes(StandardCharsets.UTF_8));
 		} finally {
 			if (oldValue != null) {
-				System.getProperties().put(SystemCheck.Type.URI.systemVar(), oldValue);
+				System.getProperties().put(SystemCheck.Type.URI.getSystemProperty(), oldValue);
 			} else {
-				System.getProperties().remove(SystemCheck.Type.URI.systemVar());
+				System.getProperties().remove(SystemCheck.Type.URI.getSystemProperty());
 			}
 		}
 	}
@@ -125,27 +125,27 @@ public class GCPValidatorTest {
 
 		credentialSource.put("file", "/tmp/example/badFile");
 
-		String oldValue = System.getProperties().getProperty(SystemCheck.Type.FILE.systemVar());
+		String oldValue = System.getProperties().getProperty(SystemCheck.Type.FILE.getSystemProperty());
 		try {
-			System.getProperties().remove(SystemCheck.Type.FILE.systemVar());
+			System.getProperties().remove(SystemCheck.Type.FILE.getSystemProperty());
 			Throwable throwable = assertThrows(IllegalArgumentException.class, () -> GCPValidator
 					.validateCredentialJson(keyFile.toPrettyString().getBytes(StandardCharsets.UTF_8)));
 			assertEquals(SystemCheck.formatError(SystemCheck.Type.FILE, "/tmp/example/badFile"),
 					throwable.getMessage());
 
-			System.getProperties().put(SystemCheck.Type.FILE.systemVar(), "/tmp/example/badFile/andSome");
+			System.getProperties().put(SystemCheck.Type.FILE.getSystemProperty(), "/tmp/example/badFile/andSome");
 			throwable = assertThrows(IllegalArgumentException.class, () -> GCPValidator
 					.validateCredentialJson(keyFile.toPrettyString().getBytes(StandardCharsets.UTF_8)));
 			assertEquals(SystemCheck.formatError(SystemCheck.Type.FILE, "/tmp/example/badFile"),
 					throwable.getMessage());
 
-			System.getProperties().put(SystemCheck.Type.FILE.systemVar(), "/tmp/example/badFile");
+			System.getProperties().put(SystemCheck.Type.FILE.getSystemProperty(), "/tmp/example/badFile");
 			GCPValidator.validateCredentialJson(keyFile.toPrettyString().getBytes(StandardCharsets.UTF_8));
 		} finally {
 			if (oldValue != null) {
-				System.getProperties().put(SystemCheck.Type.FILE.systemVar(), oldValue);
+				System.getProperties().put(SystemCheck.Type.FILE.getSystemProperty(), oldValue);
 			} else {
-				System.getProperties().remove(SystemCheck.Type.FILE.systemVar());
+				System.getProperties().remove(SystemCheck.Type.FILE.getSystemProperty());
 			}
 		}
 	}
@@ -162,25 +162,25 @@ public class GCPValidatorTest {
 		credentialSource.put("executable", executable);
 		executable.put("command", "/my/badCommand");
 
-		String oldValue = System.getProperties().getProperty(SystemCheck.Type.CMD.systemVar());
+		String oldValue = System.getProperties().getProperty(SystemCheck.Type.CMD.getSystemProperty());
 		try {
-			System.getProperties().remove(SystemCheck.Type.CMD.systemVar());
+			System.getProperties().remove(SystemCheck.Type.CMD.getSystemProperty());
 			Throwable throwable = assertThrows(IllegalArgumentException.class, () -> GCPValidator
 					.validateCredentialJson(keyFile.toPrettyString().getBytes(StandardCharsets.UTF_8)));
 			assertEquals(SystemCheck.formatError(SystemCheck.Type.CMD, "/my/badCommand"), throwable.getMessage());
 
-			System.getProperties().put(SystemCheck.Type.CMD.systemVar(), "/my/badCommand/andSome");
+			System.getProperties().put(SystemCheck.Type.CMD.getSystemProperty(), "/my/badCommand/andSome");
 			throwable = assertThrows(IllegalArgumentException.class, () -> GCPValidator
 					.validateCredentialJson(keyFile.toPrettyString().getBytes(StandardCharsets.UTF_8)));
 			assertEquals(SystemCheck.formatError(SystemCheck.Type.CMD, "/my/badCommand"), throwable.getMessage());
 
-			System.getProperties().put(SystemCheck.Type.CMD.systemVar(), "/my/badCommand");
+			System.getProperties().put(SystemCheck.Type.CMD.getSystemProperty(), "/my/badCommand");
 			GCPValidator.validateCredentialJson(keyFile.toPrettyString().getBytes(StandardCharsets.UTF_8));
 		} finally {
 			if (oldValue != null) {
-				System.getProperties().put(SystemCheck.Type.CMD.systemVar(), oldValue);
+				System.getProperties().put(SystemCheck.Type.CMD.getSystemProperty(), oldValue);
 			} else {
-				System.getProperties().remove(SystemCheck.Type.CMD.systemVar());
+				System.getProperties().remove(SystemCheck.Type.CMD.getSystemProperty());
 			}
 		}
 	}
