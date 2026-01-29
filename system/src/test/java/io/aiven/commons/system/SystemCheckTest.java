@@ -1,6 +1,6 @@
 package io.aiven.commons.system;
 /*
-         Copyright 2025 Aiven Oy and project contributors
+         Copyright 2026 Aiven Oy and project contributors
 
         Licensed under the Apache License, Version 2.0 (the "License");
         you may not use this file except in compliance with the License.
