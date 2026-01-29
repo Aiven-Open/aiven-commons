@@ -161,6 +161,15 @@ public final class SinceInfo {
 	}
 
 	/**
+	 * Sets the override to be just the version of this component.
+	 * 
+	 * @return this
+	 */
+	public SinceInfo setVersionOnly() {
+		override = new Data(null, null, baseData.version);
+		return this;
+	}
+	/**
 	 * Gets the parsed ArtifactVersion for this sinceInfo.
 	 * 
 	 * @return the parsed ArtifactVersion for this sinceInfo.
