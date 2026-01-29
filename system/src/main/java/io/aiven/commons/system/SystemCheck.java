@@ -28,8 +28,9 @@ import java.util.stream.Collectors;
  * Checks URLs against the URLs allowed as per the
  * {@code org.apache.kafka.sasl.oauthbearer.allowed.urls} environment variable.
  * If the variable is not set all URLs are allowed.
+ *
  */
-public final class EnvCheck {
+public final class SystemCheck {
 	/**
 	 * The type of object being checked.
 	 */
@@ -48,7 +49,7 @@ public final class EnvCheck {
 
 		/**
 		 * Create a Type.
-		 * 
+		 *
 		 * @param envVar
 		 *            the name of the environment variable for this type.
 		 */
@@ -58,7 +59,7 @@ public final class EnvCheck {
 
 		/**
 		 * Get the environment variable name for this type.
-		 * 
+		 *
 		 * @return the Environment variable name for this type./
 		 */
 		public String envVar() {
@@ -66,7 +67,7 @@ public final class EnvCheck {
 		}
 	}
 
-	private EnvCheck() {
+	private SystemCheck() {
 		// do not instantiate
 	}
 
