@@ -28,26 +28,18 @@ public class UrlTest {
 
 	@Test
 	void testUrlValidatorWithDefaultHttps() {
-		UrlValidator validator = new UrlValidator(true);
+		UrlValidator validator = UrlValidator.builder().schemes("ftp", "https").hosts("example.com").build();
 
 		assertThatNoException().isThrownBy(() -> validator.ensureValid("null", null));
-		assertThatNoException().isThrownBy(() -> validator.ensureValid("valid", "ftp://example.com"));
-		assertThatNoException().isThrownBy(() -> validator.ensureValid("no protocol", "example.com"));
-		assertThatThrownBy(() -> validator.ensureValid("invalid", "not://example.com"), "invalid URL")
+		assertThatNoException().isThrownBy(() -> validator.ensureValid("ftp", "ftp://example.com"));
+		assertThatNoException().isThrownBy(() -> validator.ensureValid("https", "https://example.com"));
+		assertThatThrownBy(() -> validator.ensureValid("wrong host", "https://example.net"), "wrong host")
 				.isInstanceOf(ConfigException.class).hasMessageContaining("should be valid URL");
-		assertThatThrownBy(() -> validator.ensureValid("empty", ""), "empty URL").isInstanceOf(ConfigException.class)
-				.hasMessageContaining("must be non-empty");
-	}
-
-	@Test
-	void testUrlValidatorWithoutDefaultHttps() {
-		UrlValidator validator = new UrlValidator(false);
-
-		assertThatNoException().isThrownBy(() -> validator.ensureValid("null", null));
-		assertThatNoException().isThrownBy(() -> validator.ensureValid("valid", "ftp://example.com"));
-		assertThatThrownBy(() -> validator.ensureValid("no protocol", "example.com"), "invalid URL")
+		assertThatThrownBy(() -> validator.ensureValid("wrong protocol", "http://example.com"), "wong protocol")
 				.isInstanceOf(ConfigException.class).hasMessageContaining("should be valid URL");
-		assertThatThrownBy(() -> validator.ensureValid("invalid", "not://example.com"), "invalid URL")
+		assertThatThrownBy(() -> validator.ensureValid("no protocol", "example.com"), "no Protocol")
+				.isInstanceOf(ConfigException.class).hasMessageContaining("should be valid URL");
+		assertThatThrownBy(() -> validator.ensureValid("wrong protocol", "http://example.com"), "wrong protocol")
 				.isInstanceOf(ConfigException.class).hasMessageContaining("should be valid URL");
 		assertThatThrownBy(() -> validator.ensureValid("empty", ""), "empty URL").isInstanceOf(ConfigException.class)
 				.hasMessageContaining("must be non-empty");
@@ -55,12 +47,28 @@ public class UrlTest {
 
 	@Test
 	void testToString() {
-		String msg = new UrlValidator(true).toString();
-		assertThat(msg).contains("A valid URL");
-		assertThat(msg).contains("default to https protocol ");
+		UrlValidator.Builder builder = UrlValidator.builder();
 
-		msg = new UrlValidator(false).toString();
-		assertThat(msg).contains("A valid URL");
-		assertThat(msg).doesNotContain("default to https protocol ");
+		String msg = builder.build().toString();
+		assertThat(msg).as("No scheme, no host").isEqualTo("A valid URL.");
+
+		msg = builder.schemes("ftp", "https").build().toString();
+		assertThat(msg).as("Two schemes").isEqualTo("A valid URL. URL scheme must be one of: 'ftp', 'https'.");
+
+		msg = builder.hosts("example.net").build().toString();
+		assertThat(msg).as("Two schemes, one host")
+				.isEqualTo("A valid URL. URL scheme must be one of: 'ftp', 'https'. URL host must be: 'example.net'.");
+
+		msg = builder.hosts("example.com").build().toString();
+		assertThat(msg).as("Two schemes, two hosts").isEqualTo(
+				"A valid URL. URL scheme must be one of: 'ftp', 'https'. URL host must be one of: 'example.com', 'example.net'.");
+
+		msg = UrlValidator.builder().hosts("example.net", "example.com").build().toString();
+		assertThat(msg).as("Two hosts")
+				.isEqualTo("A valid URL. URL host must be one of: 'example.com', 'example.net'.");
+
+		msg = UrlValidator.builder().hosts("example.com").build().toString();
+		assertThat(msg).as("No scheme, One hosts").isEqualTo("A valid URL. URL host must be: 'example.com'.");
+
 	}
 }

@@ -56,9 +56,9 @@ public class CommonConfigFragment extends ConfigFragment {
 		final String commonGroup = "common";
 		// We want the kafka version to display for the tasks.max property, these are
 		// not Hardcoded IPs"
-		SinceInfo.Builder overrideBuilder = SinceInfo.builder().version("Kafka 0.9.0.0");
 		SinceInfo tasksMaxSince = SinceInfo.builder().groupId("org.apache.kafka").artifactId("kafka").version("0.9.0.0")
 				.build();
+		SinceInfo.Builder overrideBuilder = SinceInfo.builder().version("Kafka 0.9.0.0");
 		tasksMaxSince.setOverride(overrideBuilder);
 		SinceInfo.Builder siBuilder = SinceInfo.builder().groupId("io.aiven.commons").artifactId("kafka-config")
 				.version("1.0.0");

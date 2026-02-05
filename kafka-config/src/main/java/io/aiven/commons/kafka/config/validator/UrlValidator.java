@@ -18,7 +18,11 @@ package io.aiven.commons.kafka.config.validator;
         SPDX-License-Identifier: Apache-2
  */
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
+import java.util.TreeSet;
 
 import org.apache.kafka.common.config.ConfigDef;
 import org.apache.kafka.common.config.ConfigException;
@@ -27,18 +31,26 @@ import org.apache.kafka.common.config.ConfigException;
  * Validates that the string is a valid URL.
  */
 public class UrlValidator implements ConfigDef.Validator {
+	/** the list of valid schemes. Empty list allows all schemes */
+	private final List<String> schemes;
+	/** the list of valid hosts. Empty list allows all hosts */
+	private final List<String> hosts;
 
-	private final boolean defaultHttps;
+	public static Builder builder() {
+		return new Builder();
+	}
 
-	/**
-	 * Constructor.
-	 * 
-	 * @param defaultHttps
-	 *            if {@code true} the string "https://" will be prepended to the
-	 *            argument if no
-	 */
-	public UrlValidator(boolean defaultHttps) {
-		this.defaultHttps = defaultHttps;
+	private UrlValidator(Builder builder) {
+		this.schemes = builder.schemes.isEmpty() ? Collections.emptyList() : new ArrayList<>(builder.schemes);
+		this.hosts = builder.hosts.isEmpty() ? Collections.emptyList() : new ArrayList<>(builder.hosts);
+	}
+
+	private String formatOutput(String name, List<String> validValues) {
+		if (validValues.size() > 1) {
+			return String.format("URL %s must be one of: '%s'.", name, String.join("', '", validValues));
+		} else {
+			return String.format("URL %s must be: '%s'.", name, validValues.get(0));
+		}
 	}
 
 	@Override
@@ -49,13 +61,16 @@ public class UrlValidator implements ConfigDef.Validator {
 			if (valueStr.isBlank()) {
 				throw new ConfigException(name, value, "must be non-empty");
 			}
-
-			if (defaultHttps && !valueStr.contains("://")) {
-				valueStr = "https://" + valueStr;
-			}
-
 			try {
-				new URI(valueStr).toURL();
+				URI uri = new URI(valueStr);
+				if (!schemes.isEmpty() && !schemes.contains(uri.getScheme())) {
+					throw new ConfigException(name, value, formatOutput("scheme", schemes));
+				}
+				if (!hosts.isEmpty() && !hosts.contains(uri.getHost())) {
+					throw new ConfigException(name, value, formatOutput("host", hosts));
+				}
+				// now check that the URL is correct.
+				uri.toURL();
 			} catch (final Exception e) {
 				throw new ConfigException(name, value, "should be valid URL");
 			}
@@ -64,6 +79,58 @@ public class UrlValidator implements ConfigDef.Validator {
 
 	@Override
 	public String toString() {
-		return "A valid URL." + (defaultHttps ? "  Will default to https protocol if not otherwise specified." : "");
+		StringBuilder sb = new StringBuilder("A valid URL.");
+		if (!schemes.isEmpty()) {
+			sb.append(" ").append(formatOutput("scheme", schemes));
+		}
+		if (!hosts.isEmpty()) {
+			sb.append(" ").append(formatOutput("host", hosts));
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Builder for UrlValidator.
+	 */
+	public static class Builder {
+		/** The list of valid schemes */
+		TreeSet<String> schemes = new TreeSet<>();
+		/** The list of valid hosts */
+		TreeSet<String> hosts = new TreeSet<>();
+
+		private Builder() {
+		}
+
+		/**
+		 * Builds a UrlValidator.
+		 * 
+		 * @return a new UrlValidator.
+		 */
+		public UrlValidator build() {
+			return new UrlValidator(this);
+		}
+		/**
+		 * Adds one or more schemes to the list of valid schemes.
+		 * 
+		 * @param scheme
+		 *            the scheme(s) to add.
+		 * @return this
+		 */
+		public Builder schemes(String... scheme) {
+			this.schemes.addAll(List.of(scheme));
+			return this;
+		}
+
+		/**
+		 * Adds one or more hosts to the list of valid hosts.
+		 * 
+		 * @param host
+		 *            the host(s) to add.
+		 * @return this
+		 */
+		public Builder hosts(String... host) {
+			this.hosts.addAll(List.of(host));
+			return this;
+		}
 	}
 }

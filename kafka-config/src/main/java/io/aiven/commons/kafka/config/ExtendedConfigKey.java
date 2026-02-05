@@ -207,7 +207,7 @@ public class ExtendedConfigKey extends ConfigDef.ConfigKey {
 		 * @return this
 		 */
 		public final T deprecatedInfo(final DeprecatedInfo.Builder deprecatedInfoBuilder) {
-			return deprecatedInfo(deprecatedInfoBuilder.get());
+			return deprecatedInfo(deprecatedInfoBuilder.build());
 		}
 
 		/**
