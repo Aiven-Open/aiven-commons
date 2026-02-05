@@ -50,7 +50,8 @@ public class CommonConfig extends AbstractConfig {
 	private void doVerification(final CommonConfigDef definition, final Map<String, String> props) {
 		Map<String, ConfigValue> configValueMap = definition.validateAll(props);
 
-		// ensure that all the values are accounted for, not just those in the properties
+		// ensure that all the values are accounted for, not just those in the
+		// properties
 		this.values().forEach((k, v) -> {
 			if (configValueMap.get(k) != null) {
 				configValueMap.get(k).value(v);

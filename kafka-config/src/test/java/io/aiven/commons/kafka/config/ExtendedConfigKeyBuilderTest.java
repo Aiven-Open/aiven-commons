@@ -50,8 +50,8 @@ public class ExtendedConfigKeyBuilderTest {
 
 	@Test
 	void testDeprecation() {
-		ExtendedConfigKey key = ExtendedConfigKey.builder("deprecation").deprecatedInfo(DeprecatedInfo.builder().build())
-				.build();
+		ExtendedConfigKey key = ExtendedConfigKey.builder("deprecation")
+				.deprecatedInfo(DeprecatedInfo.builder().build()).build();
 		assertThat(key.isDeprecated()).isTrue();
 		assertThat(key.getSince()).isEmpty();
 		assertThat(key.documentation).isEqualTo("deprecation is deprecated. ");

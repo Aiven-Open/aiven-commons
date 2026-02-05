@@ -111,8 +111,8 @@ public class DeprecatedInfoTest {
 	void testSinceDescriptionForRemoval() {
 		SinceInfo since = SinceInfo.builder().groupId("io.aiven.commons").artifactId("kafka-config").version("LATEST")
 				.build();
-		DeprecatedInfo underTest = DeprecatedInfo.builder().description("why not").since(since)
-				.forRemoval(true).build();
+		DeprecatedInfo underTest = DeprecatedInfo.builder().description("why not").since(since).forRemoval(true)
+				.build();
 		assertThat(underTest.formatted("emptyTest"))
 				.isEqualTo("emptyTest is deprecated for removal since io.aiven.commons:kafka-config:LATEST: why not");
 	}

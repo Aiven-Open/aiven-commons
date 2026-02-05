@@ -20,7 +20,6 @@
 package io.aiven.commons.kafka.config;
 
 import java.util.Map;
-import java.util.function.Supplier;
 
 /** Contains the information about a deprecated ConfigKey */
 public class DeprecatedInfo {
@@ -52,6 +51,7 @@ public class DeprecatedInfo {
 
 		/**
 		 * Creates the DeprecatedInfo
+		 * 
 		 * @return a new DeprecatedInfo
 		 */
 		public DeprecatedInfo build() {
