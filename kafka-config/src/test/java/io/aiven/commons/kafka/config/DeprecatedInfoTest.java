@@ -28,15 +28,15 @@ public class DeprecatedInfoTest {
 
 	@Test
 	void testEmpty() {
-		DeprecatedInfo underTest = DeprecatedInfo.builder().get();
+		DeprecatedInfo underTest = DeprecatedInfo.builder().build();
 		assertThat(underTest.formatted("emptyTest")).isEqualTo("emptyTest is deprecated");
 	}
 
 	@Test
 	void testForRemoval() {
-		DeprecatedInfo underTest = DeprecatedInfo.builder().setForRemoval(true).get();
+		DeprecatedInfo underTest = DeprecatedInfo.builder().forRemoval(true).build();
 		assertThat(underTest.formatted("emptyTest")).isEqualTo("emptyTest is deprecated for removal");
-		underTest = DeprecatedInfo.builder().setForRemoval(false).get();
+		underTest = DeprecatedInfo.builder().forRemoval(false).build();
 		assertThat(underTest.formatted("emptyTest")).isEqualTo("emptyTest is deprecated");
 	}
 
@@ -44,7 +44,7 @@ public class DeprecatedInfoTest {
 	void testSince() {
 		SinceInfo since = SinceInfo.builder().groupId("io.aiven.commons").artifactId("kafka-config").version("LATEST")
 				.build();
-		DeprecatedInfo underTest = DeprecatedInfo.builder().setSince(since).get();
+		DeprecatedInfo underTest = DeprecatedInfo.builder().since(since).build();
 		assertThat(underTest.formatted("emptyTest"))
 				.isEqualTo("emptyTest is deprecated since io.aiven.commons:kafka-config:LATEST");
 		since.setOverride(SinceInfo.builder().version("myVersion"));
@@ -55,7 +55,7 @@ public class DeprecatedInfoTest {
 	void testSinceOverride() {
 		SinceInfo since = SinceInfo.builder().groupId("io.aiven.commons").artifactId("kafka-config").version("LATEST")
 				.build();
-		DeprecatedInfo underTest = DeprecatedInfo.builder().setSince(since).get();
+		DeprecatedInfo underTest = DeprecatedInfo.builder().since(since).build();
 		assertThat(underTest.formatted("emptyTest"))
 				.isEqualTo("emptyTest is deprecated since io.aiven.commons:kafka-config:LATEST");
 		underTest.overrideSince(SinceInfo.builder().version("myVersion"));
@@ -67,7 +67,7 @@ public class DeprecatedInfoTest {
 		SinceInfo.Builder builder = SinceInfo.builder().groupId("io.aiven.commons").artifactId("kafka-config")
 				.version("1.0");
 		SinceInfo since = builder.build();
-		DeprecatedInfo underTest = DeprecatedInfo.builder().setSince(since).get();
+		DeprecatedInfo underTest = DeprecatedInfo.builder().since(since).build();
 		assertThat(underTest.formatted("emptyTest"))
 				.isEqualTo("emptyTest is deprecated since io.aiven.commons:kafka-config:1.0");
 		Map<SinceInfo.OverrideRange, SinceInfo.Data> overrideMap = Map.of(
@@ -79,7 +79,7 @@ public class DeprecatedInfoTest {
 
 	@Test
 	void testDescription() {
-		DeprecatedInfo underTest = DeprecatedInfo.builder().setDescription("why not").get();
+		DeprecatedInfo underTest = DeprecatedInfo.builder().description("why not").build();
 		assertThat(underTest.formatted("emptyTest")).isEqualTo("emptyTest is deprecated: why not");
 	}
 
@@ -87,14 +87,14 @@ public class DeprecatedInfoTest {
 	void testForRemovalSince() {
 		SinceInfo since = SinceInfo.builder().groupId("io.aiven.commons").artifactId("kafka-config").version("LATEST")
 				.build();
-		DeprecatedInfo underTest = DeprecatedInfo.builder().setSince(since).setForRemoval(true).get();
+		DeprecatedInfo underTest = DeprecatedInfo.builder().since(since).forRemoval(true).build();
 		assertThat(underTest.formatted("emptyTest"))
 				.isEqualTo("emptyTest is deprecated for removal since io.aiven.commons:kafka-config:LATEST");
 	}
 
 	@Test
 	void testForRemovalDescription() {
-		DeprecatedInfo underTest = DeprecatedInfo.builder().setDescription("why not").setForRemoval(true).get();
+		DeprecatedInfo underTest = DeprecatedInfo.builder().description("why not").forRemoval(true).build();
 		assertThat(underTest.formatted("emptyTest")).isEqualTo("emptyTest is deprecated for removal: why not");
 	}
 
@@ -102,7 +102,7 @@ public class DeprecatedInfoTest {
 	void testSinceDescription() {
 		SinceInfo since = SinceInfo.builder().groupId("io.aiven.commons").artifactId("kafka-config").version("LATEST")
 				.build();
-		DeprecatedInfo underTest = DeprecatedInfo.builder().setDescription("why not").setSince(since).get();
+		DeprecatedInfo underTest = DeprecatedInfo.builder().description("why not").since(since).build();
 		assertThat(underTest.formatted("emptyTest"))
 				.isEqualTo("emptyTest is deprecated since io.aiven.commons:kafka-config:LATEST: why not");
 	}
@@ -111,8 +111,8 @@ public class DeprecatedInfoTest {
 	void testSinceDescriptionForRemoval() {
 		SinceInfo since = SinceInfo.builder().groupId("io.aiven.commons").artifactId("kafka-config").version("LATEST")
 				.build();
-		DeprecatedInfo underTest = DeprecatedInfo.builder().setDescription("why not").setSince(since)
-				.setForRemoval(true).get();
+		DeprecatedInfo underTest = DeprecatedInfo.builder().description("why not").since(since)
+				.forRemoval(true).build();
 		assertThat(underTest.formatted("emptyTest"))
 				.isEqualTo("emptyTest is deprecated for removal since io.aiven.commons:kafka-config:LATEST: why not");
 	}
