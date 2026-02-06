@@ -20,4 +20,3 @@
  * Beans used for the Velocity formatted output during site generation.
  */
 package io.aiven.commons.kafka.config.docs;
-
