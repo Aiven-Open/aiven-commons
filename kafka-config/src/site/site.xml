@@ -35,6 +35,7 @@
             <item name="General Architecture" href="/GeneralArchitecture.html"/>
             <item name="SinceInfo Usage" href="/SinceInfoUsage.html"/>
             <item name="DeprecatedInfo Usage" href="/DeprecatedInfoUsage.html"/>
+            <item name="Example CommonConfigDef documentation" href=="./CommonConfigDef.html"/>
         </menu>
 
         <menu ref="reports"/>
