@@ -24,7 +24,7 @@ Config fragments encapsulate logical fragments of configuration that may be used
 
   * All implementing classes should be final.
   * Property names should be defined as `static final String` variables.  These variables should be package private so that test cases can utilize them if necessary.
-  * `ConfigFragments` implementations should include a `public static class Setter extends AbstractFragmentSetter<Setter>` that sets the values managed by the fragment.  This class should be instantiated via a `public static Setter setter(Map<String, String> props)` method.
+  * `ConfigFragments` implementations should include a `public static class Setter extends AbstractFragmentSetter<Setter>` that sets the values managed by the fragment.  This class should be instantiated via a `public static Setter setter(Map<String, String> props)` method. See [The setter](#the-setter) section below.
   * Access to the defined properties should be through getters.
   * Access to objects composed of one or more property should be through a getter.
   * Fragments should calculate default values when the default values are dependant upon values of other parameters.
@@ -131,7 +131,7 @@ This will set the default values if PARAM1 is not already set.
 
 The `ConfigFragment` supports validation by participating in the `CommonConfigDef.multiValidate()` method through the `public void validate(final Map<String, ConfigValue> configMap)` method.
 
-The values in the `configMap` argument are of the type defined in the ConfigDef for the property.  See [Notes on data types](./GeneralArchitecture.html#Notes_on_data_types) ins the General Architecture documentation.
+The values in the `configMap` argument are of the type defined in the ConfigDef for the property.  See [Notes on data types](./GeneralArchitecture.html#Notes-on-data-types) ins the General Architecture documentation.
 
 Building on our previous example, if we assume that `Thing.ONE` limits PARAM1 to values less than 10 and `Thing.TWO` limits to values less than 20 we could implement something like the following:
 
