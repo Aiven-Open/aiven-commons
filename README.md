@@ -27,7 +27,9 @@ Features
 Setup
 ============
 
-This project is a maven project.  Importing the 
+This project is a maven project, standard maven targets are available.  Each module is a separate project and builds by running `mvn package` within the module directory.
+
+To build the entire suite at once execute `mvn -P ci clean install`.
 
 License
 ============

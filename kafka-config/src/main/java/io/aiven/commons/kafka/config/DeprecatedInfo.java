@@ -20,12 +20,11 @@
 package io.aiven.commons.kafka.config;
 
 import java.util.Map;
-import java.util.function.Supplier;
 
 /** Contains the information about a deprecated ConfigKey */
 public class DeprecatedInfo {
 	/** The Builder for {@link DeprecatedInfo}. */
-	public static class Builder implements Supplier<DeprecatedInfo> {
+	public static class Builder {
 
 		/** The description. */
 		private String description;
@@ -50,8 +49,12 @@ public class DeprecatedInfo {
 		private Builder() {
 		}
 
-		@Override
-		public DeprecatedInfo get() {
+		/**
+		 * Creates the DeprecatedInfo
+		 * 
+		 * @return a new DeprecatedInfo
+		 */
+		public DeprecatedInfo build() {
 			return new DeprecatedInfo(description, since, forRemoval);
 		}
 
@@ -62,7 +65,7 @@ public class DeprecatedInfo {
 		 *            the description.
 		 * @return {@code this} instance.
 		 */
-		public Builder setDescription(final String description) {
+		public Builder description(final String description) {
 			this.description = description;
 			return this;
 		}
@@ -76,7 +79,7 @@ public class DeprecatedInfo {
 		 * @see <a href=
 		 *      "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Deprecated.html#forRemoval()">Deprecated.forRemoval</a>
 		 */
-		public Builder setForRemoval(final boolean forRemoval) {
+		public Builder forRemoval(final boolean forRemoval) {
 			this.forRemoval = forRemoval;
 			return this;
 		}
@@ -88,7 +91,7 @@ public class DeprecatedInfo {
 		 *            the version in which the option became deprecated.
 		 * @return {@code this} instance.
 		 */
-		public Builder setSince(final SinceInfo since) {
+		public Builder since(final SinceInfo since) {
 			this.since = since;
 			return this;
 		}
@@ -100,7 +103,7 @@ public class DeprecatedInfo {
 		 *            the builder for the version in which the option became deprecated.
 		 * @return {@code this} instance.
 		 */
-		public Builder setSince(final SinceInfo.Builder sinceBuilder) {
+		public Builder since(final SinceInfo.Builder sinceBuilder) {
 			this.since = sinceBuilder.build();
 			return this;
 		}

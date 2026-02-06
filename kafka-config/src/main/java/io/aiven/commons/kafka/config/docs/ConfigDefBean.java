@@ -1,6 +1,6 @@
-package io.aiven.commons.velocity;
+package io.aiven.commons.kafka.config.docs;
 /*
-         Copyright 2024-2025 Aiven Oy and project contributors
+         Copyright 2026 Aiven Oy and project contributors
 
         Licensed under the Apache License, Version 2.0 (the "License");
         you may not use this file except in compliance with the License.
@@ -17,6 +17,9 @@ package io.aiven.commons.velocity;
 
         SPDX-License-Identifier: Apache-2
  */
+
+import org.apache.kafka.common.config.ConfigDef;
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -25,7 +28,6 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import org.apache.kafka.common.config.ConfigDef;
 
 /**
  * A Base ConfigDefBean that provides created {@link ConfigKeyBean} instances
@@ -42,7 +44,7 @@ import org.apache.kafka.common.config.ConfigDef;
  * <pre>{@code
  * @DefaultKey("configDef")
  * @ValidScope({"application"})
- * public class ConfigDefBean extends BaseConfigDefBean<ConfigKeyBean> {
+ * public class ConfigDefBean extends ConfigDefBean<ConfigKeyBean> {
  * 	public ConfigDefBean() {
  * 		super(myConnectorConfig.getConfigDef(), ConfigKeyBean::new);
  * 	}
@@ -52,7 +54,7 @@ import org.apache.kafka.common.config.ConfigDef;
  * @param <T>
  *            The {@link ConfigKeyBean} type that this ConfigDefBean returns.
  */
-public class BaseConfigDefBean<T extends ConfigKeyBean> {
+public class ConfigDefBean<T extends ConfigKeyBean> {
 
 	/**
 	 * Converts a string into an array of single character strings
@@ -70,10 +72,10 @@ public class BaseConfigDefBean<T extends ConfigKeyBean> {
 		return result;
 	}
 
-	/** The characters to escape for markdown. */
+	/** The characters to escape for markdown. */ // TODO remove when velocity-tools 3.3 is released
 	private static final String[] MARKDOWN_CHARS = charParser("\\`*_{}[]<>()#+-.!|");
 
-	/** The characters to escape for APT (Almost Plain Text). */
+	/** The characters to escape for APT (Almost Plain Text). */ // TODO remove when velocity-tools 3.3 is released
 	private static final String[] APT_CHARS = charParser("\\~=-+*[]<>{}");
 
 	/** The configuration definition that we are processing. */
@@ -90,7 +92,7 @@ public class BaseConfigDefBean<T extends ConfigKeyBean> {
 	 * @param constructor
 	 *            A function to convert a Kafka {@code ConfigKey} to a {@code T}.
 	 */
-	public BaseConfigDefBean(ConfigDef configDef, Function<? super ConfigDef.ConfigKey, T> constructor) {
+	public ConfigDefBean(ConfigDef configDef, Function<? super ConfigDef.ConfigKey, T> constructor) {
 		this.configDef = configDef;
 		this.constructor = constructor;
 	}
@@ -159,6 +161,7 @@ public class BaseConfigDefBean<T extends ConfigKeyBean> {
 	 *            the characters to escape.
 	 * @return the escaped string.
 	 */
+	// TODO remove when velocity-tools 3.3 is released
 	private String escape(final String text, final String[] chars) {
 		if (text == null) {
 			return "";
@@ -177,6 +180,7 @@ public class BaseConfigDefBean<T extends ConfigKeyBean> {
 	 *            the text to escape.
 	 * @return the text with the markdown specific characters escaped.
 	 */
+	// TODO remove when velocity-tools 3.3 is released
 	@SuppressWarnings("unused")
 	public final String markdownEscape(final String text) {
 		return escape(text, MARKDOWN_CHARS);
@@ -189,6 +193,7 @@ public class BaseConfigDefBean<T extends ConfigKeyBean> {
 	 *            the text to escape.
 	 * @return the text with the APT specific characters escaped.
 	 */
+	// TODO remove when velocity-tools 3.3 is released
 	@SuppressWarnings("unused")
 	public final String aptEscape(final String text) {
 		return escape(text, APT_CHARS);

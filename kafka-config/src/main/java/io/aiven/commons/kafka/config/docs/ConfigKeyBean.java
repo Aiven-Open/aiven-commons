@@ -1,6 +1,6 @@
-package io.aiven.commons.velocity;
+package io.aiven.commons.kafka.config.docs;
 /*
-         Copyright 2024-2025 Aiven Oy and project contributors
+         Copyright 2026 Aiven Oy and project contributors
 
         Licensed under the Apache License, Version 2.0 (the "License");
         you may not use this file except in compliance with the License.
@@ -17,8 +17,10 @@ package io.aiven.commons.velocity;
 
         SPDX-License-Identifier: Apache-2
  */
-import java.util.List;
+
 import org.apache.kafka.common.config.ConfigDef;
+
+import java.util.List;
 
 /**
  * Defines the variables that are available for the Velocity template to access

@@ -22,7 +22,7 @@
   <parent>
     <groupId>io.aiven.commons</groupId>
     <artifactId>aiven-commons</artifactId>
-    <version>1</version>
+    <version>3-SNAPSHOT</version>
   </parent>
 
   <artifactId>kafka-config</artifactId>
@@ -30,9 +30,16 @@
   <name>Aiven commons Kafka config</name>
   <description>Utilities to help manage Kafka configuration and configuration definitions</description>
 
-  <properties></properties>
+  <properties>
+    <maven.artifact.version>3.9.6</maven.artifact.version>
+  </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-artifact</artifactId>
+      <version>${maven.artifact.version}</version>
+    </dependency>
     <dependency>
       <groupId>org.apache.kafka</groupId>
       <artifactId>connect-api</artifactId>
@@ -49,6 +56,10 @@
       <version>2.21.0</version>
     </dependency>
     <dependency>
+      <groupId>org.apache.velocity.tools</groupId>
+      <artifactId>velocity-tools-generic</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
       <scope>test</scope>
@@ -62,13 +73,13 @@
       <groupId>io.aiven.commons</groupId>
       <artifactId>collections</artifactId>
       <version>0.0.1-SNAPSHOT</version>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-collections4</artifactId>
       <scope>test</scope>
     </dependency>
+
   </dependencies>
 
   <repositories>
@@ -111,6 +122,41 @@
         <configuration>
           <publishingServerId>central</publishingServerId>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <configuration>
+          <generateReports>false</generateReports>
+          <generateProjectInfo>false</generateProjectInfo>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.maven.doxia</groupId>
+            <artifactId>doxia-module-markdown</artifactId>
+            <version>2.0.0</version>
+          </dependency>
+          <dependency>
+            <groupId>org.apache.maven.doxia</groupId>
+            <artifactId>doxia-site-renderer</artifactId>
+            <version>2.0.0</version>
+          </dependency>
+          <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>${project.artifactId}</artifactId>
+            <version>${project.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <version>${kafka.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>connect-api</artifactId>
+            <version>${kafka.version}</version>
+          </dependency>
+        </dependencies>
       </plugin>
     </plugins>
   </build>

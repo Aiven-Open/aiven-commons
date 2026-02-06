@@ -50,8 +50,8 @@ public class ExtendedConfigKeyBuilderTest {
 
 	@Test
 	void testDeprecation() {
-		ExtendedConfigKey key = ExtendedConfigKey.builder("deprecation").deprecatedInfo(DeprecatedInfo.builder().get())
-				.build();
+		ExtendedConfigKey key = ExtendedConfigKey.builder("deprecation")
+				.deprecatedInfo(DeprecatedInfo.builder().build()).build();
 		assertThat(key.isDeprecated()).isTrue();
 		assertThat(key.getSince()).isEmpty();
 		assertThat(key.documentation).isEqualTo("deprecation is deprecated. ");
@@ -85,7 +85,7 @@ public class ExtendedConfigKeyBuilderTest {
 
 		// since and deprecation
 		key = ExtendedConfigKey.builder("overrideSince").since(sinceBuilder.build())
-				.deprecatedInfo(DeprecatedInfo.builder().setSince(deprecatedSinceBuilder)).build();
+				.deprecatedInfo(DeprecatedInfo.builder().since(deprecatedSinceBuilder)).build();
 		assertThat(key.getSince()).isEqualTo("groupId:artifactId:1.0");
 		assertThat(key.getDeprecationMessage()).isEqualTo("Deprecated since groupId:artifactId:1.5");
 
@@ -95,7 +95,7 @@ public class ExtendedConfigKeyBuilderTest {
 
 		// deprecation only
 		key = ExtendedConfigKey.builder("overrideSince")
-				.deprecatedInfo(DeprecatedInfo.builder().setSince(deprecatedSinceBuilder.build())).build();
+				.deprecatedInfo(DeprecatedInfo.builder().since(deprecatedSinceBuilder.build())).build();
 		assertThat(key.getSince()).isEqualTo("");
 		assertThat(key.getDeprecationMessage()).isEqualTo("Deprecated since groupId:artifactId:1.5");
 

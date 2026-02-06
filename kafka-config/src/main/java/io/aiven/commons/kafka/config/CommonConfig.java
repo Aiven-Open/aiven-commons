@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Aiven Oy
+ * Copyright 2026 Aiven Oy
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,13 +24,10 @@ import org.apache.kafka.common.config.ConfigDef;
 import org.apache.kafka.common.config.ConfigException;
 import org.apache.kafka.common.config.ConfigValue;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * The base configuration or all connectors.
@@ -47,42 +44,31 @@ public class CommonConfig extends AbstractConfig {
 	 *
 	 * @param definition
 	 *            the ConfigDefinition to validate.
-	 * @param values
+	 * @param props
 	 *            The map of parameter name to values to verify with.
 	 */
-	private void doVerification(final ConfigDef definition, final Map<String, String> values) {
-		// if the call multiValidateValues if it is available otherwise just validate
-		final Stream<ConfigValue> configValueStream = definition instanceof CommonConfigDef
-				? ((CommonConfigDef) definition).multiValidateValues(values).stream()
-				: definition.validate(values).stream();
-		// extract all the values with associated errors.
-		final List<ConfigValue> errorConfigs = configValueStream
+	private void doVerification(final CommonConfigDef definition, final Map<String, String> props) {
+		Map<String, ConfigValue> configValueMap = definition.validateAll(props);
+
+		// ensure that all the values are accounted for, not just those in the
+		// properties
+		this.values().forEach((k, v) -> {
+			if (configValueMap.get(k) != null) {
+				configValueMap.get(k).value(v);
+			}
+		});
+
+		// process the detailed validation.
+		definition.multiValidate(configValueMap);
+
+		// if there are any reported errors produce a detailed configuration exception.
+		final List<ConfigValue> errorConfigs = configValueMap.values().stream()
 				.filter(configValue -> !configValue.errorMessages().isEmpty()).toList();
 		if (!errorConfigs.isEmpty()) {
 			final String msg = errorConfigs.stream().flatMap(configValue -> configValue.errorMessages().stream())
 					.collect(Collectors.joining("\n"));
 			throw new ConfigException("There are errors in the configuration:\n" + msg);
 		}
-	}
-
-	/**
-	 * Verifies that all the settings are strings or null.
-	 *
-	 * @return the map of key to setting string.
-	 */
-	private Map<String, String> originalsNullableStrings() {
-		final Map<String, String> result = new HashMap<>();
-		for (final Map.Entry<String, Object> entry : originals().entrySet()) {
-			if (entry.getValue() != null && !(entry.getValue() instanceof String)) {
-				throw new ClassCastException("Non-string value found in original settings for key " + entry.getKey()
-						+ " : " + entry.getValue().getClass().getName());
-			}
-			if (entry.getKey() == null) {
-				throw new ClassCastException("Null key found in original settings.");
-			}
-			result.put(entry.getKey(), (String) entry.getValue());
-		}
-		return result;
 	}
 
 	/**
@@ -95,7 +81,7 @@ public class CommonConfig extends AbstractConfig {
 	 */
 	public CommonConfig(final CommonConfigDef definition, final Map<String, String> originals) {
 		super(definition, originals);
-		doVerification(definition, originalsNullableStrings());
+		doVerification(definition, originals);
 		final FragmentDataAccess dataAccess = FragmentDataAccess.from(this);
 		commonConfigFragment = new CommonConfigFragment(dataAccess);
 		backoffPolicyFragment = new BackoffPolicyFragment(dataAccess);
@@ -108,6 +94,24 @@ public class CommonConfig extends AbstractConfig {
 	@SuppressWarnings("PMD.EmptyFinalizer")
 	protected final void finalize() {
 		// Do nothing
+	}
+
+	@Override
+	final protected Map<String, Object> postProcessParsedConfig(Map<String, Object> parsedValues) {
+		ChangeTrackingMap result = new ChangeTrackingMap(parsedValues);
+		fragmentPostProcess(result);
+		return result.override;
+	}
+
+	/**
+	 * Allows implementations to modify the values of the map from the fragments.
+	 * Default implementation does nothing.
+	 * 
+	 * @param map
+	 *            the map to make changes in.
+	 */
+	protected void fragmentPostProcess(ChangeTrackingMap map) {
+		// does nothing.
 	}
 
 	/**
@@ -141,59 +145,52 @@ public class CommonConfig extends AbstractConfig {
 	}
 
 	/**
-	 * The ConfigDef for the CommonConfig class.
+	 * A map of values that allows overrides.
 	 */
-	public static class CommonConfigDef extends ConfigDef {
+	public static class ChangeTrackingMap {
+		private final Map<String, Object> baseMap;
+		private final Map<String, Object> override;
+
 		/**
-		 * Constructor .
+		 * Constructor.
+		 * 
+		 * @param baseMap
+		 *            the original map.
 		 */
-		public CommonConfigDef() {
-			super();
-			BackoffPolicyFragment.update(this);
-			CommonConfigFragment.update(this);
+		public ChangeTrackingMap(Map<String, Object> baseMap) {
+			this.baseMap = baseMap;
+			this.override = new HashMap<>();
 		}
 
 		/**
-		 * Gathers in depth, multi argument configuration issues. This method should be
-		 * overridden when the Fragments added to the config have validation rules that
-		 * required inspection of multiple properties.
-		 * <p>
-		 * Overriding methods should call the parent method to update the map and then
-		 * add error messages to the {@link ConfigValue} associated with property name
-		 * that is in error.
-		 * </p>
-		 *
-		 * @param valueMap
-		 *            the map of configuration names to values.
-		 * @return the updated map.
+		 * Sets the override for a key. Passing {@code null} removes any override, any
+		 * other values sets the override.
+		 * 
+		 * @param key
+		 *            the key to override.
+		 * @param value
+		 *            the value to set the key to.
 		 */
-		protected Map<String, ConfigValue> multiValidate(final Map<String, ConfigValue> valueMap) {
-			new BackoffPolicyFragment(FragmentDataAccess.from(valueMap)).validate(valueMap);
-			return valueMap;
-		}
-
-		/**
-		 * Validate the configuration properties using the multiValidate process.
-		 *
-		 * @param props
-		 *            the properties to validate
-		 * @return the collection of ConfigValues from the validation.
-		 */
-		final Collection<ConfigValue> multiValidateValues(final Map<String, String> props) {
-			return multiValidate(validateAll(props)).values();
-		}
-
-		@Override
-		public final List<ConfigValue> validate(final Map<String, String> props) {
-			final Map<String, ConfigValue> valueMap = validateAll(props);
-
-			try {
-				return new ArrayList<>(multiValidate(valueMap).values());
-			} catch (RuntimeException e) { // NOPMD AvoidCatchingGenericException
-				// any exceptions thrown in the above block are accounted for in the
-				// super.validate(props) call.
-				return new ArrayList<>(valueMap.values());
+		public void override(String key, Object value) {
+			if (value == null) {
+				override.remove(key);
+			} else {
+				override.put(key, value);
 			}
 		}
+
+		/**
+		 * Gets the current value of the key. This is the last override or the current
+		 * value if no override is present.
+		 * 
+		 * @param key
+		 *            the key to get the value for.
+		 * @return the current value.
+		 */
+		public Object get(String key) {
+			Object result = override.get(key);
+			return result == null ? baseMap.get(key) : result;
+		}
+
 	}
 }

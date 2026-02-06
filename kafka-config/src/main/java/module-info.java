@@ -29,4 +29,5 @@ module io.aiven.commons.kafka.config {
 	requires maven.artifact;
 	requires java.validation;
 	requires org.apache.commons.io;
+	requires velocity.tools.generic;
 }
