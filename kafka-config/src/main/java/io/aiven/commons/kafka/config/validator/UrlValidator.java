@@ -71,6 +71,8 @@ public class UrlValidator implements ConfigDef.Validator {
 				}
 				// now check that the URL is correct.
 				uri.toURL();
+			} catch (ConfigException e) {
+				throw e;
 			} catch (final Exception e) {
 				throw new ConfigException(name, value, "should be valid URL");
 			}
