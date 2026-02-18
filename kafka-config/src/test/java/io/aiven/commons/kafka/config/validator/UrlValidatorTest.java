@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class UrlTest {
+public class UrlValidatorTest {
 
 	@Test
 	void testUrlValidatorWithDefaultHttps() {
@@ -34,13 +34,11 @@ public class UrlTest {
 		assertThatNoException().isThrownBy(() -> validator.ensureValid("ftp", "ftp://example.com"));
 		assertThatNoException().isThrownBy(() -> validator.ensureValid("https", "https://example.com"));
 		assertThatThrownBy(() -> validator.ensureValid("wrong host", "https://example.net"), "wrong host")
-				.isInstanceOf(ConfigException.class).hasMessageContaining("should be valid URL");
+				.isInstanceOf(ConfigException.class).hasMessageContaining("host must be: 'example.com'");
 		assertThatThrownBy(() -> validator.ensureValid("wrong protocol", "http://example.com"), "wong protocol")
-				.isInstanceOf(ConfigException.class).hasMessageContaining("should be valid URL");
+				.isInstanceOf(ConfigException.class).hasMessageContaining("scheme must be one of: 'ftp', 'https'");
 		assertThatThrownBy(() -> validator.ensureValid("no protocol", "example.com"), "no Protocol")
-				.isInstanceOf(ConfigException.class).hasMessageContaining("should be valid URL");
-		assertThatThrownBy(() -> validator.ensureValid("wrong protocol", "http://example.com"), "wrong protocol")
-				.isInstanceOf(ConfigException.class).hasMessageContaining("should be valid URL");
+				.isInstanceOf(ConfigException.class).hasMessageContaining("scheme must be one of: 'ftp', 'https'");
 		assertThatThrownBy(() -> validator.ensureValid("empty", ""), "empty URL").isInstanceOf(ConfigException.class)
 				.hasMessageContaining("must be non-empty");
 	}
