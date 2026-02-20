@@ -18,11 +18,9 @@
  */
 package io.aiven.commons.kafka.config.validator;
 
-import org.apache.kafka.common.config.ConfigDef;
 import org.apache.kafka.common.config.ConfigException;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -33,24 +31,38 @@ public class EnumValidatorTest {
 		ONE, TWO, THREE, one, One, four
 	}
 
-	private void ensureValidEnumX(ConfigDef.Validator validator) {
-		assertThatNoException().isThrownBy(() -> validator.ensureValid("config.name", "ONE"));
-		assertThatNoException().isThrownBy(() -> validator.ensureValid("config.name", "two"));
-		assertThatNoException().isThrownBy(() -> validator.ensureValid("config.name", "Three"));
-		assertThatThrownBy(() -> validator.ensureValid("config.name", "five")).isInstanceOf(ConfigException.class)
-				.hasMessageStartingWith(
-						"Invalid value five for configuration config.name: String must be one of (case insensitive):");
-	}
-
-	@Test
-	void testEnsureValidByClass() {
-		ensureValidEnumX(EnumValidator.of(X.class));
+	@ParameterizedTest
+	@ValueSource(strings = {"ONE", "One", "one", "oNe", "two", "THREE", "four"})
+	void testValidCaseInsensitive(String validString) {
+		var validator = EnumValidator.caseInsensitive(X.class);
+		assertThatNoException().isThrownBy(() -> validator.ensureValid("config.name", validString));
 	}
 
 	@ParameterizedTest
-	@EnumSource(X.class)
-	void testEnsureValidByConstant(X constant) {
-		ensureValidEnumX(EnumValidator.of(constant));
+	@ValueSource(strings = {"five", "ONE "})
+	void testInvalidCaseInsensitive(String invalidString) {
+		var validator = EnumValidator.caseInsensitive(X.class);
+		assertThatThrownBy(() -> validator.ensureValid("config.name", invalidString))
+				.isInstanceOf(ConfigException.class).hasMessageStartingWith(
+						"Invalid value %s for configuration config.name: String must be one of (case insensitive):",
+						invalidString);
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"ONE", "TWO", "THREE", "one", "One", "four"})
+	void testValidCaseSensitive(String validString) {
+		var validator = EnumValidator.caseSensitive(X.class);
+		assertThatNoException().isThrownBy(() -> validator.ensureValid("config.name", validString));
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"oNe", "two", "FOUR", "ONE "})
+	void testInvalidCaseSensitive(String invalidString) {
+		var validator = EnumValidator.caseSensitive(X.class);
+		assertThatThrownBy(() -> validator.ensureValid("config.name", invalidString))
+				.isInstanceOf(ConfigException.class).hasMessage(
+						"Invalid value %s for configuration config.name: String must be one of: ONE, TWO, THREE, one, One, four",
+						invalidString);
 	}
 
 }
