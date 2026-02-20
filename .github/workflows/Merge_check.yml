@@ -63,7 +63,7 @@ jobs:
     needs: [build]
     strategy:
       matrix:
-        module: [ '.', 'collections', 'google-utils', 'kafka-config', 'kafka-testkit', 'strings', 'system', 'timing', 'velocity' ]
+        module: [ '.', 'collections', 'google-utils', 'kafka-config', 'kafka-testkit', 'strings', 'system', 'timing', 'velocity', "io" ]
 
     name: Check deployments
     runs-on: ubuntu-latest
