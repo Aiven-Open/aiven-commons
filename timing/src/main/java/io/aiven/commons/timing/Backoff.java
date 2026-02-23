@@ -106,10 +106,11 @@ public class Backoff {
 	}
 
 	/**
-	 * Set the minimum wait time.
-	 * Actual delay will be the closest power of 2 such that
-	 * {@code 2^x <= duration}.
-	 * @param duration the minimum wait time.
+	 * Set the minimum wait time. Actual delay will be the closest power of 2 such
+	 * that {@code 2^x <= duration}.
+	 * 
+	 * @param duration
+	 *            the minimum wait time.
 	 */
 	public void setMinimumDelay(Duration duration) {
 		waitCount = (int) (Math.log10(duration.toMillis()) / LOG_2);

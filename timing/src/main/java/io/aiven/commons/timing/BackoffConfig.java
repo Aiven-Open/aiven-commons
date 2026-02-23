@@ -26,11 +26,13 @@ package io.aiven.commons.timing;
 public interface BackoffConfig {
 	/**
 	 * Gets Supplier that will return the number of milliseconds remaining in the
-	 * timer. Backoff will calculate delays until this the result of this call reaches 0.
-	 * For cases where a timer is not used this value should be the maximum delay.
+	 * timer. Backoff will calculate delays until this the result of this call
+	 * reaches 0. For cases where a timer is not used this value should be the
+	 * maximum delay.
 	 * <p>
-	 *     If the delay has an absolute upper limit, the use of a timer will force the Backoff to stop before
-	 *     the maximum is hit.  Otherwise, the delay may exceed the maximum slightly.
+	 * If the delay has an absolute upper limit, the use of a timer will force the
+	 * Backoff to stop before the maximum is hit. Otherwise, the delay may exceed
+	 * the maximum slightly.
 	 * </p>
 	 *
 	 * @return A supplier of the number of milliseconds until the timer expires.
@@ -38,8 +40,8 @@ public interface BackoffConfig {
 	SupplierOfLong getSupplierOfTimeRemaining();
 
 	/**
-	 * The AbortTrigger that will abort the timer or otherwise signal that the backoff has
-	 * reached the maximum delay and will no longer sleep.
+	 * The AbortTrigger that will abort the timer or otherwise signal that the
+	 * backoff has reached the maximum delay and will no longer sleep.
 	 *
 	 * @return the AbortTrigger.
 	 */
