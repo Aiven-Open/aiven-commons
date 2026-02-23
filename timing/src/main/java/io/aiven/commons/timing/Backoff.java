@@ -147,11 +147,7 @@ public class Backoff {
 
 	/**
 	 * Set the minimum wait time. Actual delay will be the closest power of 2 such
-<<<<<<< Updated upstream
-	 * that {@code 2^x <= duration}.
-=======
 	 * that {@code 2^x >= duration}.
->>>>>>> Stashed changes
 	 * 
 	 * @param duration
 	 *            the minimum wait time.
