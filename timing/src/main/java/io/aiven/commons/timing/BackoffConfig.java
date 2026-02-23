@@ -20,15 +20,20 @@
 package io.aiven.commons.timing;
 
 /**
- * An interface to define the Backoff configuration. Used for convenience with
- * Timer.
+ * An interface to define the Backoff configuration. The timer will generate a
+ * proper Configuration.
  */
 public interface BackoffConfig {
 	/**
 	 * Gets Supplier that will return the number of milliseconds remaining in the
+<<<<<<< Updated upstream
 	 * timer. Backoff will calculate delays until this the result of this call
 	 * reaches 0. For cases where a timer is not used this value should be the
 	 * maximum delay.
+=======
+	 * timer. Backoff will calculate delays until the result of this call reaches 0.
+	 * For cases where a timer is not used this value should be the maximum delay.
+>>>>>>> Stashed changes
 	 * <p>
 	 * If the delay has an absolute upper limit, the use of a timer will force the
 	 * Backoff to stop before the maximum is hit. Otherwise, the delay may exceed
@@ -55,7 +60,5 @@ public interface BackoffConfig {
 	 *
 	 * @return The abort time rule flag.
 	 */
-	default boolean applyTimerRule() {
-		return true;
-	}
+	boolean applyTimerRule();
 }
