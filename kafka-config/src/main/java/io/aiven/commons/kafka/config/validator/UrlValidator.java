@@ -36,6 +36,11 @@ public class UrlValidator implements ConfigDef.Validator {
 	/** the list of valid hosts. Empty list allows all hosts */
 	private final List<String> hosts;
 
+	/**
+	 * Creates a new builder.
+	 *
+	 * @return a new builder.
+	 */
 	public static Builder builder() {
 		return new Builder();
 	}

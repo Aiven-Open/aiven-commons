@@ -685,11 +685,11 @@
       <modules>
         <module>collections</module>
         <module>google-utils</module>
+        <module>io</module>
         <module>kafka-config</module>
         <module>kafka-testkit</module>
         <module>strings</module>
         <module>system</module>
-        <module>io</module>
         <module>timing</module>
       </modules>
       <build>

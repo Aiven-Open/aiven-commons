@@ -38,8 +38,8 @@ import java.util.zip.GZIPOutputStream;
  * decompress standard file extensions for the type.
  *
  * This class is useful for persistence outside of Kafka, such as files or
- * alternative binary message streams.  Kafka message compression is handled 
- * internally with the {@code compression.type}  property (or 
+ * alternative binary message streams. Kafka message compression is handled
+ * internally with the {@code compression.type} property (or
  * {@code (producer|consumer).override.compression.type} in Kafka Connect).
  */
 public enum CompressionType {
