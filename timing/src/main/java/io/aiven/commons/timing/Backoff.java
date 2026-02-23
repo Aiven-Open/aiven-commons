@@ -22,6 +22,7 @@ package io.aiven.commons.timing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
 import java.util.Random;
 
 /**
@@ -31,6 +32,11 @@ import java.util.Random;
  * seconds.
  */
 public class Backoff {
+	/**
+	 * The log(2)
+	 */
+	private static final double LOG_2 = Math.log10(2);
+
 	/**
 	 * The logger to write to
 	 */
@@ -64,7 +70,7 @@ public class Backoff {
 	 */
 	private int waitCount;
 	/**
-	 * If true then when wait count is exceeded {@link ##delay()} automatically
+	 * If true then when wait count is exceeded {@link #delay()} automatically
 	 * returns without delay.
 	 */
 	private final boolean applyTimerRule;
@@ -94,9 +100,19 @@ public class Backoff {
 		// if the remaining time is 0 or negative the maxCount will be infinity
 		// so make sure that it is 0 in that case.
 		final long remainingTime = timeRemaining.get();
-		maxCount = remainingTime < 1L ? 0 : (int) (Math.log10(remainingTime) / Math.log10(2));
+		maxCount = remainingTime < 1L ? 0 : (int) (Math.log10(remainingTime) / LOG_2);
 		waitCount = 0;
 		LOGGER.debug("Reset {}", this);
+	}
+
+	/**
+	 * Set the minimum wait time.
+	 * Actual delay will be the closest power of 2 such that
+	 * {@code 2^x <= duration}.
+	 * @param duration the minimum wait time.
+	 */
+	public void setMinimumDelay(Duration duration) {
+		waitCount = (int) (Math.log10(duration.toMillis()) / LOG_2);
 	}
 
 	/**
@@ -141,14 +157,14 @@ public class Backoff {
 
 	/**
 	 * If {@link #applyTimerRule} is true then this method will return false if the
-	 * wait count has exceeded the maximum count. Otherwise it returns true. This
+	 * wait count has exceeded the maximum count. Otherwise, it returns true. This
 	 * method also increments the wait count if the wait count is less than the
 	 * maximum count.
 	 *
 	 * @return true if sleep should occur.
 	 */
 	private boolean shouldSleep(final long sleepTime) {
-		// maxcount may have been reset so check and set if necessary.
+		// maxCount may have been reset so check and set if necessary.
 		final boolean result = sleepTime > 0
 				&& (!applyTimerRule || waitCount < (maxCount == 0 ? getMaxCount() : maxCount));
 		if (waitCount < maxCount) {
@@ -167,7 +183,7 @@ public class Backoff {
 		final long sleepTime = timeRemaining.get();
 		if (shouldSleep(sleepTime)) {
 			final long nextSleep = timeWithJitter();
-			// don't sleep negative time. Jitter can introduce negative tme.
+			// don't sleep negative time. Jitter can introduce negative time.
 			if (nextSleep > 0) {
 				if (nextSleep >= sleepTime) {
 					LOGGER.debug("Backoff aborting timer");
