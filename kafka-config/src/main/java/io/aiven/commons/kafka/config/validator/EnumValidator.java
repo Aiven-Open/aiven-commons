@@ -23,36 +23,60 @@ import org.apache.kafka.common.config.ConfigDef;
 import java.util.Arrays;
 
 /**
- * Validates that input is the name of an Enumeration value. Will accept
- * enumeration class or exemplar. Test is not case specific.
+ * Validates that a configuration value string is a case-insensitive match to an
+ * Enum constant.
+ *
+ * Given an enum:
+ * 
+ * <pre>{@code
+ * enum X {
+ * 	ONE, TWO, THREE, one
+ * };
+ * }</pre>
+ *
+ * You can create a case-insensitive validator from the Enum class (recommended
+ * for usability: enum constants do not usually differ only by case):
+ * 
+ * <pre>{@code
+ * var validator = EnumValidator.caseInsensitive(X.class);
+ * validator.ensureValid("config.name", "One"); // passes
+ * validator.ensureValid("config.name", "ONE"); // passes
+ * validator.ensureValid("config.name", "Three"); // passes
+ * validator.ensureValid("config.name", "four"); // throws ConfigException
+ * }</pre>
+ *
+ * or a case-sensitive validator, if necessary:
+ *
+ * <pre>{@code
+ * var validator = EnumValidator.caseInsensitive(X.class);
+ * validator.ensureValid("config.name", "one"); // passes
+ * validator.ensureValid("config.name", "One"); // throws ConfigException
+ * validator.ensureValid("config.name", "ONE"); // passes
+ * validator.ensureValid("config.name", "Three"); // throws ConfigException
+ * validator.ensureValid("config.name", "four"); // throws ConfigException
+ * }</pre>
  */
 public class EnumValidator {
 
 	/**
-	 * Create a validator from an Enum class. {@code enum X {ONE, TWO, THREE};
-	 *
-	 * EnumValidator.of(X.class); }
-	 * 
 	 * @param enumClass
-	 *            the class of the enum
-	 * @return the validator for the enum names
+	 *            the class of the Enum that defines the valid values.
+	 * @return a validator that allows any string value that is a case-insensitive
+	 *         match for the enum constants in the given Enum class
 	 */
-	public static ConfigDef.Validator of(Class<? extends Enum<?>> enumClass) {
+	public static ConfigDef.Validator caseInsensitive(Class<? extends Enum<?>> enumClass) {
 		return ConfigDef.CaseInsensitiveValidString
 				.in(Arrays.stream(enumClass.getEnumConstants()).map(Enum::name).toArray(String[]::new));
 	}
 
 	/**
-	 * Create a validator from an Enum exemplar. {@code enum X {ONE, TWO, THREE};
-	 *
-	 * EnumValidator.of(X.ONE); }
-	 * 
-	 * @param exemplar
-	 *            An example of the Enum.
-	 * @return the validator for the enum names.
+	 * @param enumClass
+	 *            the class of the Enum that defines the valid values.
+	 * @return a validator that allows any string value that is a case-sensitive
+	 *         match for the enum constants in the given Enum class
 	 */
-	public static ConfigDef.Validator of(Enum<?> exemplar) {
-		return ConfigDef.CaseInsensitiveValidString
-				.in(Arrays.stream(exemplar.getClass().getEnumConstants()).map(Enum::name).toArray(String[]::new));
+	public static ConfigDef.Validator caseSensitive(Class<? extends Enum<?>> enumClass) {
+		return ConfigDef.ValidString
+				.in(Arrays.stream(enumClass.getEnumConstants()).map(Enum::name).toArray(String[]::new));
 	}
 }
