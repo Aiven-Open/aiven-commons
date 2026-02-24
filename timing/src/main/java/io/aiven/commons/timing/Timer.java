@@ -120,6 +120,11 @@ public class Timer extends StopWatch {
 			public AbortTrigger getAbortTrigger() {
 				return Timer.this::abort;
 			}
+
+			@Override
+			public boolean applyTimerRule() {
+				return true;
+			}
 		};
 	}
 }
