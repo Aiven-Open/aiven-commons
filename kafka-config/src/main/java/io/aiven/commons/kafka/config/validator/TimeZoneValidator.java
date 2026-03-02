@@ -34,6 +34,13 @@ public class TimeZoneValidator implements ConfigDef.Validator {
 	 */
 	public static final TimeZoneValidator INSTANCE = new TimeZoneValidator();
 
+	/**
+	 * Private constructor.
+	 */
+	private TimeZoneValidator() {
+
+	}
+
 	@Override
 	public void ensureValid(final String name, final Object value) {
 		try {
