@@ -30,7 +30,7 @@ package io.aiven.commons.strings;
 /**
  * English reason phrases for HTTP status codes.
  *
- * This majority of this code is copied from Apache HttpComponents-core
+ * The majority of this code is copied from Apache HttpComponents-core
  * 
  * @see <a href=
  *      "https://github.com/apache/httpcomponents-core/blob/master/httpcore5/src/main/java/org/apache/hc/core5/http/impl/EnglishReasonPhraseCatalog.java">EnglishReasonPhraseCatalog</a>
