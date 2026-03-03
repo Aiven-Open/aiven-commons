@@ -59,6 +59,14 @@ import java.util.Arrays;
 public class EnumValidator {
 
 	/**
+	 * Private constructor. Do not instantiate.
+	 */
+	private EnumValidator() {
+		// do not instantiate.
+	}
+	/**
+	 * Creates a case insensitive EnumValidator.
+	 * 
 	 * @param enumClass
 	 *            the class of the Enum that defines the valid values.
 	 * @return a validator that allows any string value that is a case-insensitive
@@ -70,6 +78,8 @@ public class EnumValidator {
 	}
 
 	/**
+	 * Creates a case sensitive EnumValidator.
+	 * 
 	 * @param enumClass
 	 *            the class of the Enum that defines the valid values.
 	 * @return a validator that allows any string value that is a case-sensitive
