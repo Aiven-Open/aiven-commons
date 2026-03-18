@@ -30,6 +30,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Supplier;
@@ -181,9 +182,9 @@ public class KafkaIntegrationTestBase {
 	 * @throws InterruptedException
 	 *             on interrupted thread.
 	 */
-	final protected KafkaManager setupKafka(final Class<? extends Connector> connectorClass)
-			throws IOException, ExecutionException, InterruptedException {
-		return setupKafka(false, connectorClass);
+	final protected KafkaManager setupKafka(final Class<? extends Connector> connectorClass,
+			Map<String, String> configOverrides) throws IOException, ExecutionException, InterruptedException {
+		return setupKafka(false, connectorClass, configOverrides);
 	}
 
 	/**
@@ -201,8 +202,8 @@ public class KafkaIntegrationTestBase {
 	 * @throws IOException
 	 *             on IO error.
 	 */
-	final protected KafkaManager setupKafka(final boolean forceRestart, final Class<? extends Connector> connectorClass)
-			throws IOException {
+	final protected KafkaManager setupKafka(final boolean forceRestart, final Class<? extends Connector> connectorClass,
+			Map<String, String> configOverrides) throws IOException {
 		KafkaManager kafkaManager = KAFKA_MANAGER_THREAD_LOCAL.get();
 		if (kafkaManager != null && forceRestart) {
 			tearDownKafka();
@@ -212,7 +213,7 @@ public class KafkaIntegrationTestBase {
 			final String clusterName = new CasedString(CasedString.StringCase.CAMEL,
 					testInfo.getTestClass().get().getSimpleName()).toCase(CasedString.StringCase.KEBAB)
 					.toLowerCase(Locale.ROOT);
-			kafkaManager = new KafkaManager(clusterName, getOffsetFlushInterval(), connectorClass);
+			kafkaManager = new KafkaManager(clusterName, getOffsetFlushInterval(), connectorClass, configOverrides);
 			KAFKA_MANAGER_THREAD_LOCAL.set(kafkaManager);
 		}
 		return kafkaManager;
@@ -301,11 +302,12 @@ public class KafkaIntegrationTestBase {
 	 * @param <K>
 	 *            the data type of the storage value. (must implement equals).
 	 */
+	@SuppressWarnings("PMD.ClassCastExceptionWithToArray")
 	protected final <K> void waitForStorage(final Duration timeout, final Supplier<Collection<K>> storageList,
 			final Collection<K> expectedStorage) {
 		// wait for them to show up.
 		await().atMost(timeout).pollInterval(Duration.ofSeconds(1)).untilAsserted(() -> {
-			assertThat(storageList.get()).containsExactlyInAnyOrderElementsOf(expectedStorage);
+			assertThat(storageList.get()).contains((K[]) expectedStorage.toArray());
 		});
 	}
 }

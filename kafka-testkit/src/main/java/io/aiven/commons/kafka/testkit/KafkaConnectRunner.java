@@ -148,10 +148,10 @@ public final class KafkaConnectRunner {
 	 * @throws IOException
 	 *             if listener ports can not be found.
 	 */
-	public void startConnectCluster(final String clusterName, final Class<? extends Connector> connectorClass)
-			throws IOException {
+	public void startConnectCluster(final String clusterName, final Class<? extends Connector> connectorClass,
+			Map<String, String> configOverrides) throws IOException {
 		final List<Integer> ports = findListenerPorts();
-		startConnectCluster(clusterName, ports.get(0), ports.get(1), connectorClass);
+		startConnectCluster(clusterName, ports.get(0), ports.get(1), connectorClass, configOverrides);
 	}
 
 	/**
@@ -167,7 +167,7 @@ public final class KafkaConnectRunner {
 	 *            the class for the connector.
 	 */
 	public void startConnectCluster(final String clusterName, final int localPort, final int containerPort,
-			final Class<? extends Connector> connectorClass) {
+			final Class<? extends Connector> connectorClass, Map<String, String> configOverrides) {
 		this.clusterName = clusterName;
 		this.containerListenerPort = containerPort;
 		final Properties brokerProperties = new Properties();
@@ -178,7 +178,7 @@ public final class KafkaConnectRunner {
 		brokerProperties.put("listener.security.protocol.map", "PLAINTEXT:PLAINTEXT,TESTCONTAINERS:PLAINTEXT");
 
 		connectCluster = new EmbeddedConnectCluster.Builder().name(clusterName).brokerProps(brokerProperties)
-				.workerProps(getWorkerProperties(connectorClass)).numWorkers(1).build();
+				.workerProps(getWorkerProperties(connectorClass, configOverrides)).numWorkers(1).build();
 		connectCluster.start();
 		LOGGER.info("connectCluster {} started", clusterName);
 	}
@@ -286,14 +286,15 @@ public final class KafkaConnectRunner {
 	 *            the connector class to start, may be {@code null}.
 	 * @return the default set of worker properties.
 	 */
-	public Map<String, String> getWorkerProperties(final Class<? extends Connector> connectorClass) {
+	public Map<String, String> getWorkerProperties(final Class<? extends Connector> connectorClass,
+			final Map<String, String> configOverrides) {
 		Map<String, String> workerProperties = new HashMap<>();
 		workerProperties.put(ConnectorConfig.KEY_CONVERTER_CLASS_CONFIG, ByteArrayConverter.class.getName());
 		workerProperties.put(ConnectorConfig.VALUE_CONVERTER_CLASS_CONFIG, ByteArrayConverter.class.getCanonicalName());
 		workerProperties.put(WorkerConfig.OFFSET_COMMIT_INTERVAL_MS_CONFIG,
 				Long.toString(offsetFlushInterval.toMillis()));
 		workerProperties.put("plugin.discovery", "HYBRID_WARN");
-
+		workerProperties.putAll(configOverrides);
 		if (connectorClass != null) {
 			workerProperties.put(ConnectorConfig.CONNECTOR_CLASS_CONFIG, connectorClass.getName());
 		}
