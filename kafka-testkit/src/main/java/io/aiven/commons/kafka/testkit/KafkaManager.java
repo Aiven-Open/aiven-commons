@@ -61,9 +61,9 @@ public final class KafkaManager {
 	 *             if the cluster can not be started.
 	 */
 	public KafkaManager(final String clusterName, final Duration offsetFlushInterval,
-			final Class<? extends Connector> connectorClass) throws IOException {
+			final Class<? extends Connector> connectorClass, Map<String, String> configOverrides) throws IOException {
 		connectRunner = new KafkaConnectRunner(offsetFlushInterval);
-		connectRunner.startConnectCluster(clusterName, connectorClass);
+		connectRunner.startConnectCluster(clusterName, connectorClass, configOverrides);
 
 		final Map<String, Object> adminClientConfig = new HashMap<>();
 		adminClientConfig.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, connectRunner.getBootstrapServers());
