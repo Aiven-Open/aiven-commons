@@ -25,6 +25,8 @@ import org.apache.commons.io.function.IOSupplier;
 import org.xerial.snappy.SnappyInputStream;
 import org.xerial.snappy.SnappyOutputStream;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -36,11 +38,6 @@ import java.util.zip.GZIPOutputStream;
 /**
  * Enumeration of standard compression types along with methods to compress and
  * decompress standard file extensions for the type.
- *
- * This class is useful for persistence outside of Kafka, such as files or
- * alternative binary message streams. Kafka message compression is handled
- * internally with the {@code compression.type} property (or
- * {@code (producer|consumer).override.compression.type} in Kafka Connect).
  */
 public enum CompressionType {
 	/** No compression */
@@ -114,7 +111,15 @@ public enum CompressionType {
 	}
 
 	/**
-	 * Decompresses an input stream.
+	 * Decompresses an input stream. To function correctly the resulting input
+	 * stream must be used in a try/catch block. Failure to do so will result in
+	 * compression errors. Example:
+	 * 
+	 * <pre>{@code
+	 * try (InputStream inputStream = compressionType.decompress(originalInputStream)) {
+	 * 	// read the inputStream.
+	 * }
+	 * }</pre>
 	 *
 	 * @param input
 	 *            the input stream to read compressed data from.
@@ -127,8 +132,8 @@ public enum CompressionType {
 	}
 
 	/**
-	 * Decompresses an input stream wrapped in an IOSupplier
-	 *
+	 * Decompresses an input stream wrapped in an IOSupplier.
+	 * 
 	 * @param input
 	 *            the input stream to read compressed data from.
 	 * @return An input stream that returns decompressed data.
@@ -138,7 +143,39 @@ public enum CompressionType {
 	}
 
 	/**
-	 * Compresses an output stream.
+	 * Decompresses a byte array.
+	 * 
+	 * @param source
+	 *            the compressed byte array.
+	 * @return the decompressed byte array.
+	 * @throws IOException
+	 *             on IO error.
+	 */
+	public byte[] decompress(final byte[] source) throws IOException {
+		final int EOF = -1;
+		final byte[] buffer = new byte[source.length];
+		final ByteArrayOutputStream finalOutput = new ByteArrayOutputStream();
+		try (InputStream inputStream = this.decompress(new ByteArrayInputStream(source))) {
+			int n;
+			while (EOF != (n = inputStream.read(buffer))) {
+				finalOutput.write(buffer, 0, n);
+			}
+		}
+		return finalOutput.toByteArray();
+	}
+
+	/**
+	 * Compresses an output stream. To function correctly the resulting output
+	 * stream * must be used in a try/catch block. Failure to do so will result in
+	 * compression errors. * Example: *
+	 * 
+	 * <pre>{@code
+	 * 	 * try (OutputStream outputStream = compressionType.decompress(finalOutputStream)) {
+	 * 	 *     // write to the outputStream.
+	 * 	 * }
+	 * 	 * }</pre>
+	 * 
+	 * *
 	 *
 	 * @param output
 	 *            the output stream to write compressed data to.
@@ -148,5 +185,22 @@ public enum CompressionType {
 	 */
 	public OutputStream compress(final OutputStream output) throws IOException {
 		return compressor.apply(output);
+	}
+
+	/**
+	 * Compresses a byte array
+	 * 
+	 * @param source
+	 *            the byte array to compress.
+	 * @return the compressed byte array.
+	 * @throws IOException
+	 *             on IO error.
+	 */
+	public byte[] compress(final byte[] source) throws IOException {
+		final ByteArrayOutputStream finalOutput = new ByteArrayOutputStream();
+		try (OutputStream outputStream = this.compress(finalOutput)) {
+			outputStream.write(source);
+		}
+		return finalOutput.toByteArray();
 	}
 }
