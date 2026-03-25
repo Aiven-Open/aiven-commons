@@ -42,17 +42,17 @@ jobs:
       - name: Extract version info
         run: |
           echo "version=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_OUTPUT;
-          echo "java_version=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_OUTPUT;
+          echo "java_version=$(mvn -q -Dexec.executable=echo -Dexec.args='${jdk.version}' --non-recursive exec:exec)" >> $GITHUB_OUTPUT;
         id: project
 
-      - name: Set up JDK ${{ jdk.version }}
+      - name: Set up JDK ${{ java_version }}
         uses: actions/setup-java@v5
         with:
           distribution: 'adopt'
-          java-version: ${{ jdk.version }}
+          java-version: ${{ java.version }}
           cache: 'maven'
 
-           - name: "Upload build failure reports"
+      - name: "Upload build failure reports"
         uses: actions/upload-artifact@v7
         if: failure()
         with:
