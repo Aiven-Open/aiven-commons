@@ -657,7 +657,7 @@
       </build>
     </profile>
     <profile>
-      <id>publish</id>
+      <id>publish-snapshot</id>
       <build>
         <plugins>
           <plugin>
