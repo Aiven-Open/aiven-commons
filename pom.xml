@@ -117,11 +117,11 @@
     <mockito.version>5.21.0</mockito.version>
 
     <!-- plugin versions -->
-    <plugin.rat>0.17</plugin.rat>
     <plugin.assembly>3.7.1</plugin.assembly>
     <plugin.checkstyle>3.3.1</plugin.checkstyle>
     <plugin.compiler>3.8.1</plugin.compiler>
     <plugin.exec>3.2.0</plugin.exec>
+    <plugin.rat>0.18</plugin.rat>
     <plugin.surefire>3.5.3</plugin.surefire>
     <plugin-sonatype>0.9.0</plugin-sonatype>
     <plugin.pmd>3.27.0</plugin.pmd>
