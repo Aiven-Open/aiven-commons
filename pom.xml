@@ -125,7 +125,7 @@
     <plugin.surefire>3.5.3</plugin.surefire>
     <plugin-sonatype>0.9.0</plugin-sonatype>
     <plugin.pmd>3.27.0</plugin.pmd>
-    <plugin.spotless>2.43.0</plugin.spotless>
+    <plugin.spotless>3.4.0</plugin.spotless>
     <plugin.javadoc>3.12.0</plugin.javadoc>
     <plugin.resources>3.3.1</plugin.resources>
     <plugin.site>3.21.0</plugin.site>
