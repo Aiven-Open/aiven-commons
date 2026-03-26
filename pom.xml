@@ -266,14 +266,13 @@
                 <expandEmptyElements>false</expandEmptyElements>
               </sortPom>
             </pom>
-            <ratchetFrom>main</ratchetFrom>
           </configuration>
           <executions>
             <execution>
               <goals>
-                <goal>check</goal>
+                <goal>apply</goal>
               </goals>
-              <phase>package</phase>
+              <phase>process-sources</phase>
             </execution>
           </executions>
         </plugin>
