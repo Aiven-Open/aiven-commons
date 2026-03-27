@@ -104,20 +104,22 @@ jobs:
             start=`git rev-parse ${startTag}`;
             end=`git rev-parse ${endTag}`;
             commits=${start}...${end};
-            echo '## '${endTag};
-            echo '### What is changed';
-            echo ' ';
-            git log --format=' - %s'  ${commits};
-            echo ' ';
-            echo ' ';
-            echo '### Co-authored by';
-            echo ' ';
-            git log --format=' - %an'  ${commits} | sort -u;
-            echo ' ';
-            echo ' ';
-            echo '### Full Changelog';
-            echo 'https://github.com/Aiven-Open/aiven-commons/compare/'${startTag}'...'${endTag};
-            echo ' ';
+            echo '## '${endTag} > proposed_changelog.txt;
+            echo '### What is changed' >> proposed_changelog.txt;
+            echo ' ' >> proposed_changelog.txt;
+            git log --format=' - %s'  ${commits} >> proposed_changelog.txt;
+            echo ' ' >> proposed_changelog.txt;
+            echo ' ' >> proposed_changelog.txt;
+            echo '### Co-authored by' >> proposed_changelog.txt;
+            echo ' ' >> proposed_changelog.txt;
+            git log --format=' - %an'  ${commits} | sort -u  >> proposed_changelog.txt;
+            echo ' ' >> proposed_changelog.txt;
+            echo ' ' >> proposed_changelog.txt;
+            echo '### Full Changelog' >> proposed_changelog.txt;
+            echo 'https://github.com/Aiven-Open/aiven-commons/compare/'${startTag}'...'${endTag}  >> proposed_changelog.txt;
+            echo ' ' >> proposed_changelog.txt
+          echo "test=$(cat proposed_changelog.txt)" >> $GITHUB_OUTPUT;
+        id: changelog
           
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
