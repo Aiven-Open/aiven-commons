@@ -105,11 +105,20 @@ jobs:
             start=`git rev-parse ${startTag}`;
             end=`git rev-parse ${endTag}`;
             commits=${start}...${end};
-            printf '## ${endTag}\n### What is changed\n';
+            echo '## ${endTag}';
+            echo '### What is changed';
+            echo ' ';
             git log --format=' - %s'  ${commits};
-            printf '\n\n### Co-authored by\n';
+            echo ' ';
+            echo ' ';
+            echo '### Co-authored by';
+            echo ' ';
             git log --format=' - %an'  ${commits} | sort -u;
-            printf '\n\n### Full Changelog\nhttps://github.com/Aiven-Open/aiven-commons/compare/${startTag}...${endTag}\n\n';
+            echo ' ';
+            echo ' ';
+            echo '### Full Changelog';
+            echo 'https://github.com/Aiven-Open/aiven-commons/compare/${startTag}...${endTag}';
+            echo ' ';
           )" >> $GITHUB_OUTPUT;
         id: changelog 
           
