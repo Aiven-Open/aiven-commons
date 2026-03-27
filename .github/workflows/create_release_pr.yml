@@ -99,17 +99,17 @@ jobs:
       - name: Create changelog from v${{ github.event.inputs.previous_release_version }} to v${{ github.event.inputs.release_version }}  
         run: |
           echo text="$(
-            startTag=v${{ github.event.inputs.previous_release_version }}
-            # v${{ github.event.inputs.release_version }}
-            endTad=HEAD 
-            start=`git rev-parse v${startTag}`
-            end=`git rev-parse v${endTag}`
-            commits=${start}...${end}
-            printf '## %s\n### What\'s changed\n' ${endTag}
-            git log --format=' - %s'  ${commits}        
-            printf '\n\n### Co-authored by\n'
-            git log --format=' - %an'  ${commits} | sort -u
-            printf '\n\n### Full Changelog\nhttps://github.com/Aiven-Open/aiven-commons/compare/${startTag}...${endTag}\n\n'
+            startTag=v${{ github.event.inputs.previous_release_version }};
+            # v${{ github.event.inputs.release_version }};
+            endTag=HEAD; 
+            start=`git rev-parse v${startTag}`;
+            end=`git rev-parse v${endTag}`;
+            commits=${start}...${end};
+            printf '## %s\n### What\'s changed\n' ${endTag};
+            git log --format=' - %s'  ${commits};
+            printf '\n\n### Co-authored by\n';
+            git log --format=' - %an'  ${commits} | sort -u;
+            printf '\n\n### Full Changelog\nhttps://github.com/Aiven-Open/aiven-commons/compare/${startTag}...${endTag}\n\n';
           )" >> $GITHUB_OUTPUT;
         id: changelog 
           
@@ -122,9 +122,9 @@ jobs:
           title: Release version ${{ github.event.inputs.release_version }}
           body: |
             Proposed changelog:
-              ${{ steps.changelog.output.changelog }}
+              ${{ steps.changelog.outputs.changelog }}
             
-              "$(
+              $(
                 startTag=v${{ github.event.inputs.previous_release_version }}
                 endTad=v${{ github.event.inputs.release_version }}
                 start=`git rev-parse v${startTag}`
