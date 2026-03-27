@@ -98,7 +98,6 @@ jobs:
 
       - name: Create changelog from v${{ github.event.inputs.previous_release_version }} to v${{ github.event.inputs.release_version }}  
         run: |
-          echo text="$(
             startTag=v${{ github.event.inputs.previous_release_version }};
             # v${{ github.event.inputs.release_version }};
             endTag=HEAD; 
@@ -119,8 +118,6 @@ jobs:
             echo '### Full Changelog';
             echo 'https://github.com/Aiven-Open/aiven-commons/compare/${startTag}...${endTag}';
             echo ' ';
-          )" >> $GITHUB_OUTPUT;
-        id: changelog 
           
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
