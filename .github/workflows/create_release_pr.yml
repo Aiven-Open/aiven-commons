@@ -104,7 +104,7 @@ jobs:
             start=`git rev-parse ${startTag}`;
             end=`git rev-parse ${endTag}`;
             commits=${start}...${end};
-            echo '## '${endTag}';
+            echo '## '${endTag};
             echo '### What is changed';
             echo ' ';
             git log --format=' - %s'  ${commits};
