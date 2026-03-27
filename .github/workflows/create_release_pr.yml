@@ -104,7 +104,7 @@ jobs:
             start=`git rev-parse ${startTag}`;
             end=`git rev-parse ${endTag}`;
             commits=${start}...${end};
-            echo '## ${endTag}';
+            echo '## '${endTag}';
             echo '### What is changed';
             echo ' ';
             git log --format=' - %s'  ${commits};
@@ -116,7 +116,7 @@ jobs:
             echo ' ';
             echo ' ';
             echo '### Full Changelog';
-            echo 'https://github.com/Aiven-Open/aiven-commons/compare/${startTag}...${endTag}';
+            echo 'https://github.com/Aiven-Open/aiven-commons/compare/'${startTag}'...'${endTag};
             echo ' ';
           
       - name: Create Pull Request
