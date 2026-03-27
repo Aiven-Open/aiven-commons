@@ -105,7 +105,7 @@ jobs:
             start=`git rev-parse v${startTag}`;
             end=`git rev-parse v${endTag}`;
             commits=${start}...${end};
-            printf '## %s\n### What\'s changed\n' ${endTag};
+            printf '## %s\n### What\\'s changed\n' ${endTag};
             git log --format=' - %s'  ${commits};
             printf '\n\n### Co-authored by\n';
             git log --format=' - %an'  ${commits} | sort -u;
