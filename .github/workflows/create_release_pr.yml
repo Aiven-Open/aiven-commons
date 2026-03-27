@@ -78,11 +78,11 @@ jobs:
           echo "java_version=$(mvn -q -Dexec.executable=echo -Dexec.args='${jdk.version}' --non-recursive exec:exec)" >> $GITHUB_OUTPUT;
         id: project
         
-      - name: Set up ${{ steps.project.output.java_version }}
+      - name: Set up ${{ steps.project.outputs.java_version }}
         uses: actions/setup-java@v4
         with:
           distribution: 'adopt'
-          java-version: ${{ steps.project.output.java_version }}
+          java-version: ${{ steps.project.outputs.java_version }}
           cache: maven
 
 #      - name: Create release commits
