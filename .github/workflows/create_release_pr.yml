@@ -118,8 +118,6 @@ jobs:
             echo '### Full Changelog' >> proposed_changelog.txt;
             echo 'https://github.com/Aiven-Open/aiven-commons/compare/'${startTag}'...'${endTag}  >> proposed_changelog.txt;
             echo ' ' >> proposed_changelog.txt
-            echo "test=$(cat proposed_changelog.txt)" >> $GITHUB_OUTPUT;
-        id: changelog
           
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
@@ -128,8 +126,6 @@ jobs:
           delete-branch: true
           draft: true
           title: Release version ${{ github.event.inputs.release_version }}
-          body: |
-            Proposed changelog:
-              ${{ steps.changelog.outputs.text }}           
+          body-path: proposed_changelog.txt
  
              
