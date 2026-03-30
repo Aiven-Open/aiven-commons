@@ -25,13 +25,25 @@ then
   exit 1
 fi
 
-startTag=${1}
-endTag=${2}
+echo "Checking final version..."
+if echo ${1} | grep '^[0-9]+$' > /dev/null; then
+  echo "Release version ${1} is invalid"
+  exit 1
+fi
 
-start=`git rev-parse v${startTag}`;
+echo "Checking snapshot version..."
+if echo ${2} | grep '^[0-9]+-SNAPSHOT$' > /dev/null; then
+  echo "Snapshot version ${2} is invalid"
+  exit 1
+fi
+
+startTag=v${1}
+endTag=v${2}
+
+start=`git rev-parse ${startTag}`;
 end=`git rev-parse HEAD`;
 commits=${start}...${end};
-echo '## v'${endTag} > /tmp/proposed_changelog.txt;
+echo '## '${endTag} > /tmp/proposed_changelog.txt;
 echo '### What is changed' >> /tmp/proposed_changelog.txt;
 echo ' ' >> /tmp/proposed_changelog.txt;
 git log --format=' - %s'  ${commits} >> /tmp/proposed_changelog.txt;
@@ -52,5 +64,5 @@ mv /tmp/CHANGE_LOG.md CHANGE_LOG.md
 git checkout -b changelog-${endTag}
 
 git add CHANGE_LOG.md
-git commit -m "Changelog for v${startTag} to v${endTag}"
+git commit -m "Changelog for ${startTag} to ${endTag}"
 git push --set-upstream origin changelog-${endTag}
