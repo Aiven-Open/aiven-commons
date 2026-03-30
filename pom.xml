@@ -22,7 +22,7 @@
 
   <groupId>io.aiven.commons</groupId>
   <artifactId>aiven-commons</artifactId>
-  <version>3</version>
+  <version>4-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Aiven Commons Parent</name>
