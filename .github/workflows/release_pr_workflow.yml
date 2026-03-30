@@ -26,10 +26,7 @@ on:
         description: "Release version '0.1.2' (without 'v')"
         required: true
       snapshot_version:
-        description: "Snapshot version '0.2.0-SNAPSHOT' (without 'v')"
-        required: true
-      previous_release_version:
-        description: "Previous release version '0.1.1' (without 'v')"
+        description: "Next SNAPSHOT version '0.2.0-SNAPSHOT' (without 'v')"
         required: true
 
 permissions:
@@ -45,7 +42,7 @@ jobs:
       - name: Check versions
         run: |
           echo "Checking release version..."
-          if echo ${{ github.event.inputs.release_version }} | '^[0-9]\+' > /dev/null; then
+          if echo ${{ github.event.inputs.release_version }} | '^[0-9]+' > /dev/null; then
             echo "Release version is invalid"
             exit 1
           fi
@@ -56,12 +53,6 @@ jobs:
             exit 1
           fi
           
-          echo "Checking previous release version..."
-          if echo ${{ github.event.inputs.previous_release_version }} | '^[0-9]+$' > /dev/null; then
-            echo "Release version is invalid"
-            exit 1
-          fi
-
       - name: Checkout main
         uses: actions/checkout@v6
         with:
@@ -74,11 +65,11 @@ jobs:
           echo "java_version=$(mvn -q -Dexec.executable=echo -Dexec.args='${jdk.version}' --non-recursive exec:exec)" >> $GITHUB_OUTPUT;
         id: project
 
-      - name: Set up ${{ steps.project.output.java_version }}
+      - name: Set up ${{ steps.project.outputs.java_version }}
         uses: actions/setup-java@v5
         with:
           distribution: 'adopt'
-          java-version: ${{ steps.project.output.java_version }}
+          java-version: ${{ steps.project.outputs.java_version }}
           cache: maven
 
       - name: Create release commits
