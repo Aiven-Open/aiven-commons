@@ -87,6 +87,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
+          sign-commits: true
           branch: release-${{ github.event.inputs.release_version }}
           delete-branch: true
           draft: true
