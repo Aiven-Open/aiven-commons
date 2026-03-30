@@ -22,7 +22,7 @@
 #
 
 # The workflow to create PRs with release commits.
-name: Create release PR
+name: Create changelog PR
 on:
   workflow_dispatch:
     inputs:
