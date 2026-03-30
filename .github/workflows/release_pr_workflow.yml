@@ -48,7 +48,7 @@ jobs:
           fi
 
           echo "Checking snapshot version..."
-          if echo ${{ github.event.inputs.snapshot_version }} | grep --invert-match '^[0-9]+-SNAPSHOT$' > /dev/null; then
+          if echo ${{ github.event.inputs.snapshot_version }} | grep '^[0-9]+-SNAPSHOT$' > /dev/null; then
             echo "Snapshot version ${{ github.event.inputs.snapshot_version }} is invalid"
             exit 1
           fi
