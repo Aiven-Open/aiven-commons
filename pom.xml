@@ -463,6 +463,9 @@
       <plugin>
         <groupId>org.apache.rat</groupId>
         <artifactId>apache-rat-plugin</artifactId>
+        <configuration>
+          <inputExclude>**/CHANGE_LOG.md</inputExclude>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -659,7 +662,6 @@
             <extensions>true</extensions>
             <configuration>
               <publishingServerId>central-snapshot</publishingServerId>
-              <ignorePublishedComponents>true</ignorePublishedComponents>
               <centralSnapshotsUrl>https://central.sonatype.com/repository/maven-snapshots</centralSnapshotsUrl>
             </configuration>
           </plugin>
