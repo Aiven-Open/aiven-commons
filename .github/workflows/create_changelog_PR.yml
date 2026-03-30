@@ -99,7 +99,6 @@ jobs:
           mv /tmp/CHANGE_LOG.md CHANGE_LOG.md
           git config --local user.name "GitHub Action"
           git config --local user.email "action@github.com"
-          git add CHANGE_LOG.md      
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
