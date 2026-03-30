@@ -23,10 +23,10 @@ on:
   workflow_dispatch:
     inputs:
       release_version:
-        description: "Release version '0.1.2' (without 'v')"
+        description: "Release version (e.g '1') (without 'v')"
         required: true
       snapshot_version:
-        description: "Next SNAPSHOT version '0.2.0-SNAPSHOT' (without 'v')"
+        description: "Next SNAPSHOT version (e.g. '2-SNAPSHOT') (without 'v')"
         required: true
 
 permissions:
@@ -43,13 +43,13 @@ jobs:
         run: |
           echo "Checking release version..."
           if echo ${{ github.event.inputs.release_version }} | grep '^[0-9]+$' > /dev/null; then
-            echo "Release version is invalid"
+            echo "Release version ${{ github.event.inputs.release_version }} is invalid"
             exit 1
           fi
 
           echo "Checking snapshot version..."
           if echo ${{ github.event.inputs.snapshot_version }} | grep --invert-match '^[0-9]+-SNAPSHOT$' > /dev/null; then
-            echo "Snapshot version is invalid"
+            echo "Snapshot version ${{ github.event.inputs.snapshot_version }} is invalid"
             exit 1
           fi
           
