@@ -104,4 +104,4 @@ jobs:
           delete-branch: true
           draft: true
           title: Release version ${{ github.event.inputs.release_version }}
-          body-file: CHANGE_LOG.md
+          body-path: CHANGE_LOG.md
