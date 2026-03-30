@@ -658,7 +658,6 @@
             <extensions>true</extensions>
             <configuration>
               <publishingServerId>central-snapshot</publishingServerId>
-              <ignorePublishedComponents>true</ignorePublishedComponents>
               <centralSnapshotsUrl>https://central.sonatype.com/repository/maven-snapshots</centralSnapshotsUrl>
             </configuration>
           </plugin>
