@@ -42,7 +42,7 @@ permissions:
   issues: write
 
 jobs:
-  create_release_pr:
+  create_changelog_pr:
     name: Create release PR (job)
     runs-on: ubuntu-latest
     steps:
@@ -80,23 +80,26 @@ jobs:
           start=`git rev-parse ${startTag}`;
           end=`git rev-parse ${endTag}`;
           commits=${start}...${end};
-          echo '## '${endTag} > proposed_changelog.txt;
-          echo '### What is changed' >> proposed_changelog.txt;
-          echo ' ' >> proposed_changelog.txt;
-          git log --format=' - %s'  ${commits} >> proposed_changelog.txt;
-          echo ' ' >> proposed_changelog.txt;
-          echo ' ' >> proposed_changelog.txt;
-          echo '### Co-authored by' >> proposed_changelog.txt;
-          echo ' ' >> proposed_changelog.txt;
-          git log --format=' - %an'  ${commits} | sort -u  >> proposed_changelog.txt;
-          echo ' ' >> proposed_changelog.txt;
-          echo ' ' >> proposed_changelog.txt;
-          echo '### Full Changelog' >> proposed_changelog.txt;
-          echo 'https://github.com/Aiven-Open/aiven-commons/compare/'${startTag}'...'${endTag}  >> proposed_changelog.txt;
-          echo ' ' >> proposed_changelog.txt
+          echo '## '${endTag} > /tmp/proposed_changelog.txt;
+          echo '### What is changed' >> /tmp/proposed_changelog.txt;
+          echo ' ' >> /tmp/proposed_changelog.txt;
+          git log --format=' - %s'  ${commits} >> /tmp/proposed_changelog.txt;
+          echo ' ' >> /tmp/proposed_changelog.txt;
+          echo ' ' >> /tmp/proposed_changelog.txt;
+          echo '### Co-authored by' >> /tmp/proposed_changelog.txt;
+          echo ' ' >> /tmp/proposed_changelog.txt;
+          git log --format=' - %an'  ${commits} | sort -u  >> /tmp/proposed_changelog.txt;
+          echo ' ' >> /tmp/proposed_changelog.txt;
+          echo ' ' >> /tmp/proposed_changelog.txt;
+          echo '### Full Changelog' >> /tmp/proposed_changelog.txt;
+          echo 'https://github.com/Aiven-Open/aiven-commons/compare/'${startTag}'...'${endTag}  >> /tmp/proposed_changelog.txt;
+          echo ' ' >> /tmp/proposed_changelog.txt
           touch CHANGE_LOG.md
-          cat proposed_changelog.txt CHANGE_LOG.md >> CHANGE_LOG.md
-          rm proposed_changelog.txt
+          cat /tmp/proposed_changelog.txt CHANGE_LOG.md >> /tmp/CHANGE_LOG.md
+          mv /tmp/CHANGEL_LOG.md CHANGE_LOG.md
+          git config --local user.name "GitHub Action"
+          git config --local user.email "action@github.com"
+          git add CHANGE_LOG.md      
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
