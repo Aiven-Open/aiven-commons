@@ -77,13 +77,13 @@ jobs:
           sonatypeSnapshots: false
           servers: |
             [{
-              "id": "central",
+              "id": "central-snapshot",
               "username": "${{ secrets.SONATYPE_ID }}",
               "password": "${{ secrets.SONATYPE_PASSWORD }}"
             }]
 
       - name: Publish ${{ steps.project.outputs.version }}
-        run: mvn -P sign -p publish-snapshot -e -B -V -ntp -Dgpg.signer=bc enforcer:enforce -Denforcer.rules=requireReleaseDeps deploy
+        run: mvn -P sign -P publish-snapshot -e -B -V -ntp -Dgpg.signer=bc enforcer:enforce -Denforcer.rules=requireReleaseDeps deploy
         env:
           MAVEN_GPG_KEY: ${{ secrets.GPG_KEY }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSWORD }}
