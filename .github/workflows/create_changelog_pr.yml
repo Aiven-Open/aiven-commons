@@ -1,0 +1,138 @@
+#
+# Copyright 2024 Copyright 2022 Aiven Oy and
+# bigquery-connector-for-apache-kafka project contributors
+#
+# This software contains code derived from the Confluent BigQuery
+# Kafka Connector, Copyright Confluent, Inc, which in turn
+# contains code derived from the WePay BigQuery Kafka Connector,
+# Copyright WePay, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#
+
+# The workflow to create PRs with release commits.
+name: Create release PR
+on:
+  workflow_dispatch:
+    inputs:
+      release_version:
+        description: "Release version '0.1.2' (without 'v')"
+        required: true
+      snapshot_version:
+        description: "Snapshot version '0.2.0-SNAPSHOT' (without 'v')"
+        required: true
+      previous_release_version:
+        description: "Previous release version '0.1.1' (without 'v')"
+        required: true
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  create_release_pr:
+    name: Create release PR (job)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check versions
+        run: |
+          echo "Checking release version..."
+          if echo ${{ github.event.inputs.release_version }} | '^[0-9]\+\.[0-9]\+\.[0-9]\+\(-\(alpha\|beta\|rc[0-9]\+\)\)\?$' > /dev/null; then
+            echo "Release version is invalid"
+            exit 1
+          fi
+
+          echo "Checking snapshot version..."
+          if echo ${{ github.event.inputs.snapshot_version }} | grep --invert-match '^[0-9]\+\.[0-9]\+\.[0-9]\+-SNAPSHOT$' > /dev/null; then
+            echo "Snapshot version is invalid"
+            exit 1
+          fi
+          
+          echo "Checking previous release version..."
+          if echo ${{ github.event.inputs.previous_release_version }} | '^[0-9]\+\.[0-9]\+\.[0-9]\+\(-\(alpha\|beta\|rc[0-9]\+\)\)\?$' > /dev/null; then
+            echo "Release version is invalid"
+            exit 1
+          fi
+
+      - name: Checkout main
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Extract version info
+        run: |
+          echo "version=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_OUTPUT;
+          echo "java_version=$(mvn -q -Dexec.executable=echo -Dexec.args='${jdk.version}' --non-recursive exec:exec)" >> $GITHUB_OUTPUT;
+        id: project
+
+      - name: Set up ${{ steps.project.output.java_version }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'adopt'
+          java-version: ${{ steps.project.output.java_version }}
+          cache: maven
+
+#      - name: Create release commits
+#        run: |
+#          git config --local user.name "GitHub Action"
+#          git config --local user.email "action@github.com"
+#          mvn versions:set -DgenerateBackupPoms=false -DnewVersion=${{ github.event.inputs.release_version }} versions:set-property -Dproperty=latestRelease
+#          git add pom.xml
+#          git commit -m "Release version ${{ github.event.inputs.release_version }}"
+#          mvn versions:set -DgenerateBackupPoms=false -DnewVersion=${{ github.event.inputs.snapshot_version }}
+#          git add pom.xml
+#          git commit -m "Bump version to ${{ github.event.inputs.snapshot_version }}"
+
+      - name: Create changelog from v${{ github.event.inputs.previous_release_version }} to v${{ github.event.inputs.release_version }}
+        run: |
+          echo text="$(
+            startTag=v${{ github.event.inputs.previous_release_version }}
+            # v${{ github.event.inputs.release_version }}
+            endTad=HEAD 
+            start=`git rev-parse v${startTag}`
+            end=`git rev-parse v${endTag}`
+            commits=${start}...${end}
+            printf '## %s\n### What\'s changed\n' ${endTag}
+            git log --format=' - %s'  ${commits}        
+            printf '\n\n### Co-authored by\n'
+            git log --format=' - %an'  ${commits} | sort -u
+            printf '\n\n### Full Changelog\nhttps://github.com/Aiven-Open/aiven-commons/compare/${startTag}...${endTag}\n\n'
+          )" >> $GITHUB_OUTPUT;
+        id: changelog
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          branch: release-${{ github.event.inputs.release_version }}
+          delete-branch: true
+          draft: true
+          title: Release version ${{ github.event.inputs.release_version }}
+          body: |
+            Proposed changelog:
+              ${{ steps.changelog.output.changelog }}
+            
+              "$(
+                startTag=v${{ github.event.inputs.previous_release_version }}
+                endTad=v${{ github.event.inputs.release_version }}
+                start=`git rev-parse v${startTag}`
+                end=`git rev-parse v${endTag}`
+                commits=${start}...${end}
+                printf '## %s\n### What\'s changed\n' ${endTag}
+                git log --format=' - %s'  ${commits}        
+                printf '\n\n### Co-authored by\n'
+                git log --format=' - %an'  ${commits} | sort -u
+                printf '\n\n### Full Changelog\nhttps://github.com/Aiven-Open/aiven-commons/compare/${startTag}...${endTag}\n\n'
+              ) 
