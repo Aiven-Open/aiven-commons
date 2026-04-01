@@ -88,7 +88,6 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-
     <!-- standard package versions (please keep in alphabetical order)-->
     <apache.avro.version>1.12.1</apache.avro.version>
     <apache.parquet.version>1.17.0</apache.parquet.version>
