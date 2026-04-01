@@ -120,7 +120,7 @@
     <plugin.assembly>3.8.0</plugin.assembly>
     <plugin.checkstyle>3.6.0</plugin.checkstyle>
     <plugin.compiler>3.8.1</plugin.compiler>
-    <plugin.exec>3.2.0</plugin.exec>
+    <plugin.exec>3.6.3</plugin.exec>
     <plugin.gpg>3.2.8</plugin.gpg>
     <plugin.jar>3.4.2</plugin.jar>
     <plugin.javadoc>3.12.0</plugin.javadoc>
