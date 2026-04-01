@@ -117,7 +117,7 @@
     <testcontainers.version>1.20.6</testcontainers.version>
 
     <!-- plugin versions (please keep in alphabetical order) -->
-    <plugin.assembly>3.7.1</plugin.assembly>
+    <plugin.assembly>3.8.0</plugin.assembly>
     <plugin.checkstyle>3.3.1</plugin.checkstyle>
     <plugin.compiler>3.8.1</plugin.compiler>
     <plugin.exec>3.2.0</plugin.exec>
