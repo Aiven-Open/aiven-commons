@@ -132,7 +132,7 @@
     <plugin.site>3.21.0</plugin.site>
     <plugin-sonatype>0.9.0</plugin-sonatype>
     <plugin.spotless>3.4.0</plugin.spotless>
-    <plugin.surefire>3.5.3</plugin.surefire>
+    <plugin.surefire>3.5.5</plugin.surefire>
     <plugin.source>3.4.0</plugin.source>
 
     <!-- site versions (please keep in alphabetical order) -->
