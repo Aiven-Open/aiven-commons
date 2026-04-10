@@ -20,7 +20,6 @@ Aiven Commons
 ======================
 
 [![Deployment checks](https://github.com/Aiven-Open/aiven-commons/actions/workflows/Merge_check.yml/badge.svg)](https://github.com/Aiven-Open/aiven-commons/actions/workflows/Merge_check.yml)
-[![Build and deploy site](https://github.com/Aiven-Open/aiven-commons/actions/workflows/build_site.yml/badge.svg)](https://github.com/Aiven-Open/aiven-commons/actions/workflows/build_site.yml)
 
 Is a collection of java utilities used in Aiven development
 
