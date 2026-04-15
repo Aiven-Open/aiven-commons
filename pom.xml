@@ -124,7 +124,7 @@
     <plugin.gpg>3.2.8</plugin.gpg>
     <plugin.jar>3.5.0</plugin.jar>
     <plugin.javadoc>3.12.0</plugin.javadoc>
-    <plugin.pmd>3.27.0</plugin.pmd>
+    <plugin.pmd>3.28.0</plugin.pmd>
     <plugin.project.info>3.9.0</plugin.project.info>
     <plugin.properties>1.3.0</plugin.properties>
     <plugin.rat>0.18</plugin.rat>
