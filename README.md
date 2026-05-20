@@ -21,12 +21,12 @@ Aiven Commons
 
 [![Deployment checks](https://github.com/Aiven-Open/aiven-commons/actions/workflows/Merge_check.yml/badge.svg)](https://github.com/Aiven-Open/aiven-commons/actions/workflows/Merge_check.yml)
 
-This is the parent pom for most Aiven java development
+This is the parent pom for most Aiven java development.
 
 Overview
 ========
 
-This parent pom contains performs all the dependency and plugin management.  It is not semantically versioned and uses simple monotonically increasing integer values.
+This parent pom contains all the dependency and plugin management.  It is not semantically versioned and uses simple monotonically increasing integer values.
 
 
 License
