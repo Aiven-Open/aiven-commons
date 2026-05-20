@@ -131,7 +131,7 @@
     <plugin.resources>3.5.0</plugin.resources>
     <plugin.site>3.21.0</plugin.site>
     <plugin-sonatype>0.10.0</plugin-sonatype>
-    <plugin.spotless>3.4.0</plugin.spotless>
+    <plugin.spotless>3.5.1</plugin.spotless>
     <plugin.surefire>3.5.5</plugin.surefire>
     <plugin.source>3.4.0</plugin.source>
 
