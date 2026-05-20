@@ -5,7 +5,7 @@
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+    https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing,
     software distributed under the License is distributed on an
@@ -14,7 +14,7 @@
     specific language governing permissions and limitations
     under the License.
 
-    SPDX-License-Identifier: Apache-2
+    SPDX-License-Identifier: Apache-2.0
 -->
 # Welcome!
 
@@ -23,23 +23,6 @@ Contributions are very welcome on Aiven Commons. When contributing please keep t
 - Open an issue to discuss new bigger features.
 - Write code consistent with the project style and make sure the tests are passing.
 - Stay in touch with us if we have follow up questions or requests for further changes.
-
-# Development
-
-## Local Environment
-
-
-## Tests
-
-
-## Static checking and Linting
-
-
-## Manual testing
-
-
-### Configuration
-
 
 # Opening a PR
 
