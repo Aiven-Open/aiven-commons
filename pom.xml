@@ -133,7 +133,7 @@
     <plugin.sonatype>0.10.0</plugin.sonatype>
     <plugin.source>3.4.0</plugin.source>
     <plugin.spotbugs>4.10.2.0</plugin.spotbugs>
-    <plugin.spotless>3.5.1</plugin.spotless>
+    <plugin.spotless>3.6.0</plugin.spotless>
     <plugin.surefire>3.5.6</plugin.surefire>
     
 
