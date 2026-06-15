@@ -134,7 +134,7 @@
     <plugin.source>3.4.0</plugin.source>
     <plugin.spotbugs>4.10.2.0</plugin.spotbugs>
     <plugin.spotless>3.5.1</plugin.spotless>
-    <plugin.surefire>3.5.5</plugin.surefire>
+    <plugin.surefire>3.5.6</plugin.surefire>
     
 
     <!-- site versions (please keep in alphabetical order) -->
