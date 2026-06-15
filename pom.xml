@@ -129,7 +129,7 @@
     <plugin.properties>1.3.0</plugin.properties>
     <plugin.rat>0.18</plugin.rat>
     <plugin.resources>3.5.0</plugin.resources>
-    <plugin.site>3.21.0</plugin.site>
+    <plugin.site>3.22.0</plugin.site>
     <plugin.sonatype>0.10.0</plugin.sonatype>
     <plugin.source>3.4.0</plugin.source>
     <plugin.spotbugs>4.10.2.0</plugin.spotbugs>
