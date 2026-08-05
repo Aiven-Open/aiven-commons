@@ -44,6 +44,29 @@ jobs:
         run: |
           echo "version=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_OUTPUT;
           echo "java_version=$(mvn -q -Dexec.executable=echo -Dexec.args='${jdk.version}' --non-recursive exec:exec)" >> $GITHUB_OUTPUT;
+          export release_version=$(mvn -q -Dexec.executable=echo -Dexec.args='${latestRelease}' --non-recursive exec:exec);
+          if [[ "${release_version}" == "${version}" ]]
+          then
+            echo "Creating draft release for ${release_version}"
+            echo "release_version=${release_version}" >> $GITHUB_OUTPUT;
+          else
+            echo "Invalid 'latestRelease' in pom. ${release_version} != ${version}"
+            exit 1
+          fi
+          export commit_title=$(git log --pretty=format:%s -1)
+          echo "Commit title: $commit_title"
+          if [[ ${commit_title} == "Release version ${release_version}" ]]; then
+            echo "release_hash=$(git rev-list -n 1 v${release_version})" >> $GITHUB_OUTPUT
+          else
+            echo "Invalid commit title: "${commit_title}
+            exit 1
+          fi
+        
+          if [[ `grep -c "^## " CHANGE_LOG.md` -gt 1 ]]; then
+            grep -B 999 -m2 "^## " CHANGE_LOG.md | head -n -1 > /tmp/release_body.txt
+          else
+            cp CHANGE_LOG.md /tmp/release_body.txt
+          fi
         id: project
 
       - name: Check commit title and extract version
@@ -95,9 +118,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: "v${{ steps.project.outputs.version }}"
+          body_path: /tmp/release_body.txt
           target_commitish: ${{ github.event.inputs.commit_hash }}
           draft: true
           prerelease: false
-          files: pom.xm
+          files: pom.xml
 
