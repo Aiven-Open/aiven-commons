@@ -99,5 +99,5 @@ jobs:
           target_commitish: ${{ github.event.inputs.commit_hash }}
           draft: true
           prerelease: false
-          files: pom.xm
+          files: pom.xml
 
