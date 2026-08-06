@@ -63,6 +63,13 @@ jobs:
         run: |
           echo "version=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_OUTPUT;
           echo "java_version=$(mvn -q -Dexec.executable=echo -Dexec.args='${jdk.version}' --non-recursive exec:exec)" >> $GITHUB_OUTPUT;
+          echo "# DO NOT SQUASH COMMITS" >  /tmp/release_body.txt
+          if [[ `grep -c "^## " CHANGE_LOG.md` -gt 1 ]]
+          then
+            grep -B 999 -m2 "^## " CHANGE_LOG.md | head -n -1 >> /tmp/release_body.txt
+          else
+            cat CHANGE_LOG.md >> /tmp/release_body.txt
+          fi
         id: project
 
       - name: Set up Java ${{ steps.project.outputs.java_version }}
@@ -92,4 +99,4 @@ jobs:
           delete-branch: true
           draft: true
           title: Release version ${{ github.event.inputs.release_version }}
-          body-path: CHANGE_LOG.md
+          body-path: /tmp/release_body.txt
