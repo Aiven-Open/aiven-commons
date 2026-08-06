@@ -90,7 +90,7 @@
 
     <!-- standard package versions (please keep in alphabetical order)-->
     <apache.avro.version>1.12.1</apache.avro.version>
-    <apache.parquet.version>1.17.0</apache.parquet.version>
+    <apache.parquet.version>1.17.1</apache.parquet.version>
     <com.google.auto.value.version>1.10.2</com.google.auto.value.version>
     <com.google.guava.version>32.0.1-jre</com.google.guava.version>
     <com.google.re2j.version>1.7</com.google.re2j.version>
