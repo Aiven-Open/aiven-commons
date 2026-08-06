@@ -107,7 +107,7 @@
     <slf4j.version>2.0.11</slf4j.version>
     <snappy.version>1.1.10.8</snappy.version>
     <spotbugs.annotations.version>4.9.8</spotbugs.annotations.version>
-    <zstd.version>1.5.7-7</zstd.version>
+    <zstd.version>1.5.7-12</zstd.version>
 
     <!-- testing versions (please keep in alphabetical order) -->
     <assertj.version>3.27.7</assertj.version>
