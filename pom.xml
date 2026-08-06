@@ -120,6 +120,7 @@
     <plugin.assembly>3.8.0</plugin.assembly>
     <plugin.checkstyle>3.6.0</plugin.checkstyle>
     <plugin.compiler>3.15.0</plugin.compiler>
+    <plugin.enforcer>3.6.3</plugin.enforcer>
     <plugin.exec>3.6.3</plugin.exec>
     <plugin.gpg>3.2.8</plugin.gpg>
     <plugin.jar>3.5.0</plugin.jar>
@@ -327,6 +328,11 @@
   <build>
     <pluginManagement>
       <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-enforcer-plugin</artifactId>
+          <version>${plugin.enforcer}</version>
+        </plugin>
         <plugin>
           <groupId>com.github.spotbugs</groupId>
           <artifactId>spotbugs-maven-plugin</artifactId>
