@@ -94,7 +94,7 @@
     <com.google.auto.value.version>1.10.2</com.google.auto.value.version>
     <com.google.guava.version>33.7.1-jre</com.google.guava.version>
     <com.google.re2j.version>1.8</com.google.re2j.version>
-    <commons.codec.version>1.21.0</commons.codec.version>
+    <commons.codec.version>1.22.1</commons.codec.version>
     <commons.collection4.version>4.4</commons.collection4.version>
     <commons.csv.version>1.14.1</commons.csv.version>
     <commons.io.version>2.21.0</commons.io.version>
