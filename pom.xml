@@ -22,7 +22,7 @@
 
   <groupId>io.aiven.commons</groupId>
   <artifactId>aiven-commons</artifactId>
-  <version>5-SNAPSHOT</version>
+  <version>6-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Aiven Commons Parent</name>
@@ -81,7 +81,7 @@
   </distributionManagement>
 
   <properties>
-    <latestRelease>4</latestRelease>
+    <latestRelease>5</latestRelease>
     <!-- config properties (please keep in alphabetical order) -->
     <jdk.version>17</jdk.version>
     <maven.compiler.release>${jdk.version}</maven.compiler.release>
