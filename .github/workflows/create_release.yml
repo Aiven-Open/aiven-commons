@@ -54,11 +54,10 @@ jobs:
             echo "Invalid 'latestRelease' in pom. ${release_version} != ${version}"
             exit 1
           fi
+          
           export commit_title=$(git log --pretty=format:%s -1)
           echo "Commit title: $commit_title"
-          if [[ ${commit_title} == "Release version ${release_version}" ]]; then
-            echo "release_hash=$(git rev-list -n 1 v${release_version})" >> $GITHUB_OUTPUT
-          else
+          if [[ "${commit_title}" != "Release version ${release_version}" ]]; then
             echo "Invalid commit title: "${commit_title}
             exit 1
           fi
@@ -70,17 +69,6 @@ jobs:
           fi
         id: project
 
-      - name: Check commit title and extract version
-        run: |
-          export commit_title=$(git log --pretty=format:%s -1 ${{ github.event.inputs.commit_hash }})
-          echo "Commit title: $commit_title"
-          if [[ ${commit_title} == "Release version ${{ steps.project.outputs.version }}" ]]; then
-            echo "Valid commit title"
-          else
-            echo "Invalid commit title: "${commit_title}
-            exit 1
-          fi
-          
       - name: Set up JDK ${{ steps.project.outputs.java_version }}
         uses: actions/setup-java@v6
         with:
