@@ -45,7 +45,7 @@ jobs:
           echo "java_version=$(mvn -q -Dexec.executable=echo -Dexec.args='${jdk.version}' --non-recursive exec:exec)" >> $GITHUB_OUTPUT;
           export version=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" 
           export release_version=$(mvn -q -Dexec.executable=echo -Dexec.args='${latestRelease}' --non-recursive exec:exec);
-          if [[ "${release_version}" == "${version}" ]]
+          if [[ "${release_version}" == "${{ steps.project.outputs.version }}" ]]
           then
             echo "Creating draft release for ${release_version}"
             echo "release_version=${release_version}" >> $GITHUB_OUTPUT;
