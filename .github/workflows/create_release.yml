@@ -43,13 +43,13 @@ jobs:
       - name: Extract version info
         run: |
           echo "java_version=$(mvn -q -Dexec.executable=echo -Dexec.args='${jdk.version}' --non-recursive exec:exec)" >> $GITHUB_OUTPUT;
-          export version=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" 
+          export version=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec) 
+          echo "version=${version}" >> $GITHUB_OUTPUT
           export release_version=$(mvn -q -Dexec.executable=echo -Dexec.args='${latestRelease}' --non-recursive exec:exec);
           if [[ "${release_version}" == "${version}" ]]
           then
             echo "Creating draft release for ${release_version}"
             echo "release_version=${release_version}" >> $GITHUB_OUTPUT;
-            echo "version=${version}" >> $GITHUB_OUTPUT
           else
             echo "Invalid 'latestRelease' in pom. ${release_version} != $version}"
             exit 1
