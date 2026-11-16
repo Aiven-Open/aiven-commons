@@ -30,7 +30,7 @@
  - added dependency management
  - Bump Apache commons lang3 from 3.17.0 to 3.18.0
  - Add change log entries to release
- - Add DO NOT SQUASH trelease PR
+ - Add DO NOT SQUASH to release PR
  - Bump com.github.spotbugs:spotbugs-maven-plugin from 4.10.2.0 to 4.10.3.0 (#94)
  - Bump org.sonatype.central:central-publishing-maven-plugin (#87)
  - Bump junit.version from 6.1.0 to 6.1.2 (#92)
@@ -49,8 +49,6 @@
  
  - Aindriú Lavelle
  - Claude Warren
- - dependabot[bot]
- - github-actions[bot]
  - Ryan Skraba
  
  
