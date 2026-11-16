@@ -81,6 +81,7 @@
   </distributionManagement>
 
   <properties>
+    <latestRelease>4</latestRelease>
     <!-- config properties (please keep in alphabetical order) -->
     <jdk.version>17</jdk.version>
     <maven.compiler.source>${jdk.version}</maven.compiler.source>
