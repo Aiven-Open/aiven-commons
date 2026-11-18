@@ -127,7 +127,7 @@
     <plugin.javadoc>3.12.0</plugin.javadoc>
     <plugin.pmd>3.28.0</plugin.pmd>
     <plugin.project.info>3.9.0</plugin.project.info>
-    <plugin.properties>1.3.0</plugin.properties>
+    <plugin.properties>1.4.0</plugin.properties>
     <plugin.rat>0.18</plugin.rat>
     <plugin.resources>3.5.0</plugin.resources>
     <plugin.site>3.22.0</plugin.site>
